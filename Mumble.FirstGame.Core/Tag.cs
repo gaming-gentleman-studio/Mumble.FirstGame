@@ -6,8 +6,8 @@ namespace Mumble.FirstGame.Core
 {
     public class Tag
     {
-        public string Id { get; set; }
-        public object[] Arguments { get; set; }
+        public string Id { get; private set; }
+        public object[] Arguments { get; private set; }
 
         public Tag(string id, params object[] arguments)
         {

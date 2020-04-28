@@ -8,6 +8,28 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.Common.Default.props" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.Common.props" />
   <PropertyGroup />
+  <ItemGroup>
+    <Compile Include="Action\ActionResult.cs" />
+    <Compile Include="Action\Combat\AttackAction.cs" />
+    <Compile Include="Action\Combat\ICombatAction.cs" />
+    <Compile Include="Action\IAction.cs" />
+    <Compile Include="Action\NullAction.cs" />
+    <Compile Include="Entity\Components\AI\ICombatAIComponent.cs" />
+    <Compile Include="Entity\Components\AI\SimpleAttackAIComponent.cs" />
+    <Compile Include="Entity\Components\Damage\DamageComponent.cs" />
+    <Compile Include="Entity\Components\Damage\IDamageComponent.cs" />
+    <Compile Include="Entity\Components\Health\HealthComponent.cs" />
+    <Compile Include="Entity\Components\Health\IHealthComponent.cs" />
+    <Compile Include="Entity\Components\IEntityComponent.cs" />
+    <Compile Include="Entity\Enemy\Slime.cs" />
+    <Compile Include="Entity\ICombatAIEntity.cs" />
+    <Compile Include="Entity\ICombatEntity.cs" />
+    <Compile Include="Entity\IEntity.cs" />
+    <Compile Include="Entity\Player\Player.cs" />
+    <Compile Include="Scene\Battle\BattleScene.cs" />
+    <Compile Include="Scene\IScene.cs" />
+    <Compile Include="Tag.cs" />
+  </ItemGroup>
   <Import Project="GamersUnite.FirstGame.Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.CSharp.targets" />
 </Project>
