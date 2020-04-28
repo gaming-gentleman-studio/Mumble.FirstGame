@@ -16,7 +16,6 @@ C:\Users\dekke\source\repos\Mumble.FirstGame\Mumble.FirstGame.ConsoleApp\bin\Deb
 C:\Users\dekke\source\repos\Mumble.FirstGame\Mumble.FirstGame.ConsoleApp\bin\Debug\netcoreapp3.1\Mumble.FirstGame.ConsoleApp.runtimeconfig.dev.json
 C:\Users\dekke\source\repos\Mumble.FirstGame\Mumble.FirstGame.ConsoleApp\bin\Debug\netcoreapp3.1\Mumble.FirstGame.ConsoleApp.dll
 C:\Users\dekke\source\repos\Mumble.FirstGame\Mumble.FirstGame.ConsoleApp\bin\Debug\netcoreapp3.1\Mumble.FirstGame.ConsoleApp.pdb
-C:\Users\dekke\source\repos\Mumble.FirstGame\Mumble.FirstGame.ConsoleApp\obj\Debug\netcoreapp3.1\Mumble.FirstGame.ConsoleApp.csprojAssemblyReference.cache
 C:\Users\dekke\source\repos\Mumble.FirstGame\Mumble.FirstGame.ConsoleApp\obj\Debug\netcoreapp3.1\Mumble.FirstGame.ConsoleApp.csproj.CoreCompileInputs.cache
 C:\Users\dekke\source\repos\Mumble.FirstGame\Mumble.FirstGame.ConsoleApp\obj\Debug\netcoreapp3.1\Mumble.FirstGame.ConsoleApp.AssemblyInfoInputs.cache
 C:\Users\dekke\source\repos\Mumble.FirstGame\Mumble.FirstGame.ConsoleApp\obj\Debug\netcoreapp3.1\Mumble.FirstGame.ConsoleApp.AssemblyInfo.cs
