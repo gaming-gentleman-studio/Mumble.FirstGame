@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>cce26e5c-58e5-4b0e-8282-a2104bf39e71</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>GamersUnite.FirstGame.Core</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Action\ActionResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Action\Combat\AttackAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Action\Combat\ICombatAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Action\IAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Action\NullAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\AI\ICombatAIComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\AI\SimpleAttackAIComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Damage\DamageComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Damage\IDamageComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Health\HealthComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Health\IHealthComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\IEntityComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Enemy\Slime.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\ICombatAIEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\ICombatEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\IEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Player\Player.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\BattleScene.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scene\IScene.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tag.cs" />
+  </ItemGroup>
+</Project>
