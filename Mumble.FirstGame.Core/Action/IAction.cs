@@ -7,10 +7,10 @@ namespace Mumble.FirstGame.Core.Action
     //Sent from UI to logic
     public interface IAction
     {
-        public ActionResult Result
+        ActionResult Result
         {
             get;
         }
-        public bool HasResult();
+        bool HasResult();
     }
 }

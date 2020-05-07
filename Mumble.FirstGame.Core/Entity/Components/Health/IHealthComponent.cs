@@ -6,12 +6,12 @@ namespace Mumble.FirstGame.Core.Entity.Components.Health
 {
     public interface IHealthComponent : IEntityComponent
     {
-        public void Hit(int damage);
-        public void Heal(int restored);
-        public void SetMax(int max);
-        public bool IsAlive();
+        void Hit(int damage);
+        void Heal(int restored);
+        void SetMax(int max);
+        bool IsAlive();
 
-        public int GetCurrentHealth();
-        public int GetMaxHealth();
+        int GetCurrentHealth();
+        int GetMaxHealth();
     }
 }

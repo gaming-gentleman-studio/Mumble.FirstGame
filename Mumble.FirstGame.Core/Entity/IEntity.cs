@@ -6,6 +6,6 @@ namespace Mumble.FirstGame.Core.Entity
 {
     public interface IEntity
     {
-        public string GetName();
+        string GetName();
     }
 }

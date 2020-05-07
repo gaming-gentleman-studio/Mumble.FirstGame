@@ -30,6 +30,6 @@
     <Compile Include="Scene\IScene.cs" />
     <Compile Include="Tag.cs" />
   </ItemGroup>
-  <Import Project="GamersUnite.FirstGame.Core.projitems" Label="Shared" />
+  <Import Project="Mumble.FirstGame.Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.CSharp.targets" />
 </Project>

@@ -7,7 +7,7 @@ namespace Mumble.FirstGame.Core.Action.Combat
 {
     public interface ICombatAction : IAction
     {
-        public bool EndsEntityTurn();
-        public void CalculateEffect();
+        bool EndsEntityTurn();
+        void CalculateEffect();
     }
 }
