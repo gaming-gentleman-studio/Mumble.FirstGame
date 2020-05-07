@@ -6,7 +6,7 @@ namespace Mumble.FirstGame.Core.Entity.Components.Damage
 {
     public interface IDamageComponent: IEntityComponent
     {
-        public int GetRawDamage();
+        int GetRawDamage();
 
     }
 }

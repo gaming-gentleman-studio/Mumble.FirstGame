@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mumble.FirstGame.MonogameShared;
+using System;
 
 namespace Mumble.FirstGame.Windows
 {
@@ -14,7 +15,7 @@ namespace Mumble.FirstGame.Windows
         [STAThread]
         static void Main()
         {
-            using (var game = new Game1())
+            using (var game = new GameMain())
                 game.Run();
         }
     }

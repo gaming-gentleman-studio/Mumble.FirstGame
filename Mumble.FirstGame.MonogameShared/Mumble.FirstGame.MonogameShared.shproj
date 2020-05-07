@@ -10,9 +10,7 @@
   <ItemGroup>
     <None Include="Content\Content.mgcb" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Game1.cs" />
-  </ItemGroup>
-  <Import Project="GamersUnite.FirstGame.MonogameShared.projitems" Label="Shared" />
+  <Import Project="Mumble.FirstGame.MonogameShared.projitems" Label="Shared" />
+  <Import Project="Mumble.FirstGame.Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.CSharp.targets" />
 </Project>

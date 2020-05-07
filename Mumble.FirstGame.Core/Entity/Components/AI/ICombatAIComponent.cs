@@ -8,6 +8,6 @@ namespace Mumble.FirstGame.Core.Entity.Components.AI
 {
     public interface ICombatAIComponent : IEntityComponent
     {
-        public ICombatAction GenerateCombatAction(ICombatEntity source, List<ICombatEntity> potentialTargets);
+        ICombatAction GenerateCombatAction(ICombatEntity source, List<ICombatEntity> potentialTargets);
     }
 }

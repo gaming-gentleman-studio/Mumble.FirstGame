@@ -7,7 +7,7 @@ namespace Mumble.FirstGame.Core.Scene
 {
     public interface IScene
     {
-        public List<IAction> Update(IAction action);
-        public bool IsSceneActive();
+        List<IAction> Update(IAction action);
+        bool IsSceneActive();
     }
 }
