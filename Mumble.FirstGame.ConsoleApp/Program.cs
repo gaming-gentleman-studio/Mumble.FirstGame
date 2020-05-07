@@ -12,7 +12,7 @@ namespace Mumble.FirstGame.ConsoleApp
         //No DI container for now
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello Nate");
+            Console.WriteLine("Hello Nathanial");
             Player player = new Player(3, 10);
             Slime slime = new Slime(2, 4);
             BattleScene scene = new BattleScene(
