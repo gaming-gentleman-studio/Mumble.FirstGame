@@ -1,4 +1,4 @@
-﻿using Mumble.FirstGame.Core.Action.Combat;
+﻿using Mumble.FirstGame.Core.Action.Attack;
 using Mumble.FirstGame.Core.Entity.Components.Damage;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ namespace Mumble.FirstGame.Core.Entity.Components.AI
         {
             _randomGenerator = new Random();
         }
-        public ICombatAction GenerateCombatAction(ICombatEntity source, List<ICombatEntity> potentialTargets)
+        public IAttackAction GenerateCombatAction(ICombatEntity source, List<ICombatEntity> potentialTargets)
         {
             int targetIdx = _randomGenerator.Next(0, potentialTargets.Count);
             return new AttackAction(source, potentialTargets[targetIdx]);

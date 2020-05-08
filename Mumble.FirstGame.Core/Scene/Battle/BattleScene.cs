@@ -1,5 +1,5 @@
 ﻿using Mumble.FirstGame.Core.Action;
-using Mumble.FirstGame.Core.Action.Combat;
+using Mumble.FirstGame.Core.Action.Attack;
 using Mumble.FirstGame.Core.Entity;
 using System;
 using System.Collections.Generic;
@@ -24,13 +24,13 @@ namespace Mumble.FirstGame.Core.Scene.Battle
         public List<IAction> Update(IAction action)
         {
             
-            if (!(action is ICombatAction)){
+            if (!(action is IAttackAction)){
                 return new List<IAction>();
             }
-            ICombatAction combatAction = (ICombatAction) action;
+            IAttackAction combatAction = (IAttackAction) action;
             return Update(combatAction);
         }
-        private List<IAction> Update(ICombatAction action)
+        private List<IAction> Update(IAttackAction action)
         {
             List<IAction> results = new List<IAction>();
             results.Add(action);
@@ -42,7 +42,7 @@ namespace Mumble.FirstGame.Core.Scene.Battle
                 {
                     foreach(ICombatAIEntity enemy in EnemyTeam)
                     {
-                        ICombatAction enemyAction = enemy.CombatAIComponent.GenerateCombatAction(enemy, PlayerTeam);
+                        IAttackAction enemyAction = enemy.CombatAIComponent.GenerateCombatAction(enemy, PlayerTeam);
                         enemyAction.CalculateEffect();
                         results.Add(enemyAction);
                     }

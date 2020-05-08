@@ -6,7 +6,7 @@
     <SharedGUID>50af4f08-b0db-4156-ba1a-0a5fc591b684</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>GamersUnite.FirstGame.MonogameShared</Import_RootNamespace>
+    <Import_RootNamespace>Mumble.FirstGame.MonogameShared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)GameMain.cs" />

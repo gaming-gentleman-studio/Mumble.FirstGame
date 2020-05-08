@@ -10,8 +10,8 @@
   <PropertyGroup />
   <ItemGroup>
     <Compile Include="Action\ActionResult.cs" />
-    <Compile Include="Action\Combat\AttackAction.cs" />
-    <Compile Include="Action\Combat\ICombatAction.cs" />
+    <Compile Include="Action\Attack\AttackAction.cs" />
+    <Compile Include="Action\Attack\IAttackAction.cs" />
     <Compile Include="Action\IAction.cs" />
     <Compile Include="Action\NullAction.cs" />
     <Compile Include="Entity\Components\AI\ICombatAIComponent.cs" />

@@ -1,4 +1,4 @@
-﻿using Mumble.FirstGame.Core.Action.Combat;
+﻿using Mumble.FirstGame.Core.Action.Attack;
 using Mumble.FirstGame.Core.Entity.Components.AI;
 using Mumble.FirstGame.Core.Entity.Components.Damage;
 using Mumble.FirstGame.Core.Entity.Components.Health;
@@ -26,9 +26,9 @@ namespace Mumble.FirstGame.Core.Entity.Enemy
             private set;
         }
 
-        public Tag HealthTag => new Tag("hp_display", GetName(), HealthComponent.GetCurrentHealth(), HealthComponent.GetMaxHealth());
+        public Tag HealthTag => new Tag(TagId.hp_display, GetName(), HealthComponent.GetCurrentHealth(), HealthComponent.GetMaxHealth());
 
-        public Tag DamageTag => new Tag("damage_display", GetName(), DamageComponent.GetRawDamage());
+        public Tag DamageTag => new Tag(TagId.damage_display, GetName(), DamageComponent.GetRawDamage());
 
         public Slime(int damage, int health)
         {

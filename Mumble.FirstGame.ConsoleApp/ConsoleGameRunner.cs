@@ -1,5 +1,5 @@
 ﻿using Mumble.FirstGame.Core.Action;
-using Mumble.FirstGame.Core.Action.Combat;
+using Mumble.FirstGame.Core.Action.Attack;
 using Mumble.FirstGame.Core.Scene;
 using Mumble.FirstGame.Core.Scene.Battle;
 using System;

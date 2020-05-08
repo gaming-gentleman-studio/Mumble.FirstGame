@@ -8,7 +8,7 @@ namespace Mumble.FirstGame.Core.Action
     {
         public Tag Tag { get; private set; }
 
-        public ActionResult(string tagId, params object[] arguments)
+        public ActionResult(TagId tagId, params object[] arguments)
         {
             Tag = new Tag(tagId, arguments);
         }

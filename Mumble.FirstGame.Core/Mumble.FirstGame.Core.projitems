@@ -6,13 +6,15 @@
     <SharedGUID>cce26e5c-58e5-4b0e-8282-a2104bf39e71</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>GamersUnite.FirstGame.Core</Import_RootNamespace>
+    <Import_RootNamespace>Mumble.FirstGame.Core</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Action\ActionResult.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Action\Combat\AttackAction.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Action\Combat\ICombatAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Action\Attack\AttackAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Action\Attack\IAttackAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\IAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Action\Movement\IMoveAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Action\Movement\MoveAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\NullAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\AI\ICombatAIComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\AI\SimpleAttackAIComponent.cs" />
@@ -29,5 +31,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\BattleScene.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\IScene.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Tag.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TagId.cs" />
   </ItemGroup>
 </Project>

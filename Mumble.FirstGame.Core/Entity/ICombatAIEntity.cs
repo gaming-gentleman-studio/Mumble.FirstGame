@@ -1,4 +1,4 @@
-﻿using Mumble.FirstGame.Core.Action.Combat;
+﻿using Mumble.FirstGame.Core.Action.Attack;
 using Mumble.FirstGame.Core.Entity.Components.AI;
 using System;
 using System.Collections.Generic;

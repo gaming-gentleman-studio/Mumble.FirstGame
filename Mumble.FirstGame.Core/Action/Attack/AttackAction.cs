@@ -2,10 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Mumble.FirstGame.Core.Action;
 
-namespace Mumble.FirstGame.Core.Action.Combat
+namespace Mumble.FirstGame.Core.Action.Attack
 {
-    public class AttackAction : ICombatAction
+    public class AttackAction : IAttackAction
     {
         private ICombatEntity _source;
         private ICombatEntity _target;
@@ -25,11 +26,11 @@ namespace Mumble.FirstGame.Core.Action.Combat
                 _source.DamageComponent.GetRawDamage());
            if (!_target.HealthComponent.IsAlive())
             {
-                Result = new ActionResult("enemy_killed", _target.GetName());
+                Result = new ActionResult(TagId.enemy_killed, _target.GetName());
             }
             else
             {
-                Result = new ActionResult("damage_taken", _target.GetName(), _target.DamageComponent.GetRawDamage());
+                Result = new ActionResult(TagId.damage_taken, _target.GetName(), _target.DamageComponent.GetRawDamage());
             }
         }
 

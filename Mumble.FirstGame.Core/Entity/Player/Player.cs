@@ -19,9 +19,9 @@ namespace Mumble.FirstGame.Core.Entity.Player
             private set;
         }
 
-        public Tag HealthTag => new Tag("hp_display", GetName(), HealthComponent.GetCurrentHealth(), HealthComponent.GetMaxHealth());
+        public Tag HealthTag => new Tag(TagId.hp_display, GetName(), HealthComponent.GetCurrentHealth(), HealthComponent.GetMaxHealth());
 
-        public Tag DamageTag => new Tag("damage_display", GetName(), DamageComponent.GetRawDamage());
+        public Tag DamageTag => new Tag(TagId.damage_display, GetName(), DamageComponent.GetRawDamage());
 
         public Player(int damage, int health)
         {
