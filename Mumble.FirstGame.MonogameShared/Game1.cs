@@ -2,14 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Mumble.FirstGame.Core.Action;
-using Mumble.FirstGame.Core.Entity;
-using Mumble.FirstGame.Core.Entity.Enemy;
-using Mumble.FirstGame.Core.Entity.Player;
-using Mumble.FirstGame.Core.Scene;
-using Mumble.FirstGame.Core.Scene.Battle;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 #endregion
 
@@ -18,7 +10,7 @@ namespace Mumble.FirstGame.MonogameShared
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class GameMain : Game
+    public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -38,11 +30,6 @@ namespace Mumble.FirstGame.MonogameShared
         /// </summary>
         protected override void Initialize()
         {
-            Player player = new Player(3, 10);
-            Slime slime = new Slime(2, 4);
-            scene = new BattleScene(
-                new List<ICombatEntity>() { player },
-                new List<ICombatAIEntity>() { slime });
             // TODO: Add your initialization logic here
             base.Initialize();
         }
@@ -74,11 +61,8 @@ namespace Mumble.FirstGame.MonogameShared
             {
                 Exit();
             }
-
 #endif
-
-            IAction action = null;
-            scene.Update(action);
+            // TODO: Add your update logic here			
             base.Update(gameTime);
         }
 
