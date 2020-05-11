@@ -9,6 +9,7 @@ using Mumble.FirstGame.Core.Entity.Player;
 using Mumble.FirstGame.Core.Scene;
 using Mumble.FirstGame.Core.Scene.Battle;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 #endregion
@@ -23,6 +24,7 @@ namespace Mumble.FirstGame.MonogameShared
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         IScene scene;
+        Player player;
         public GameMain()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -38,11 +40,14 @@ namespace Mumble.FirstGame.MonogameShared
         /// </summary>
         protected override void Initialize()
         {
-            Player player = new Player(3, 10);
+            graphics.ToggleFullScreen();
+            player = new Player(3, 10);
             Slime slime = new Slime(2, 4);
+            SceneBoundary boundary = new SceneBoundary(30, 30);
             scene = new BattleScene(
-                new List<ICombatEntity>() { player },
-                new List<ICombatAIEntity>() { slime });
+                new List<IMoveableCombatEntity>() { player },
+                new List<ICombatAIEntity>() { slime },
+                boundary);
             // TODO: Add your initialization logic here
             base.Initialize();
         }
@@ -76,9 +81,19 @@ namespace Mumble.FirstGame.MonogameShared
             }
 
 #endif
-
-            IAction action = null;
+            MovementKeyHandler keyHandler = new MovementKeyHandler();
+            IAction action = keyHandler.HandleKeyPress(player);
             scene.Update(action);
+            if (action != null)
+            {
+                Debug.WriteLine("");
+                Debug.Write(action.Result.Tag.Id.ToString());
+                foreach (object arg in action.Result.Tag.Arguments)
+                {
+                    Debug.Write(";"+arg.ToString());
+                }
+            }
+            
             base.Update(gameTime);
         }
 

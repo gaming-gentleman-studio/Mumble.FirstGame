@@ -9,6 +9,7 @@ namespace Mumble.FirstGame.Core.Action.Attack
     {
         //probably not needed? leaving for now
         bool EndsEntityTurn();
+
         void CalculateEffect();
     }
 }

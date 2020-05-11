@@ -1,5 +1,6 @@
 ﻿using Mumble.FirstGame.Core.Action;
 using Mumble.FirstGame.Core.Action.Attack;
+using Mumble.FirstGame.Core.Action.Movement;
 using Mumble.FirstGame.Core.Entity;
 using System;
 using System.Collections.Generic;
@@ -11,38 +12,53 @@ namespace Mumble.FirstGame.Core.Scene.Battle
 
     public class BattleScene : IScene
     {
-        public List<ICombatEntity> PlayerTeam { get; set; }
+        public List<IMoveableCombatEntity> PlayerTeam { get; set; }
         public List<ICombatAIEntity> EnemyTeam { get; set; }
+
+        public SceneBoundary Boundary { get; private set; }
 
         private int _entityTurn = 0;
         
-        public BattleScene(List<ICombatEntity> playerTeam, List<ICombatAIEntity> enemyTeam)
+        public BattleScene(List<IMoveableCombatEntity> playerTeam, List<ICombatAIEntity> enemyTeam, SceneBoundary boundary)
         {
             PlayerTeam = playerTeam;
             EnemyTeam = enemyTeam;
+            Boundary = boundary;
         }
         public List<IAction> Update(IAction action)
         {
-            
-            if (!(action is IAttackAction)){
-                return new List<IAction>();
+            if (action is IMoveAction)
+            {
+                IMoveAction moveAction = (IMoveAction)action;
+                return Update(moveAction);
             }
-            IAttackAction combatAction = (IAttackAction) action;
-            return Update(combatAction);
+            if (action is IAttackAction){
+                IAttackAction combatAction = (IAttackAction)action;
+                return Update(combatAction); 
+            }
+            return new List<IAction>();
         }
-        private List<IAction> Update(IAttackAction action)
+        private List<IAction> Update(IMoveAction moveAction)
+        {
+            moveAction.CalculateEffect(Boundary);
+
+            //TODO - enemies may also move
+            return new List<IAction>() { moveAction };
+        }
+        private List<IAction> Update(IAttackAction combatAction)
         {
             List<IAction> results = new List<IAction>();
-            results.Add(action);
-            action.CalculateEffect();
-            if (action.EndsEntityTurn())
+            results.Add(combatAction);
+            combatAction.CalculateEffect();
+            if (combatAction.EndsEntityTurn())
             {
                 _entityTurn++;
                 if (isEnemyTurn())
                 {
                     foreach(ICombatAIEntity enemy in EnemyTeam)
                     {
-                        IAttackAction enemyAction = enemy.CombatAIComponent.GenerateCombatAction(enemy, PlayerTeam);
+                        //PlayerTeam.ToList inneficient?
+                        IAttackAction enemyAction = enemy.CombatAIComponent.GenerateCombatAction(enemy, PlayerTeam.ToList<ICombatEntity>());
                         enemyAction.CalculateEffect();
                         results.Add(enemyAction);
                     }

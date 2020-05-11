@@ -10,7 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)GameMain.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MovementAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MovementKeyHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Content\" />

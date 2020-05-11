@@ -23,12 +23,17 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Health\HealthComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Health\IHealthComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\IEntityComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Position\IPositionComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Position\PositionComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Enemy\Slime.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\ICombatAIEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\ICombatEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\IEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\IMoveableCombatEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\IMoveableEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Player\Player.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\BattleScene.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\SceneBoundary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\IScene.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Tag.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TagId.cs" />

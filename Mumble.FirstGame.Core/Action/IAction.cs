@@ -12,5 +12,7 @@ namespace Mumble.FirstGame.Core.Action
             get;
         }
         bool HasResult();
+
+        
     }
 }

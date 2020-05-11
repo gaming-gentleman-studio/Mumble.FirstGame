@@ -10,6 +10,7 @@ namespace Mumble.FirstGame.Core
         damage_taken,
         hp_display,
         damage_display,
-        move
+        move,
+        move_out_of_bounds
     }
 }
