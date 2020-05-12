@@ -8,8 +8,11 @@ using Mumble.FirstGame.Core.Entity.Enemy;
 using Mumble.FirstGame.Core.Entity.Player;
 using Mumble.FirstGame.Core.Scene;
 using Mumble.FirstGame.Core.Scene.Battle;
+using Mumble.FirstGame.Core.TagArguments;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 #endregion
@@ -60,6 +63,7 @@ namespace Mumble.FirstGame.MonogameShared
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            
 
             //TODO: use this.Content to load your game content here 
         }
@@ -88,9 +92,11 @@ namespace Mumble.FirstGame.MonogameShared
             {
                 Debug.WriteLine("");
                 Debug.Write(action.Result.Tag.Id.ToString());
-                foreach (object arg in action.Result.Tag.Arguments)
+
+                ITagArguments args = action.Result.Tag.Arguments;
+                foreach (FieldInfo field in args.GetType().GetFields())
                 {
-                    Debug.Write(";"+arg.ToString());
+                    Debug.Write(";"+ field.Name+":"+ field.GetValue(args).ToString());
                 }
             }
             

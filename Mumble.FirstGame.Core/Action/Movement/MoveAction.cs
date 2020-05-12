@@ -1,6 +1,7 @@
 ﻿using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Components.Position;
 using Mumble.FirstGame.Core.Scene.Battle;
+using Mumble.FirstGame.Core.TagArguments;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -37,7 +38,7 @@ namespace Mumble.FirstGame.Core.Action.Movement
             if (boundary.IsInBounds(newPosition))
             {
                 _entity.PositionComponent.Move(newPosition);
-                Result = new ActionResult(TagId.move, _entity.GetName(), newPosition.X, newPosition.Y);
+                Result = new ActionResult(TagId.move, new MoveArguments(_entity.GetName(), newPosition.X, newPosition.Y));
             }
             else
             {
@@ -50,7 +51,7 @@ namespace Mumble.FirstGame.Core.Action.Movement
                     newPosition = new PositionComponent(boundary.MaxValues[Direction], newPosition.Y);
                 }
                 _entity.PositionComponent.Move(newPosition);
-                Result = new ActionResult(TagId.move_out_of_bounds, _entity.GetName(), Direction, _entity.PositionComponent.X, _entity.PositionComponent.Y);
+                Result = new ActionResult(TagId.move_out_of_bounds, new MoveArguments(_entity.GetName(), _entity.PositionComponent.X, _entity.PositionComponent.Y));
             }
             
         }

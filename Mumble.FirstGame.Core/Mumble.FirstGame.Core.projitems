@@ -36,6 +36,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\SceneBoundary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\IScene.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Tag.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TagArguments\DamageArguments.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TagArguments\EntityKilledArguments.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TagArguments\HPArguments.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TagArguments\ITagArguments.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TagArguments\MoveArguments.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TagId.cs" />
   </ItemGroup>
 </Project>

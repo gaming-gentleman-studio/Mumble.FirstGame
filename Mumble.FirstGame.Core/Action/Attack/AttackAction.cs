@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Mumble.FirstGame.Core.Action;
+using Mumble.FirstGame.Core.TagArguments;
 
 namespace Mumble.FirstGame.Core.Action.Attack
 {
@@ -26,11 +27,11 @@ namespace Mumble.FirstGame.Core.Action.Attack
                 _source.DamageComponent.GetRawDamage());
            if (!_target.HealthComponent.IsAlive())
             {
-                Result = new ActionResult(TagId.enemy_killed, _target.GetName());
+                Result = new ActionResult(TagId.enemy_killed, new EntityKilledArguments(_target.GetName()));
             }
             else
             {
-                Result = new ActionResult(TagId.damage_taken, _target.GetName(), _target.DamageComponent.GetRawDamage());
+                Result = new ActionResult(TagId.damage_taken, new DamageArguments(_target.GetName(), _target.DamageComponent.GetRawDamage()));
             }
         }
 

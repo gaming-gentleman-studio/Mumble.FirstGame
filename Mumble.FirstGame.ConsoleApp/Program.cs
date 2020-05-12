@@ -16,8 +16,9 @@ namespace Mumble.FirstGame.ConsoleApp
             Player player = new Player(3, 10);
             Slime slime = new Slime(2, 4);
             BattleScene scene = new BattleScene(
-                new List<ICombatEntity>() { player },
-                new List<ICombatAIEntity>() { slime });
+                new List<IMoveableCombatEntity>() { player },
+                new List<ICombatAIEntity>() { slime },
+                new SceneBoundary(1,1));
             ConsoleGameRunner runner = new ConsoleGameRunner(scene);
             runner.Run();
         }

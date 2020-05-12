@@ -3,6 +3,7 @@ using Mumble.FirstGame.Core.Action.Movement;
 using Mumble.FirstGame.Core.Entity.Components.Damage;
 using Mumble.FirstGame.Core.Entity.Components.Health;
 using Mumble.FirstGame.Core.Entity.Components.Position;
+using Mumble.FirstGame.Core.TagArguments;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -28,9 +29,9 @@ namespace Mumble.FirstGame.Core.Entity.Player
             private set;
         }
 
-        public Tag HealthTag => new Tag(TagId.hp_display, GetName(), HealthComponent.GetCurrentHealth(), HealthComponent.GetMaxHealth());
+        public Tag HealthTag => new Tag(TagId.hp_display, new HPArguments(GetName(), HealthComponent.GetCurrentHealth(), HealthComponent.GetMaxHealth()));
 
-        public Tag DamageTag => new Tag(TagId.damage_display, GetName(), DamageComponent.GetRawDamage());
+        public Tag DamageTag => new Tag(TagId.damage_display, new DamageArguments(GetName(), DamageComponent.GetRawDamage()));
 
         
 
