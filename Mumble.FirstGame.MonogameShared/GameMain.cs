@@ -29,10 +29,10 @@ namespace Mumble.FirstGame.MonogameShared
         IScene scene;
         Player player;
         public GameMain()
-        {
+        {   
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
         }
 
         /// <summary>
@@ -43,7 +43,6 @@ namespace Mumble.FirstGame.MonogameShared
         /// </summary>
         protected override void Initialize()
         {
-            graphics.ToggleFullScreen();
             player = new Player(3, 10);
             Slime slime = new Slime(2, 4);
             SceneBoundary boundary = new SceneBoundary(30, 30);
