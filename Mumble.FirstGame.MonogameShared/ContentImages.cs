@@ -1,8 +1,8 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Web.UI.WebControls;
 
 namespace Mumble.FirstGame.MonogameShared
 {
@@ -10,6 +10,12 @@ namespace Mumble.FirstGame.MonogameShared
     {
         public Texture2D ImgTheDude { get; set; }
 
-        ImgTheDude = Content.Load<Texture2D>("The Dude");
+
+        public void LoadContent(ContentManager Content)
+        {
+            ImgTheDude = Content.Load<Texture2D>("TheDude");
+        }
+
     }
+
 }

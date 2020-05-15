@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Mumble.FirstGame.Core.Action;
+using Mumble.FirstGame.Core.Action.Movement;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Enemy;
 using Mumble.FirstGame.Core.Entity.Player;
@@ -27,7 +28,10 @@ namespace Mumble.FirstGame.MonogameShared
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         IScene scene;
+        int x=10;
+        int y=10;
         Player player;
+        ContentImages contentImages;
         public GameMain()
         {   
             graphics = new GraphicsDeviceManager(this);
@@ -62,7 +66,8 @@ namespace Mumble.FirstGame.MonogameShared
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            
+            contentImages = new ContentImages();
+            contentImages.LoadContent(Content);
 
             //TODO: use this.Content to load your game content here 
         }
@@ -91,6 +96,14 @@ namespace Mumble.FirstGame.MonogameShared
             {
                 Debug.WriteLine("");
                 Debug.Write(action.Result.Tag.Id.ToString());
+                if (action is IMoveAction)
+                {
+                    MoveArguments moveargs = (MoveArguments)action.Result.Tag.Arguments;
+                    x = moveargs.XPos*10;
+                    y = moveargs.YPos*10;
+                }
+
+                   
 
                 ITagArguments args = action.Result.Tag.Arguments;
                 foreach (FieldInfo field in args.GetType().GetFields())
@@ -108,8 +121,10 @@ namespace Mumble.FirstGame.MonogameShared
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
+            GraphicsDevice.Clear(Color.Black);
+            spriteBatch.Begin();
+            spriteBatch.Draw(contentImages.ImgTheDude, new Rectangle(x, y, 32, 32), Color.DarkGray);
+            spriteBatch.End();
             //TODO: Add your drawing code here
 
             base.Draw(gameTime);
