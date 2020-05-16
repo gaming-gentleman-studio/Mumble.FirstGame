@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mumble.FirstGame.Core.TagArguments
+namespace Mumble.FirstGame.Core.ActionResult
 {
-    public interface ITagArguments
+    public interface IActionResult
     {
     }
 }

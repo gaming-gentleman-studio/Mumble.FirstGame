@@ -8,7 +8,6 @@ using Mumble.FirstGame.Core.Entity.Enemy;
 using Mumble.FirstGame.Core.Entity.Player;
 using Mumble.FirstGame.Core.Scene;
 using Mumble.FirstGame.Core.Scene.Battle;
-using Mumble.FirstGame.Core.TagArguments;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -32,7 +31,7 @@ namespace Mumble.FirstGame.MonogameShared
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
         }
 
         /// <summary>
@@ -43,7 +42,7 @@ namespace Mumble.FirstGame.MonogameShared
         /// </summary>
         protected override void Initialize()
         {
-            graphics.ToggleFullScreen();
+            //graphics.ToggleFullScreen();
             player = new Player(3, 10);
             Slime slime = new Slime(2, 4);
             SceneBoundary boundary = new SceneBoundary(30, 30);
@@ -91,12 +90,11 @@ namespace Mumble.FirstGame.MonogameShared
             if (action != null)
             {
                 Debug.WriteLine("");
-                Debug.Write(action.Result.Tag.Id.ToString());
+                Debug.Write(action.Result.GetType().ToString());
 
-                ITagArguments args = action.Result.Tag.Arguments;
-                foreach (FieldInfo field in args.GetType().GetFields())
+                foreach (FieldInfo field in action.Result.GetType().GetFields())
                 {
-                    Debug.Write(";"+ field.Name+":"+ field.GetValue(args).ToString());
+                    Debug.Write(";"+ field.Name+":"+ field.GetValue(action.Result).ToString());
                 }
             }
             

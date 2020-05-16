@@ -9,7 +9,7 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.Common.props" />
   <PropertyGroup />
   <ItemGroup>
-    <Compile Include="Action\ActionResult.cs" />
+    <Compile Include="ActionResult\IActionResult.cs" />
     <Compile Include="Action\Attack\AttackAction.cs" />
     <Compile Include="Action\Attack\IAttackAction.cs" />
     <Compile Include="Action\IAction.cs" />

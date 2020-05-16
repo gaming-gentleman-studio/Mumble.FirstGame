@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mumble.FirstGame.Core.TagArguments
+namespace Mumble.FirstGame.Core.ActionResult
 {
-    public struct EntityKilledArguments : ITagArguments
+    public class EntityKilledActionResult : IActionResult
     {
         public readonly string TargetName;
-        public EntityKilledArguments(string targetName)
+        public EntityKilledActionResult(string targetName)
         {
             TargetName = targetName;
         }

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Mumble.FirstGame.Core.Action;
-using Mumble.FirstGame.Core.TagArguments;
+using Mumble.FirstGame.Core.ActionResult;
 
 namespace Mumble.FirstGame.Core.Action.Attack
 {
@@ -11,7 +11,7 @@ namespace Mumble.FirstGame.Core.Action.Attack
     {
         private ICombatEntity _source;
         private ICombatEntity _target;
-        public ActionResult Result { get; set; }
+        public IActionResult Result { get; set; }
 
         public AttackAction(ICombatEntity source, ICombatEntity target)
         {
@@ -27,11 +27,11 @@ namespace Mumble.FirstGame.Core.Action.Attack
                 _source.DamageComponent.GetRawDamage());
            if (!_target.HealthComponent.IsAlive())
             {
-                Result = new ActionResult(TagId.enemy_killed, new EntityKilledArguments(_target.GetName()));
+                Result = new EntityKilledActionResult(_target.GetName());
             }
             else
             {
-                Result = new ActionResult(TagId.damage_taken, new DamageArguments(_target.GetName(), _target.DamageComponent.GetRawDamage()));
+                Result = new DamageActionResult(_target.GetName(), _target.DamageComponent.GetRawDamage());
             }
         }
 

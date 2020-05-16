@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mumble.FirstGame.Core.ActionResult;
 
-namespace Mumble.FirstGame.Core.TagArguments
+namespace Mumble.FirstGame.Core.ActionResult
 {
-    public struct DamageArguments : ITagArguments
+    public class DamageActionResult : IActionResult
     {
         public readonly string TargetName;
         public readonly int DamageTaken;
-        public DamageArguments(string targetName, int damageTaken)
+        public DamageActionResult(string targetName, int damageTaken)
         {
             TargetName = targetName;
             DamageTaken = damageTaken;
