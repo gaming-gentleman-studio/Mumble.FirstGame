@@ -9,6 +9,7 @@
     <Import_RootNamespace>Mumble.FirstGame.MonogameShared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ContentImages.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameMain.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MovementKeyHandler.cs" />
   </ItemGroup>

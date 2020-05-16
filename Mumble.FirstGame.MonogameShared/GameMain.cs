@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Mumble.FirstGame.Core.Action;
+using Mumble.FirstGame.Core.Action.Movement;
+using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Enemy;
 using Mumble.FirstGame.Core.Entity.Player;
@@ -26,9 +28,12 @@ namespace Mumble.FirstGame.MonogameShared
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         IScene scene;
+        int x=10;
+        int y=10;
         Player player;
+        ContentImages contentImages;
         public GameMain()
-        {
+        {   
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             graphics.IsFullScreen = false;
@@ -42,7 +47,6 @@ namespace Mumble.FirstGame.MonogameShared
         /// </summary>
         protected override void Initialize()
         {
-            //graphics.ToggleFullScreen();
             player = new Player(3, 10);
             Slime slime = new Slime(2, 4);
             SceneBoundary boundary = new SceneBoundary(30, 30);
@@ -62,7 +66,8 @@ namespace Mumble.FirstGame.MonogameShared
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            
+            contentImages = new ContentImages();
+            contentImages.LoadContent(Content);
 
             //TODO: use this.Content to load your game content here 
         }
@@ -91,7 +96,12 @@ namespace Mumble.FirstGame.MonogameShared
             {
                 Debug.WriteLine("");
                 Debug.Write(action.Result.GetType().ToString());
-
+                if (action is IMoveAction)
+                {
+                    MoveActionResult moveResult = (MoveActionResult)action.Result;
+                    x = moveResult.XPos*10;
+                    y = moveResult.YPos*10;
+                }
                 foreach (FieldInfo field in action.Result.GetType().GetFields())
                 {
                     Debug.Write(";"+ field.Name+":"+ field.GetValue(action.Result).ToString());
@@ -107,8 +117,10 @@ namespace Mumble.FirstGame.MonogameShared
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
+            GraphicsDevice.Clear(Color.Black);
+            spriteBatch.Begin();
+            spriteBatch.Draw(contentImages.ImgTheDude, new Rectangle(x, y, 32, 32), Color.DarkGray);
+            spriteBatch.End();
             //TODO: Add your drawing code here
 
             base.Draw(gameTime);

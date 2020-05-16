@@ -10,6 +10,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ActionResult\DamageActionResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ActionResult\EntityKilledActionResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ActionResult\IActionResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ActionResult\MoveActionResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Attack\AttackAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Attack\IAttackAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\IAction.cs" />
@@ -35,12 +38,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\BattleScene.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\SceneBoundary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\IScene.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Tag.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TagArguments\DamageArguments.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TagArguments\EntityKilledArguments.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TagArguments\HPArguments.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TagArguments\ITagArguments.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TagArguments\MoveArguments.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TagId.cs" />
   </ItemGroup>
 </Project>

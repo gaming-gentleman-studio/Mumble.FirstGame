@@ -18,7 +18,5 @@ namespace Mumble.FirstGame.Core.Entity
             get;
         }
 
-        Tag HealthTag { get; }
-        Tag DamageTag { get; }
     }
 }

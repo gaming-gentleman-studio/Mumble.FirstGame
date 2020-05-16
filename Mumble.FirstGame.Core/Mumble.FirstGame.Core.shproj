@@ -9,7 +9,6 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.Common.props" />
   <PropertyGroup />
   <ItemGroup>
-    <Compile Include="ActionResult\IActionResult.cs" />
     <Compile Include="Action\Attack\AttackAction.cs" />
     <Compile Include="Action\Attack\IAttackAction.cs" />
     <Compile Include="Action\IAction.cs" />
@@ -28,7 +27,6 @@
     <Compile Include="Entity\Player\Player.cs" />
     <Compile Include="Scene\Battle\BattleScene.cs" />
     <Compile Include="Scene\IScene.cs" />
-    <Compile Include="Tag.cs" />
   </ItemGroup>
   <Import Project="Mumble.FirstGame.Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.CSharp.targets" />
