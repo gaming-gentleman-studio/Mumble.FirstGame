@@ -1,6 +1,7 @@
 ﻿using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Components.Position;
+using Mumble.FirstGame.Core.Entity.Components.Velocity;
 using Mumble.FirstGame.Core.Scene.Battle;
 using System;
 using System.Collections.Generic;
@@ -10,22 +11,24 @@ namespace Mumble.FirstGame.Core.Action.Movement
 {
     public class MoveAction : IMoveAction
     {
-        public enum DirectionValues
-        {
-            Left,
-            Right,
-            Up,
-            Down
-        }
-        public DirectionValues Direction { get; private set; }
-        public IActionResult Result { get; private set; }
-        private IMoveableEntity _entity;
 
-        public MoveAction(IMoveableEntity entity, DirectionValues direction)
+        public IVelocityComponent Velocity { get; private set; }
+        public IActionResult Result { get; private set; }
+        public IMoveableEntity Entity { get; private set; }
+
+        //Use when entity velocity has no direction
+        public MoveAction(IMoveableEntity entity, Direction direction)
         {
-            _entity = entity;
-            Direction = direction;
+            Entity = entity;
+            Velocity = new VelocityComponent(direction, Entity.VelocityComponent.Speed);
             
+        }
+        //Use when entity velocity already has direction
+        public MoveAction(IMoveableEntity entity, IVelocityComponent velocity)
+        {
+            Entity = entity;
+            Velocity = velocity;
+
         }
         public bool HasResult()
         {
@@ -34,24 +37,24 @@ namespace Mumble.FirstGame.Core.Action.Movement
 
         public void CalculateEffect(SceneBoundary boundary)
         {
-            IPositionComponent newPosition = _entity.PositionComponent.GetNewCoords(Direction);
+            IPositionComponent newPosition = Entity.PositionComponent.GetNewCoords(Velocity);
             if (boundary.IsInBounds(newPosition))
             {
-                _entity.PositionComponent.Move(newPosition);
-                Result = new MoveActionResult(_entity.GetName(), newPosition.X, newPosition.Y);
+                Entity.PositionComponent.Move(newPosition);
+                Result = new MoveActionResult(Entity.GetName(), newPosition.X, newPosition.Y);
             }
             else
             {
-                if ((Direction == DirectionValues.Up) || (Direction == DirectionValues.Down))
+                if (boundary.IsInBoundsX(newPosition))
                 {
-                    newPosition = new PositionComponent(newPosition.X, boundary.MaxValues[Direction]);
+                    newPosition = new PositionComponent(newPosition.X, boundary.GetBoundsAdjustedY(newPosition));
                 }
-                else if ((Direction == DirectionValues.Left) || (Direction == DirectionValues.Right))
+                if (boundary.IsInBoundsY(newPosition))
                 {
-                    newPosition = new PositionComponent(boundary.MaxValues[Direction], newPosition.Y);
+                    newPosition = new PositionComponent(boundary.GetBoundsAdjustedX(newPosition), newPosition.Y);
                 }
-                _entity.PositionComponent.Move(newPosition);
-                Result = new MoveActionResult(_entity.GetName(), _entity.PositionComponent.X, _entity.PositionComponent.Y,true);
+                Entity.PositionComponent.Move(newPosition);
+                Result = new MoveActionResult(Entity.GetName(), Entity.PositionComponent.X, Entity.PositionComponent.Y,true);
             }
             
         }

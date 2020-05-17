@@ -8,11 +8,14 @@ using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Enemy;
 using Mumble.FirstGame.Core.Entity.Player;
+using Mumble.FirstGame.Core.Entity.Projectile;
 using Mumble.FirstGame.Core.Scene;
 using Mumble.FirstGame.Core.Scene.Battle;
+using Mumble.FirstGame.MonogameShared.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -28,10 +31,12 @@ namespace Mumble.FirstGame.MonogameShared
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         IScene scene;
-        int x=10;
-        int y=10;
+        Dictionary<IEntity, Vector2> positions = new Dictionary<IEntity, Vector2>();
         Player player;
+        int scaling = 5;
         ContentImages contentImages;
+        MovementKeyHandler keyHandler;
+        MouseHandler mouseHandler;
         public GameMain()
         {   
             graphics = new GraphicsDeviceManager(this);
@@ -47,9 +52,12 @@ namespace Mumble.FirstGame.MonogameShared
         /// </summary>
         protected override void Initialize()
         {
+            keyHandler = new MovementKeyHandler();
+            mouseHandler = new MouseHandler();
             player = new Player(3, 10);
-            Slime slime = new Slime(2, 4);
-            SceneBoundary boundary = new SceneBoundary(30, 30);
+            positions.Add(player, new Vector2(10, 10));
+            Slime slime = new Slime(2, 4,15,15);
+            SceneBoundary boundary = new SceneBoundary(100, 100);
             scene = new BattleScene(
                 new List<IMoveableCombatEntity>() { player },
                 new List<ICombatAIEntity>() { slime },
@@ -89,25 +97,37 @@ namespace Mumble.FirstGame.MonogameShared
             }
 
 #endif
-            MovementKeyHandler keyHandler = new MovementKeyHandler();
-            IAction action = keyHandler.HandleKeyPress(player);
-            scene.Update(action);
-            if (action != null)
+            Mouse.GetState().Position.ToVector2().Normalize();
+            //TODO - move all this stuff into separate class
+            List<IAction> actions = new List<IAction>();
+            actions.AddIfNotNull(keyHandler.HandleKeyPress(player));
+            actions.AddIfNotNull(mouseHandler.HandleMouseClick(player,positions[player]));
+            actions.AddRange(scene.Update(actions));
+            if (actions.Count > 0)
             {
-                Debug.WriteLine("");
-                Debug.Write(action.Result.GetType().ToString());
-                if (action is IMoveAction)
+                foreach (IMoveAction action in actions.Where(x => x is IMoveAction))
                 {
+
                     MoveActionResult moveResult = (MoveActionResult)action.Result;
-                    x = moveResult.XPos*10;
-                    y = moveResult.YPos*10;
-                }
-                foreach (FieldInfo field in action.Result.GetType().GetFields())
-                {
-                    Debug.Write(";"+ field.Name+":"+ field.GetValue(action.Result).ToString());
+                    if (moveResult.OutOfBounds)
+                    {
+                        if (action.Entity != player)
+                        {
+                            positions.Remove(action.Entity);
+                        }
+ 
+                    }
+                    else
+                    {
+                        positions[action.Entity] = new Vector2(
+                            moveResult.XPos * 2 * scaling,
+                            moveResult.YPos * 2 * scaling
+                        );
+                    }
+                       
                 }
             }
-            
+            //DebugUtils.PrintActions(actions);
             base.Update(gameTime);
         }
 
@@ -119,7 +139,19 @@ namespace Mumble.FirstGame.MonogameShared
         {
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
-            spriteBatch.Draw(contentImages.ImgTheDude, new Rectangle(x, y, 32, 32), Color.DarkGray);
+            
+            
+            foreach (IEntity entity in positions.Keys)
+            {
+                if (entity == player)
+                {
+                    spriteBatch.Draw(contentImages.ImgTheDude, positions[entity], null, Color.DarkGray, 0f, Vector2.Zero, new Vector2(2, 2), SpriteEffects.None, 0f);
+                }
+                if (entity is SimpleBullet)
+                {
+                    spriteBatch.Draw(contentImages.Bullet, positions[entity], null, Color.DarkGray, 0f, Vector2.Zero, new Vector2(2, 2), SpriteEffects.None, 0f);
+                }
+            }
             spriteBatch.End();
             //TODO: Add your drawing code here
 

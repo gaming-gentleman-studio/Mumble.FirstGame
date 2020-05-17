@@ -10,11 +10,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ActionResult\DamageActionResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ActionResult\EntitiesCreatedActionResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ActionResult\EntityKilledActionResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ActionResult\IActionResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ActionResult\MoveActionResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Attack\AttackAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Attack\IAttackAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Action\Fire\FireWeaponAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Action\Fire\IFireWeaponAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\IAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Movement\IMoveAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Movement\MoveAction.cs" />
@@ -28,6 +31,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\IEntityComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Position\IPositionComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Position\PositionComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Velocity\Direction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Velocity\IVelocityComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Velocity\VelocityComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Enemy\Slime.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\ICombatAIEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\ICombatEntity.cs" />
@@ -35,6 +41,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entity\IMoveableCombatEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\IMoveableEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Player\Player.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Projectile\IProjectileEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Projectile\SimpleBullet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\BattleScene.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\SceneBoundary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\IScene.cs" />

@@ -7,10 +7,10 @@ namespace Mumble.FirstGame.Core.ActionResult
     public class MoveActionResult : IActionResult
     {
         public readonly string SubjectName;
-        public readonly int XPos;
-        public readonly int YPos;
+        public readonly float XPos;
+        public readonly float YPos;
         public readonly bool OutOfBounds; 
-        public MoveActionResult(string subjectName, int x, int y, bool outOfBounds = false)
+        public MoveActionResult(string subjectName, float x, float y, bool outOfBounds = false)
         {
             SubjectName = subjectName;
             XPos = x;

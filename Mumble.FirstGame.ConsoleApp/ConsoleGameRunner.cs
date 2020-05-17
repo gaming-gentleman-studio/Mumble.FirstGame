@@ -28,8 +28,7 @@ namespace Mumble.FirstGame.ConsoleApp
             while (scene.IsSceneActive())
             {
                 IAction action;
-                Console.WriteLine(TagHandler.TranslateTag(scene.PlayerTeam[0].HealthTag));
-                Console.WriteLine(TagHandler.TranslateTag(scene.EnemyTeam[0].HealthTag));
+
                 if (YN("Do you want to attack?"))
                 {
                     action = new AttackAction(scene.PlayerTeam[0], scene.EnemyTeam[0]);
@@ -40,14 +39,6 @@ namespace Mumble.FirstGame.ConsoleApp
                     action = new NullAction();
                 }
                 List<IAction> resultingActions = scene.Update(action);
-                foreach(IAction resultingAction in resultingActions)
-                {
-                    if (resultingAction.HasResult())
-                    {
-                        Console.WriteLine(TagHandler.TranslateTag(resultingAction.Result.Tag));
-                    }
-                    
-                }
             }
         }
         private bool YN(string prompt)

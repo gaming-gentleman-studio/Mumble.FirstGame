@@ -1,7 +1,10 @@
 ﻿using Mumble.FirstGame.Core.Action;
 using Mumble.FirstGame.Core.Action.Attack;
+using Mumble.FirstGame.Core.Action.Fire;
 using Mumble.FirstGame.Core.Action.Movement;
+using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
+using Mumble.FirstGame.Core.Entity.Projectile;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +18,7 @@ namespace Mumble.FirstGame.Core.Scene.Battle
         public List<IMoveableCombatEntity> PlayerTeam { get; set; }
         public List<ICombatAIEntity> EnemyTeam { get; set; }
 
+        public List<IProjectileEntity> Projectiles { get; set; }
         public SceneBoundary Boundary { get; private set; }
 
         private int _entityTurn = 0;
@@ -23,20 +27,55 @@ namespace Mumble.FirstGame.Core.Scene.Battle
         {
             PlayerTeam = playerTeam;
             EnemyTeam = enemyTeam;
+            Projectiles = new List<IProjectileEntity>();
             Boundary = boundary;
         }
-        public List<IAction> Update(IAction action)
+        public List<IAction> Update(List<IAction> actions)
         {
-            if (action is IMoveAction)
+            List<IAction> resultingActions = new List<IAction>();
+            resultingActions.AddRange(ApplyVelocity());
+            foreach (IAction action in actions)
             {
-                IMoveAction moveAction = (IMoveAction)action;
-                return Update(moveAction);
+                if (action is IMoveAction)
+                {
+                    IMoveAction moveAction = (IMoveAction)action;
+                    resultingActions.AddRange(Update(moveAction));
+                }
+                else if (action is IAttackAction)
+                {
+                    IAttackAction combatAction = (IAttackAction)action;
+                    resultingActions.AddRange(Update(combatAction));
+                }
+                else if (action is IFireWeaponAction)
+                {
+                    IFireWeaponAction fireAction = (IFireWeaponAction)action;
+                    resultingActions.AddRange(Update(fireAction));
+                }
             }
-            if (action is IAttackAction){
-                IAttackAction combatAction = (IAttackAction)action;
-                return Update(combatAction); 
+            
+            return resultingActions;
+        }
+        private List<IAction> ApplyVelocity()
+        {
+            List<IAction> resultingActions = new List<IAction>();
+            HashSet<IProjectileEntity> projectilesToRemove = new HashSet<IProjectileEntity>();
+            foreach( IProjectileEntity projectile in Projectiles)
+            {
+                MoveAction move = new MoveAction(projectile, projectile.VelocityComponent);
+                move.CalculateEffect(Boundary);
+                if (((MoveActionResult)move.Result).OutOfBounds == true)
+                {
+                    projectilesToRemove.Add(projectile);
+                }
+                resultingActions.Add(move);
             }
-            return new List<IAction>();
+            Projectiles = Projectiles.Where(x => !projectilesToRemove.Contains(x)).ToList();
+            return resultingActions;
+        }
+        private List<IAction> Update(IFireWeaponAction fireAction)
+        {
+            Projectiles.AddRange(fireAction.CalculateEffect());
+            return new List<IAction>() { fireAction };
         }
         private List<IAction> Update(IMoveAction moveAction)
         {

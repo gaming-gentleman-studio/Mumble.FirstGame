@@ -14,7 +14,7 @@ namespace Mumble.FirstGame.ConsoleApp
         {
             Console.WriteLine("Hi Nathanials");
             Player player = new Player(3, 10);
-            Slime slime = new Slime(2, 4);
+            Slime slime = new Slime(2, 4,1,1);
             BattleScene scene = new BattleScene(
                 new List<IMoveableCombatEntity>() { player },
                 new List<ICombatAIEntity>() { slime },

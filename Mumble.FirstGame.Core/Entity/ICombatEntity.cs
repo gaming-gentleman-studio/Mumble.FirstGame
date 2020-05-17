@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Mumble.FirstGame.Core.Entity
 {
-    public interface ICombatEntity : IEntity
+    public interface ICombatEntity : IMoveableEntity
     {
         IHealthComponent HealthComponent
         {

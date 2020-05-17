@@ -8,12 +8,14 @@ namespace Mumble.FirstGame.MonogameShared
 {
     class ContentImages
     {
-        public Texture2D ImgTheDude { get; set; }
+        public Texture2D ImgTheDude { get; private set; }
+        public Texture2D Bullet { get; private set; }
 
 
         public void LoadContent(ContentManager Content)
         {
             ImgTheDude = Content.Load<Texture2D>("TheDude");
+            Bullet = Content.Load<Texture2D>("Bullet");
         }
 
     }

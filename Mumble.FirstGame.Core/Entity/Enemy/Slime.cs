@@ -2,6 +2,8 @@
 using Mumble.FirstGame.Core.Entity.Components.AI;
 using Mumble.FirstGame.Core.Entity.Components.Damage;
 using Mumble.FirstGame.Core.Entity.Components.Health;
+using Mumble.FirstGame.Core.Entity.Components.Position;
+using Mumble.FirstGame.Core.Entity.Components.Velocity;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -26,11 +28,26 @@ namespace Mumble.FirstGame.Core.Entity.Enemy
             private set;
         }
 
-        public Slime(int damage, int health)
+        public IPositionComponent PositionComponent
+        {
+            get;
+            private set;
+        }
+
+        public IVelocityComponent VelocityComponent
+        {
+            get;
+            private set;
+        }
+
+        public Slime(int damage, int health, int x, int y)
         {
             DamageComponent = new DamageComponent(damage);
             HealthComponent = new HealthComponent(health);
             CombatAIComponent = new SimpleAttackAIComponent();
+            PositionComponent = new PositionComponent(x, y);
+            VelocityComponent = new VelocityComponent(Direction.None, 1);
+
         }
 
         public string GetName()
