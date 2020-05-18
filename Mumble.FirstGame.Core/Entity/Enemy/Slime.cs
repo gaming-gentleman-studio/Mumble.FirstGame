@@ -4,6 +4,7 @@ using Mumble.FirstGame.Core.Entity.Components.Damage;
 using Mumble.FirstGame.Core.Entity.Components.Health;
 using Mumble.FirstGame.Core.Entity.Components.Position;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
+using Mumble.FirstGame.Core.Entity.Components.Weapon;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,7 +13,7 @@ namespace Mumble.FirstGame.Core.Entity.Enemy
 {
     public class Slime : ICombatAIEntity
     {
-        public IDamageComponent DamageComponent
+        public IWeaponComponent WeaponComponent
         {
             get;
             private set;
@@ -42,7 +43,7 @@ namespace Mumble.FirstGame.Core.Entity.Enemy
 
         public Slime(int damage, int health, int x, int y)
         {
-            DamageComponent = new DamageComponent(damage);
+            WeaponComponent = new SimpleWeaponComponent(new VelocityComponent(Direction.None, 1),new DamageComponent(damage));
             HealthComponent = new HealthComponent(health);
             CombatAIComponent = new SimpleAttackAIComponent();
             PositionComponent = new PositionComponent(x, y);

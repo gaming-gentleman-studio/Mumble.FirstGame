@@ -27,11 +27,11 @@ namespace Mumble.FirstGame.Core.Entity.Projectile
             private set;
         }
 
-        public SimpleBullet(IPositionComponent sourceEntityPosition, IDamageComponent sourceEntityDamage, Direction direction)
+        public SimpleBullet(float x, float y, int damage, Direction direction, float speed)
         {
-            PositionComponent = sourceEntityPosition;
-            DamageComponent = sourceEntityDamage;
-            VelocityComponent = new VelocityComponent(direction, 1);
+            PositionComponent = new PositionComponent(x,y);
+            DamageComponent = new DamageComponent(damage);
+            VelocityComponent = new VelocityComponent(direction, speed);
         }
         public string GetName()
         {

@@ -24,14 +24,14 @@ namespace Mumble.FirstGame.Core.Action.Attack
         public void CalculateEffect()
         {
             _target.HealthComponent.Hit(
-                _source.DamageComponent.GetRawDamage());
+                _source.WeaponComponent.DamageComponent.GetRawDamage());
            if (!_target.HealthComponent.IsAlive())
             {
                 Result = new EntityKilledActionResult(_target.GetName());
             }
             else
             {
-                Result = new DamageActionResult(_target.GetName(), _target.DamageComponent.GetRawDamage());
+                Result = new DamageActionResult(_target.GetName(), _target.WeaponComponent.DamageComponent.GetRawDamage());
             }
         }
 

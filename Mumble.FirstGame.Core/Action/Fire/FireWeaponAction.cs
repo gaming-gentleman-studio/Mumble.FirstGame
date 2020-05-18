@@ -14,7 +14,7 @@ namespace Mumble.FirstGame.Core.Action.Fire
     public class FireWeaponAction : IFireWeaponAction
     {
         private Direction _direction;
-        private ICombatEntity _sourceEntity;
+        public ICombatEntity Entity { get; private set; }
 
         public IActionResult Result
         {
@@ -25,13 +25,13 @@ namespace Mumble.FirstGame.Core.Action.Fire
         
         public FireWeaponAction(ICombatEntity sourceEntity, Direction direction)
         {
-            _sourceEntity = sourceEntity;
+            Entity = sourceEntity;
             _direction = direction;
         }
         public List<IProjectileEntity> CalculateEffect()
         {
             List<IProjectileEntity> projectiles = new List<IProjectileEntity>();
-            SimpleBullet bullet = new SimpleBullet(new PositionComponent(_sourceEntity.PositionComponent.X,_sourceEntity.PositionComponent.Y), new DamageComponent(_sourceEntity.DamageComponent.GetRawDamage()), _direction);
+            SimpleBullet bullet = new SimpleBullet(Entity.PositionComponent.X, Entity.PositionComponent.Y, Entity.WeaponComponent.DamageComponent.GetRawDamage(), _direction,Entity.WeaponComponent.VelocityComponent.Speed);
             projectiles.Add(bullet);
             Result = new EntitiesCreatedActionResult(projectiles.ToList<IEntity>());
             return projectiles;

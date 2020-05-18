@@ -34,6 +34,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Velocity\Direction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Velocity\IVelocityComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Velocity\VelocityComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Weapon\IWeaponComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Weapon\SimpleWeaponComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Enemy\Slime.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\ICombatAIEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\ICombatEntity.cs" />

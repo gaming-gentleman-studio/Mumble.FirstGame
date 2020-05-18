@@ -4,6 +4,7 @@ using Mumble.FirstGame.Core.Entity.Components.Damage;
 using Mumble.FirstGame.Core.Entity.Components.Health;
 using Mumble.FirstGame.Core.Entity.Components.Position;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
+using Mumble.FirstGame.Core.Entity.Components.Weapon;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,7 +13,7 @@ namespace Mumble.FirstGame.Core.Entity.Player
 {
     public class Player : IMoveableCombatEntity
     {
-        public IDamageComponent DamageComponent
+        public IWeaponComponent WeaponComponent
         {
             get;
             private set;
@@ -36,7 +37,7 @@ namespace Mumble.FirstGame.Core.Entity.Player
 
         public Player(int damage, int health)
         {
-            DamageComponent = new DamageComponent(damage);
+            WeaponComponent = new SimpleWeaponComponent(new VelocityComponent(Direction.None,1),new DamageComponent(damage));
             HealthComponent = new HealthComponent(health);
             PositionComponent = new PositionComponent(0, 0);
             VelocityComponent = new VelocityComponent(Direction.None,1);

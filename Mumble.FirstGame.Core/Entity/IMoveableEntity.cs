@@ -10,10 +10,6 @@ namespace Mumble.FirstGame.Core.Entity
 {
     public interface IMoveableEntity : IEntity
     {
-        IPositionComponent PositionComponent
-        {
-            get;
-        }
         IVelocityComponent VelocityComponent
         {
             get;

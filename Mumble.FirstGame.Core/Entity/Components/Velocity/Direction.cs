@@ -9,7 +9,7 @@ namespace Mumble.FirstGame.Core.Entity.Components.Velocity
     {
         public readonly float X;
         public readonly float Y;
-
+        public readonly float Radians;
         public Direction(float x, float y)
         {
             if ((x > 1) || (x < -1))
@@ -23,6 +23,7 @@ namespace Mumble.FirstGame.Core.Entity.Components.Velocity
             }
             X = x;
             Y = y;
+            Radians = (float)Math.Atan2(Y, X);
         }
         public static Direction Up => new Direction(0, -1);
         public static Direction Down => new Direction(0, 1);

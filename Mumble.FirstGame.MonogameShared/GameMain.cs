@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Mumble.FirstGame.Core.Action;
+using Mumble.FirstGame.Core.Action.Fire;
 using Mumble.FirstGame.Core.Action.Movement;
 using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
@@ -99,12 +100,28 @@ namespace Mumble.FirstGame.MonogameShared
 #endif
             Mouse.GetState().Position.ToVector2().Normalize();
             //TODO - move all this stuff into separate class
+            // Really need to clean this up lol, will do later
             List<IAction> actions = new List<IAction>();
             actions.AddIfNotNull(keyHandler.HandleKeyPress(player));
             actions.AddIfNotNull(mouseHandler.HandleMouseClick(player,positions[player]));
             actions.AddRange(scene.Update(actions));
             if (actions.Count > 0)
             {
+                foreach(IFireWeaponAction action in actions.Where(x => x is IFireWeaponAction))
+                {
+                    EntitiesCreatedActionResult entityCreatedResult = (EntitiesCreatedActionResult)action.Result;
+                    if (action.Result is EntitiesCreatedActionResult)
+                    {
+                        EntitiesCreatedActionResult result = (EntitiesCreatedActionResult)action.Result;
+                        foreach(IEntity entity in result.Entities)
+                        {
+                            positions[entity] = new Vector2(
+                                (entity.PositionComponent.X * 2 * scaling)+16,
+                                (entity.PositionComponent.Y * 2 * scaling)+16
+                            );
+                        }
+                    }
+                }
                 foreach (IMoveAction action in actions.Where(x => x is IMoveAction))
                 {
 
@@ -119,10 +136,21 @@ namespace Mumble.FirstGame.MonogameShared
                     }
                     else
                     {
-                        positions[action.Entity] = new Vector2(
-                            moveResult.XPos * 2 * scaling,
-                            moveResult.YPos * 2 * scaling
-                        );
+                        if (action.Entity != player)
+                        {
+                            positions[action.Entity] = new Vector2(
+                                moveResult.XPos * 2 * scaling+16,
+                                moveResult.YPos * 2 * scaling+16
+                            );
+                        }
+                        else
+                        {
+                            positions[action.Entity] = new Vector2(
+                                moveResult.XPos * 2 * scaling,
+                                moveResult.YPos * 2 * scaling
+                            );
+                        }
+                        
                     }
                        
                 }
@@ -140,7 +168,6 @@ namespace Mumble.FirstGame.MonogameShared
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
             
-            
             foreach (IEntity entity in positions.Keys)
             {
                 if (entity == player)
@@ -149,7 +176,9 @@ namespace Mumble.FirstGame.MonogameShared
                 }
                 if (entity is SimpleBullet)
                 {
-                    spriteBatch.Draw(contentImages.Bullet, positions[entity], null, Color.DarkGray, 0f, Vector2.Zero, new Vector2(2, 2), SpriteEffects.None, 0f);
+                    SimpleBullet bulletEntity = (SimpleBullet)entity;
+                    //origin = <width/2,height/2>
+                    spriteBatch.Draw(contentImages.Bullet, positions[bulletEntity], null, Color.DarkGray, bulletEntity.VelocityComponent.Direction.Radians, new Vector2(8,8), new Vector2(1, 1), SpriteEffects.None, 0f);
                 }
             }
             spriteBatch.End();
