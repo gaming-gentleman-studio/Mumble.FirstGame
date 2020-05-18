@@ -28,11 +28,13 @@ namespace Mumble.FirstGame.Core.Action.Fire
             Entity = sourceEntity;
             _direction = direction;
         }
-        public List<IProjectileEntity> CalculateEffect()
+        public List<IProjectileEntity> CalculateEffect(TimeSpan elapsed)
         {
             List<IProjectileEntity> projectiles = new List<IProjectileEntity>();
-            SimpleBullet bullet = new SimpleBullet(Entity.PositionComponent.X, Entity.PositionComponent.Y, Entity.WeaponComponent.DamageComponent.GetRawDamage(), _direction,Entity.WeaponComponent.VelocityComponent.Speed);
-            projectiles.Add(bullet);
+            if (Entity.WeaponComponent.AbleToFire(elapsed))
+            {
+                projectiles = Entity.WeaponComponent.Fire(Entity.PositionComponent.X, Entity.PositionComponent.Y, _direction);
+            }
             Result = new EntitiesCreatedActionResult(projectiles.ToList<IEntity>());
             return projectiles;
         }

@@ -8,7 +8,7 @@ namespace Mumble.FirstGame.Core.Action.Fire
 {
     public interface IFireWeaponAction : IAction
     {
-        List<IProjectileEntity> CalculateEffect();
+        List<IProjectileEntity> CalculateEffect(TimeSpan elapsed);
 
         ICombatEntity Entity { get; }
     }

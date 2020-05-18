@@ -1,5 +1,6 @@
 ﻿using Mumble.FirstGame.Core.Entity.Components.Damage;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
+using Mumble.FirstGame.Core.Entity.Projectile;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,5 +11,8 @@ namespace Mumble.FirstGame.Core.Entity.Components.Weapon
     {
         IVelocityComponent VelocityComponent { get; }
         IDamageComponent DamageComponent { get; }
+
+        bool AbleToFire(TimeSpan elapsed);
+        List<IProjectileEntity> Fire(float sourceX, float sourceY, Direction direction);
     }
 }

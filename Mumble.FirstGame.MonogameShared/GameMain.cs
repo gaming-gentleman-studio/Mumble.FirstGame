@@ -104,7 +104,7 @@ namespace Mumble.FirstGame.MonogameShared
             List<IAction> actions = new List<IAction>();
             actions.AddIfNotNull(keyHandler.HandleKeyPress(player));
             actions.AddIfNotNull(mouseHandler.HandleMouseClick(player,positions[player]));
-            actions.AddRange(scene.Update(actions));
+            actions.AddRange(scene.Update(actions,gameTime.ElapsedGameTime));
             if (actions.Count > 0)
             {
                 foreach(IFireWeaponAction action in actions.Where(x => x is IFireWeaponAction))

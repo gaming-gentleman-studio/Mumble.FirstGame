@@ -38,7 +38,6 @@ namespace Mumble.FirstGame.ConsoleApp
                 {
                     action = new NullAction();
                 }
-                List<IAction> resultingActions = scene.Update(action);
             }
         }
         private bool YN(string prompt)

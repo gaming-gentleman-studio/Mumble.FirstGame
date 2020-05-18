@@ -21,6 +21,8 @@ namespace Mumble.FirstGame.Core.Scene.Battle
         public List<IProjectileEntity> Projectiles { get; set; }
         public SceneBoundary Boundary { get; private set; }
 
+        private TimeSpan _elapsed;
+
         private int _entityTurn = 0;
         
         public BattleScene(List<IMoveableCombatEntity> playerTeam, List<ICombatAIEntity> enemyTeam, SceneBoundary boundary)
@@ -30,8 +32,9 @@ namespace Mumble.FirstGame.Core.Scene.Battle
             Projectiles = new List<IProjectileEntity>();
             Boundary = boundary;
         }
-        public List<IAction> Update(List<IAction> actions)
+        public List<IAction> Update(List<IAction> actions, TimeSpan elapsed)
         {
+            _elapsed = elapsed;
             List<IAction> resultingActions = new List<IAction>();
             resultingActions.AddRange(ApplyVelocity());
             foreach (IAction action in actions)
@@ -74,7 +77,7 @@ namespace Mumble.FirstGame.Core.Scene.Battle
         }
         private List<IAction> Update(IFireWeaponAction fireAction)
         {
-            Projectiles.AddRange(fireAction.CalculateEffect());
+            Projectiles.AddRange(fireAction.CalculateEffect(_elapsed));
             return new List<IAction>() { fireAction };
         }
         private List<IAction> Update(IMoveAction moveAction)
