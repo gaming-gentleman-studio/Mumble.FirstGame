@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>8fc457a9-50e1-4fb6-a49a-eaf0c6b83fb9</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Mumble.FirstGame.Client</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ClientType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IGameClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OnlineGameClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SoloGameClient.cs" />
+  </ItemGroup>
+</Project>

@@ -7,4 +7,6 @@
 
   <Import Project="..\Mumble.FirstGame.Core\Mumble.FirstGame.Core.projitems" Label="Shared" />
 
+  <Import Project="..\Mumble.FirstGame.Client\Mumble.FirstGame.Client.projitems" Label="Shared" />
+
 </Project>

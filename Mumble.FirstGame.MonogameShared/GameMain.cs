@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Mumble.FirstGame.Client;
 using Mumble.FirstGame.Core.Action;
 using Mumble.FirstGame.Core.Action.Fire;
 using Mumble.FirstGame.Core.Action.Movement;
@@ -10,13 +11,12 @@ using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Enemy;
 using Mumble.FirstGame.Core.Entity.Player;
 using Mumble.FirstGame.Core.Entity.Projectile;
-using Mumble.FirstGame.Core.Scene;
-using Mumble.FirstGame.Core.Scene.Battle;
 using Mumble.FirstGame.MonogameShared.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -31,7 +31,8 @@ namespace Mumble.FirstGame.MonogameShared
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        IScene scene;
+        ClientType clientType = ClientType.Online;
+        IGameClient client;
         Dictionary<IEntity, Vector2> positions = new Dictionary<IEntity, Vector2>();
         Player player;
         int scaling = 5;
@@ -55,14 +56,21 @@ namespace Mumble.FirstGame.MonogameShared
         {
             keyHandler = new MovementKeyHandler();
             mouseHandler = new MouseHandler();
+
             player = new Player(3, 10);
-            positions.Add(player, new Vector2(10, 10));
-            Slime slime = new Slime(2, 4,15,15);
-            SceneBoundary boundary = new SceneBoundary(100, 100);
-            scene = new BattleScene(
-                new List<IMoveableCombatEntity>() { player },
-                new List<ICombatAIEntity>() { slime },
-                boundary);
+            //solo
+            if (clientType == ClientType.Solo)
+            {
+                client = new SoloGameClient();
+            }
+            else if (clientType == ClientType.Online)
+            {
+                IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 27000);
+                client = new OnlineGameClient(endpoint);
+            }
+            client.Init(player);
+            
+            positions.Add(player, new Vector2(0, 0));
             // TODO: Add your initialization logic here
             base.Initialize();
         }
@@ -104,7 +112,7 @@ namespace Mumble.FirstGame.MonogameShared
             List<IAction> actions = new List<IAction>();
             actions.AddIfNotNull(keyHandler.HandleKeyPress(player));
             actions.AddIfNotNull(mouseHandler.HandleMouseClick(player,positions[player]));
-            actions.AddRange(scene.Update(actions,gameTime.ElapsedGameTime));
+            actions.AddRange(client.Update(actions,gameTime.ElapsedGameTime));
             if (actions.Count > 0)
             {
                 foreach(IFireWeaponAction action in actions.Where(x => x is IFireWeaponAction))
