@@ -2,6 +2,7 @@
 using System.Data;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 
 namespace Mumble.FirstGame.Server
 {
@@ -10,7 +11,7 @@ namespace Mumble.FirstGame.Server
         private Socket _socket;
         private const int _bufSize = 8 * 1024;
         private State _state = new State();
-        private EndPoint _validSender = new IPEndPoint(IPAddress.Any, 0);
+        private EndPoint _sender = new IPEndPoint(IPAddress.Any, 0);
         private AsyncCallback recv = null;
 
         public class State
@@ -25,12 +26,14 @@ namespace Mumble.FirstGame.Server
         }
         public void Listen()
         {
-            _socket.BeginReceiveFrom(_state.Buffer, 0, _bufSize, SocketFlags.None, ref _validSender, recv = (ar) =>
+            _socket.BeginReceiveFrom(_state.Buffer, 0, _bufSize, SocketFlags.None, ref _sender, recv = (ar) =>
                {
                    State state = (State)ar.AsyncState;
-                   int bytes = _socket.EndReceiveFrom(ar, ref _validSender);
-                   _socket.BeginReceiveFrom(state.Buffer, 0, _bufSize, SocketFlags.None, ref _validSender, recv, state);
-                   Console.WriteLine("RECEIVED");
+                   int bytes = _socket.EndReceiveFrom(ar, ref _sender);
+                   _socket.BeginReceiveFrom(state.Buffer, 0, _bufSize, SocketFlags.None, ref _sender, recv, state);
+                   Console.WriteLine("RECV: {0}: {1}, {2}", _sender.ToString(), bytes, Encoding.ASCII.GetString(state.Buffer, 0, bytes));
+                   byte[] res = Encoding.ASCII.GetBytes("Server Reply");
+                   _socket.SendTo(res,_sender);
                }, _state);
         }
     }

@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Text;
 using Mumble.FirstGame.Core.ActionResult;
+using Mumble.FirstGame.Core.Entity;
 
 namespace Mumble.FirstGame.Core.ActionResult
 {
     public class DamageActionResult : IActionResult
     {
-        public readonly string TargetName;
+        public readonly IEntity Entity;
         public readonly int DamageTaken;
-        public DamageActionResult(string targetName, int damageTaken)
+        public DamageActionResult(IEntity target, int damageTaken)
         {
-            TargetName = targetName;
+            Entity = target;
             DamageTaken = damageTaken;
         }
     }

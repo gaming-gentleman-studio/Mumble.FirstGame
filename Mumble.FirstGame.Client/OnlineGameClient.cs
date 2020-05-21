@@ -1,4 +1,5 @@
 ﻿using Mumble.FirstGame.Core.Action;
+using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Player;
 using System;
@@ -14,7 +15,7 @@ namespace Mumble.FirstGame.Client
         private Socket _socket;
         private const int _bufSize = 8 * 1024;
         private State _state = new State();
-        private EndPoint _validSender = new IPEndPoint(IPAddress.Any, 0);
+        private EndPoint _sender = new IPEndPoint(IPAddress.Any, 0);
         private AsyncCallback recv = null;
         public class State
         {
@@ -26,14 +27,14 @@ namespace Mumble.FirstGame.Client
             _socket.Connect(endpoint);
             Receive();
         }
-        private void Receive()
+        public void Receive()
         {
-            _socket.BeginReceiveFrom(_state.Buffer, 0, _bufSize, SocketFlags.None, ref _validSender, recv = (ar) =>
+            _socket.BeginReceiveFrom(_state.Buffer, 0, _bufSize, SocketFlags.None, ref _sender, recv = (ar) =>
             {
                 State state = (State)ar.AsyncState;
-                int bytes = _socket.EndReceiveFrom(ar, ref _validSender);
-                _socket.BeginReceiveFrom(state.Buffer, 0, _bufSize, SocketFlags.None, ref _validSender, recv, state);
-                Console.WriteLine("RECEIVED");
+                int bytes = _socket.EndReceiveFrom(ar, ref _sender);
+                _socket.BeginReceiveFrom(state.Buffer, 0, _bufSize, SocketFlags.None, ref _sender, recv, state);
+                Console.WriteLine("RECV: {0}: {1}, {2}", _sender.ToString(), bytes, Encoding.ASCII.GetString(state.Buffer, 0, bytes));
             }, _state);
         }
         public void Send(string text)
@@ -57,14 +58,14 @@ namespace Mumble.FirstGame.Client
             return new List<Player>(); 
         }
 
-        public List<IAction> Update(List<IAction> actions, TimeSpan elapsed)
+        public List<IActionResult> Update(List<IAction> actions, TimeSpan elapsed)
         {
             if (actions.Count > 0)
             {
                 Send("Update");
             }
             Send("Update");
-            return new List<IAction>();
+            return new List<IActionResult>();
         }
 
         public void Init(Player player)

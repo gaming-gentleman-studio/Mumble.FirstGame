@@ -32,7 +32,7 @@ namespace Mumble.FirstGame.Core.Scene.Battle
             Projectiles = new List<IProjectileEntity>();
             Boundary = boundary;
         }
-        public List<IAction> Update(List<IAction> actions, TimeSpan elapsed)
+        public List<IActionResult> Update(List<IAction> actions, TimeSpan elapsed)
         {
             _elapsed = elapsed;
             List<IAction> resultingActions = new List<IAction>();
@@ -56,7 +56,7 @@ namespace Mumble.FirstGame.Core.Scene.Battle
                 }
             }
             
-            return resultingActions;
+            return resultingActions.Select(x => x.Result).ToList<IActionResult>();
         }
         private List<IAction> ApplyVelocity()
         {

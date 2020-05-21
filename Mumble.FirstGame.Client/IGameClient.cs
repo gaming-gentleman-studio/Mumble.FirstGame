@@ -1,4 +1,5 @@
 ﻿using Mumble.FirstGame.Core.Action;
+using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Player;
 using System;
@@ -9,7 +10,7 @@ namespace Mumble.FirstGame.Client
 {
     public interface IGameClient
     {
-        List<IAction> Update(List<IAction> actions, TimeSpan elapsed);
+        List<IActionResult> Update(List<IAction> actions, TimeSpan elapsed);
 
         void Init(Player player);
         List<Player> GetPlayers();

@@ -1,4 +1,5 @@
 ﻿using Mumble.FirstGame.Core.Action;
+using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Enemy;
 using Mumble.FirstGame.Core.Entity.Player;
@@ -37,7 +38,7 @@ namespace Mumble.FirstGame.Client
                 boundary);
         }
 
-        public List<IAction> Update(List<IAction> actions, TimeSpan elapsed)
+        public List<IActionResult> Update(List<IAction> actions, TimeSpan elapsed)
         {
             return _scene.Update(actions, elapsed);
         }

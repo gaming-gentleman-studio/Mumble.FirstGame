@@ -49,4 +49,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\SceneBoundary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\IScene.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)ProtoBuf\ActionResult\Schema\" />
+    <Folder Include="$(MSBuildThisFileDirectory)ProtoBuf\Action\Schema\" />
+  </ItemGroup>
 </Project>

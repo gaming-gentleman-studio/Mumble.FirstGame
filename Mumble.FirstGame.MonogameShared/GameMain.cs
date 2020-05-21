@@ -31,7 +31,7 @@ namespace Mumble.FirstGame.MonogameShared
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        ClientType clientType = ClientType.Online;
+        ClientType clientType = ClientType.Solo;
         IGameClient client;
         Dictionary<IEntity, Vector2> positions = new Dictionary<IEntity, Vector2>();
         Player player;
@@ -65,7 +65,8 @@ namespace Mumble.FirstGame.MonogameShared
             }
             else if (clientType == ClientType.Online)
             {
-                IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 27000);
+                //IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 27000);
+                IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse("52.151.9.24"), 27000);
                 client = new OnlineGameClient(endpoint);
             }
             client.Init(player);
@@ -109,58 +110,53 @@ namespace Mumble.FirstGame.MonogameShared
             Mouse.GetState().Position.ToVector2().Normalize();
             //TODO - move all this stuff into separate class
             // Really need to clean this up lol, will do later
+            List<IActionResult> results = new List<IActionResult>();
             List<IAction> actions = new List<IAction>();
             actions.AddIfNotNull(keyHandler.HandleKeyPress(player));
             actions.AddIfNotNull(mouseHandler.HandleMouseClick(player,positions[player]));
-            actions.AddRange(client.Update(actions,gameTime.ElapsedGameTime));
-            if (actions.Count > 0)
+            results = client.Update(actions,gameTime.ElapsedGameTime);
+            if (results.Count > 0)
             {
-                foreach(IFireWeaponAction action in actions.Where(x => x is IFireWeaponAction))
+                foreach (EntitiesCreatedActionResult result in results.Where(x => x is EntitiesCreatedActionResult))
                 {
-                    EntitiesCreatedActionResult entityCreatedResult = (EntitiesCreatedActionResult)action.Result;
-                    if (action.Result is EntitiesCreatedActionResult)
+                    foreach (IEntity entity in result.Entities)
                     {
-                        EntitiesCreatedActionResult result = (EntitiesCreatedActionResult)action.Result;
-                        foreach(IEntity entity in result.Entities)
-                        {
-                            positions[entity] = new Vector2(
-                                (entity.PositionComponent.X * 2 * scaling)+16,
-                                (entity.PositionComponent.Y * 2 * scaling)+16
-                            );
-                        }
+                        positions[entity] = new Vector2(
+                            (entity.PositionComponent.X * 2 * scaling) + 16,
+                            (entity.PositionComponent.Y * 2 * scaling) + 16
+                        );
                     }
                 }
-                foreach (IMoveAction action in actions.Where(x => x is IMoveAction))
+                foreach (MoveActionResult result in results.Where(x => x is MoveActionResult))
                 {
 
-                    MoveActionResult moveResult = (MoveActionResult)action.Result;
-                    if (moveResult.OutOfBounds)
+                    if (result.OutOfBounds)
                     {
-                        if (action.Entity != player)
+                        if (result.Entity != player)
                         {
-                            positions.Remove(action.Entity);
+                            positions.Remove(result.Entity);
                         }
- 
+
                     }
                     else
                     {
-                        if (action.Entity != player)
+                        if (result.Entity != player)
                         {
-                            positions[action.Entity] = new Vector2(
-                                moveResult.XPos * 2 * scaling+16,
-                                moveResult.YPos * 2 * scaling+16
+                            positions[result.Entity] = new Vector2(
+                                result.XPos * 2 * scaling + 16,
+                                result.YPos * 2 * scaling + 16
                             );
                         }
                         else
                         {
-                            positions[action.Entity] = new Vector2(
-                                moveResult.XPos * 2 * scaling,
-                                moveResult.YPos * 2 * scaling
+                            positions[result.Entity] = new Vector2(
+                                result.XPos * 2 * scaling,
+                                result.YPos * 2 * scaling
                             );
                         }
-                        
+
                     }
-                       
+
                 }
             }
             //DebugUtils.PrintActions(actions);

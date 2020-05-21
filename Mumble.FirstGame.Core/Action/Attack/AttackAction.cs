@@ -27,11 +27,11 @@ namespace Mumble.FirstGame.Core.Action.Attack
                 _source.WeaponComponent.DamageComponent.GetRawDamage());
            if (!_target.HealthComponent.IsAlive())
             {
-                Result = new EntityKilledActionResult(_target.GetName());
+                Result = new EntityKilledActionResult(_target);
             }
             else
             {
-                Result = new DamageActionResult(_target.GetName(), _target.WeaponComponent.DamageComponent.GetRawDamage());
+                Result = new DamageActionResult(_target, _target.WeaponComponent.DamageComponent.GetRawDamage());
             }
         }
 
