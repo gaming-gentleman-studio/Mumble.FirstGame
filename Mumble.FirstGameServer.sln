@@ -5,13 +5,18 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mumble.FirstGame.ServerConsole", "Mumble.FirstGame.ServerConsole\Mumble.FirstGame.ServerConsole.csproj", "{D509CCAA-7D05-4829-96EF-C3221AAC532F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mumble.FirstGame.Server", "Mumble.FirstGame.Server\Mumble.FirstGame.Server.csproj", "{5CDA4346-B647-4719-841A-6E1D57B40000}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mumble.FirstGame.Server", "Mumble.FirstGame.Server\Mumble.FirstGame.Server.csproj", "{5CDA4346-B647-4719-841A-6E1D57B40000}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Mumble.FirstGame.Core", "Mumble.FirstGame.Core\Mumble.FirstGame.Core.shproj", "{CCE26E5C-58E5-4B0E-8282-A2104BF39E71}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Mumble.FirstGame.Serialization", "Mumble.FirstGame.Serialization\Mumble.FirstGame.Serialization.shproj", "{661E66DB-611E-4E7C-8447-0847BDDE55CB}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		..\Mumble.FirstGame\Mumble.FirstGame.Core\Mumble.FirstGame.Core.projitems*{cce26e5c-58e5-4b0e-8282-a2104bf39e71}*SharedItemsImports = 13
+		Mumble.FirstGame.Core\Mumble.FirstGame.Core.projitems*{5cda4346-b647-4719-841a-6e1d57b40000}*SharedItemsImports = 5
+		Mumble.FirstGame.Serialization\Mumble.FirstGame.Serialization.projitems*{5cda4346-b647-4719-841a-6e1d57b40000}*SharedItemsImports = 5
+		Mumble.FirstGame.Serialization\Mumble.FirstGame.Serialization.projitems*{661e66db-611e-4e7c-8447-0847bdde55cb}*SharedItemsImports = 13
+		Mumble.FirstGame.Core\Mumble.FirstGame.Core.projitems*{cce26e5c-58e5-4b0e-8282-a2104bf39e71}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

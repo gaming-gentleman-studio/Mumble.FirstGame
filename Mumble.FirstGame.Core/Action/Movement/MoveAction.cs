@@ -23,7 +23,9 @@ namespace Mumble.FirstGame.Core.Action.Movement
             Velocity = new VelocityComponent(direction, Entity.VelocityComponent.Speed);
             
         }
-        //Use when entity velocity already has direction
+        //DO NOT USE IN FRONT END Use when entity velocity already has direction
+
+        // TODO - how to make internal for shared projects?
         public MoveAction(IMoveableEntity entity, IVelocityComponent velocity)
         {
             Entity = entity;

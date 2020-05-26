@@ -11,6 +11,7 @@ using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Enemy;
 using Mumble.FirstGame.Core.Entity.Player;
 using Mumble.FirstGame.Core.Entity.Projectile;
+using Mumble.FirstGame.Core.Scene.EntityContainer;
 using Mumble.FirstGame.MonogameShared.Utils;
 using System;
 using System.Collections.Generic;
@@ -31,7 +32,7 @@ namespace Mumble.FirstGame.MonogameShared
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        ClientType clientType = ClientType.Solo;
+        ClientType clientType = ClientType.Online;
         IGameClient client;
         Dictionary<IEntity, Vector2> positions = new Dictionary<IEntity, Vector2>();
         Player player;
@@ -58,6 +59,7 @@ namespace Mumble.FirstGame.MonogameShared
             mouseHandler = new MouseHandler();
 
             player = new Player(3, 10);
+            BattleEntityContainer entityContainer = new BattleEntityContainer(new List<IMoveableCombatEntity>() { player });
             //solo
             if (clientType == ClientType.Solo)
             {
@@ -65,11 +67,11 @@ namespace Mumble.FirstGame.MonogameShared
             }
             else if (clientType == ClientType.Online)
             {
-                //IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 27000);
-                IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse("52.151.9.24"), 27000);
+                IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 27000);
+                //IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse("52.151.9.24"), 27000);
                 client = new OnlineGameClient(endpoint);
             }
-            client.Init(player);
+            client.Init(entityContainer);
             
             positions.Add(player, new Vector2(0, 0));
             // TODO: Add your initialization logic here
@@ -114,7 +116,7 @@ namespace Mumble.FirstGame.MonogameShared
             List<IAction> actions = new List<IAction>();
             actions.AddIfNotNull(keyHandler.HandleKeyPress(player));
             actions.AddIfNotNull(mouseHandler.HandleMouseClick(player,positions[player]));
-            results = client.Update(actions,gameTime.ElapsedGameTime);
+            results = client.Update(actions);
             if (results.Count > 0)
             {
                 foreach (EntitiesCreatedActionResult result in results.Where(x => x is EntitiesCreatedActionResult))

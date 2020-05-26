@@ -1,4 +1,5 @@
 ﻿using Mumble.FirstGame.Core.Entity;
+using Mumble.FirstGame.Core.Entity.Components.Velocity;
 using Mumble.FirstGame.Core.Entity.Projectile;
 using System;
 using System.Collections.Generic;
@@ -11,5 +12,7 @@ namespace Mumble.FirstGame.Core.Action.Fire
         List<IProjectileEntity> CalculateEffect(TimeSpan elapsed);
 
         ICombatEntity Entity { get; }
+
+        Direction Direction { get; }
     }
 }

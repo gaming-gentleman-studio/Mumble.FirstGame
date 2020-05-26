@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -8,5 +8,11 @@
   <Import Project="..\Mumble.FirstGame.Core\Mumble.FirstGame.Core.projitems" Label="Shared" />
 
   <Import Project="..\Mumble.FirstGame.Client\Mumble.FirstGame.Client.projitems" Label="Shared" />
+
+  <Import Project="..\Mumble.FirstGame.Serialization\Mumble.FirstGame.Serialization.projitems" Label="Shared" />
+
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.12.1" />
+  </ItemGroup>
 
 </Project>

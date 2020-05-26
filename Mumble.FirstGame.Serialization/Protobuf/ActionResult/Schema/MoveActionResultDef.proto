@@ -1,0 +1,11 @@
+﻿syntax = "proto3";
+package actionresult;
+
+option csharp_namespace = "Mumble.FirstGame.Serialization.Protobuf.ActionResult";
+
+message MoveActionResultDef{
+    int32 id = 1;
+    float x = 2;
+    float y = 3;
+    bool outOfBounds = 4;
+}

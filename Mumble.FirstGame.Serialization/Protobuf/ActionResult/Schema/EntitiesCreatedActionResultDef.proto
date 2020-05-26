@@ -1,0 +1,23 @@
+﻿syntax = "proto3";
+package actionresult;
+
+option csharp_namespace = "Mumble.FirstGame.Serialization.Protobuf.ActionResult";
+import "Action/Schema/Direction.proto";
+
+message EntitiesCreatedActionResultDef{
+    repeated Entity entities = 1;
+
+    message Entity{
+        enum EntityType{
+            Player = 0;
+            Enemy = 1;
+            Projectile = 2;
+	    }
+        int32 id = 1;
+        EntityType type = 2;
+        float x = 3;
+        float y = 4;
+        action.Direction direction = 5;
+
+	}
+}

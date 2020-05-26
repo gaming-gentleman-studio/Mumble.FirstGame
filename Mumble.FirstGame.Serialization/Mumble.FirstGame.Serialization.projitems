@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>661e66db-611e-4e7c-8447-0847bdde55cb</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Mumble.FirstGame.Serialization</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Protobuf\ActionResult\Schema\MoveActionResultDef.proto" />
+    <Content Include="$(MSBuildThisFileDirectory)Protobuf\Action\Schema\FireActionDef.proto" />
+    <Content Include="$(MSBuildThisFileDirectory)Protobuf\Action\Schema\MoveActionDef.proto" />
+    <Content Include="$(MSBuildThisFileDirectory)Protobuf\README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Protobuf\ActionResult\ActionResultExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Protobuf\ActionResult\EntitiesCreatedActionResultDef.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Protobuf\ActionResult\MoveActionResultDef.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Action\ActionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Action\Direction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Action\FireActionDef.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Action\MoveActionDef.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Factory\ActionFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Factory\ActionResultFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Factory\IActionFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Factory\IActionResultFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Lookup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Protobuf\ActionResult\Schema\EntitiesCreatedActionResultDef.proto" />
+    <None Include="$(MSBuildThisFileDirectory)Protobuf\Action\Schema\Direction.proto" />
+  </ItemGroup>
+</Project>

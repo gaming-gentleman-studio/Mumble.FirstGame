@@ -5,6 +5,7 @@ using Mumble.FirstGame.Core.Action.Movement;
 using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Projectile;
+using Mumble.FirstGame.Core.Scene.EntityContainer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,26 +16,25 @@ namespace Mumble.FirstGame.Core.Scene.Battle
 
     public class BattleScene : IScene
     {
-        public List<IMoveableCombatEntity> PlayerTeam { get; set; }
-        public List<ICombatAIEntity> EnemyTeam { get; set; }
-
-        public List<IProjectileEntity> Projectiles { get; set; }
+        public BattleEntityContainer EntityContainer { get; private set; }
         public SceneBoundary Boundary { get; private set; }
 
         private TimeSpan _elapsed;
+        private DateTime _prevTime;
 
         private int _entityTurn = 0;
         
-        public BattleScene(List<IMoveableCombatEntity> playerTeam, List<ICombatAIEntity> enemyTeam, SceneBoundary boundary)
+        public BattleScene(BattleEntityContainer entityContainer, SceneBoundary boundary)
         {
-            PlayerTeam = playerTeam;
-            EnemyTeam = enemyTeam;
-            Projectiles = new List<IProjectileEntity>();
+            EntityContainer = entityContainer;
             Boundary = boundary;
+            _prevTime = DateTime.Now;
         }
-        public List<IActionResult> Update(List<IAction> actions, TimeSpan elapsed)
+        public List<IActionResult> Update(List<IAction> actions)
         {
-            _elapsed = elapsed;
+            DateTime now = DateTime.Now;
+            _elapsed = now.Subtract(_prevTime);
+            _prevTime = now;
             List<IAction> resultingActions = new List<IAction>();
             resultingActions.AddRange(ApplyVelocity());
             foreach (IAction action in actions)
@@ -61,8 +61,8 @@ namespace Mumble.FirstGame.Core.Scene.Battle
         private List<IAction> ApplyVelocity()
         {
             List<IAction> resultingActions = new List<IAction>();
-            HashSet<IProjectileEntity> projectilesToRemove = new HashSet<IProjectileEntity>();
-            foreach( IProjectileEntity projectile in Projectiles)
+            HashSet<IEntity> projectilesToRemove = new HashSet<IEntity>();
+            foreach( IProjectileEntity projectile in EntityContainer.Projectiles)
             {
                 MoveAction move = new MoveAction(projectile, projectile.VelocityComponent);
                 move.CalculateEffect(Boundary);
@@ -72,12 +72,12 @@ namespace Mumble.FirstGame.Core.Scene.Battle
                 }
                 resultingActions.Add(move);
             }
-            Projectiles = Projectiles.Where(x => !projectilesToRemove.Contains(x)).ToList();
+            EntityContainer.RemoveEntities(projectilesToRemove);
             return resultingActions;
         }
         private List<IAction> Update(IFireWeaponAction fireAction)
         {
-            Projectiles.AddRange(fireAction.CalculateEffect(_elapsed));
+            EntityContainer.Projectiles.AddRange(fireAction.CalculateEffect(_elapsed));
             return new List<IAction>() { fireAction };
         }
         private List<IAction> Update(IMoveAction moveAction)
@@ -97,10 +97,10 @@ namespace Mumble.FirstGame.Core.Scene.Battle
                 _entityTurn++;
                 if (isEnemyTurn())
                 {
-                    foreach(ICombatAIEntity enemy in EnemyTeam)
+                    foreach(ICombatAIEntity enemy in EntityContainer.EnemyTeam)
                     {
                         //PlayerTeam.ToList inneficient?
-                        IAttackAction enemyAction = enemy.CombatAIComponent.GenerateCombatAction(enemy, PlayerTeam.ToList<ICombatEntity>());
+                        IAttackAction enemyAction = enemy.CombatAIComponent.GenerateCombatAction(enemy, EntityContainer.PlayerTeam.ToList<ICombatEntity>());
                         enemyAction.CalculateEffect();
                         results.Add(enemyAction);
                     }
@@ -112,12 +112,12 @@ namespace Mumble.FirstGame.Core.Scene.Battle
         }
         private bool isEnemyTurn()
         {
-            return _entityTurn > PlayerTeam.Count()-1;
+            return _entityTurn > EntityContainer.PlayerTeam.Count()-1;
         }
 
         public bool IsSceneActive()
         {
-            return (EnemyTeam.Count(enemy => enemy.HealthComponent.IsAlive()) > 0);
+            return (EntityContainer.EnemyTeam.Count(enemy => enemy.HealthComponent.IsAlive()) > 0);
         }
     }
 }
