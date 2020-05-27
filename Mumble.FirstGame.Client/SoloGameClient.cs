@@ -7,8 +7,11 @@ using Mumble.FirstGame.Core.Scene;
 using Mumble.FirstGame.Core.Scene.Battle;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Timers;
 
 namespace Mumble.FirstGame.Client
 {
@@ -16,7 +19,8 @@ namespace Mumble.FirstGame.Client
     {
         private IScene _scene;
         private Player _player;
-        private List<ICombatAIEntity> _enemies;
+        private int _tickRate = 1;
+
 
         public List<ICombatAIEntity> GetEnemies()
         {
@@ -36,7 +40,7 @@ namespace Mumble.FirstGame.Client
 
         public List<IActionResult> Update(List<IAction> actions)
         {
-            return _scene.Update(actions);
+            return _scene.Update(actions, _tickRate);
         }
     }
 }

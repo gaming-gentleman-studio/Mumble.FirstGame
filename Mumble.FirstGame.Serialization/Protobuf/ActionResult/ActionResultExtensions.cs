@@ -4,6 +4,7 @@ using Mumble.FirstGame.Core.Action;
 using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
+using Mumble.FirstGame.Serialization.Protobuf.Action;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -33,7 +34,10 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult
                 {
                     var entityDef = new EntitiesCreatedActionResultDef.Types.Entity();
                     entityDef.Id = entityContainer.GetEntityId(entity);
-                    entityDef.Direction = Lookup.DirectionToSerializedMap[entity.VelocityComponent.Direction];
+                    entityDef.Direction = new Direction
+                    {
+                        Radians = entity.VelocityComponent.Direction.Radians
+                    };
                     entityDef.X = entity.PositionComponent.X;
                     entityDef.Y = entity.PositionComponent.Y;
                     message.Entities.Add(entityDef);

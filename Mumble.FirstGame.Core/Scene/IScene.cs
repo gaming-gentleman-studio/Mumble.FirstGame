@@ -9,7 +9,7 @@ namespace Mumble.FirstGame.Core.Scene
 {
     public interface IScene
     {
-        List<IActionResult> Update(List<IAction> actions);
+        List<IActionResult> Update(List<IAction> actions,int elapsedTicks);
         bool IsSceneActive();
     }
 }

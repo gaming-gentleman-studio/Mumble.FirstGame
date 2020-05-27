@@ -3,9 +3,6 @@ package action;
 
 option csharp_namespace = "Mumble.FirstGame.Serialization.Protobuf.Action";
 
-enum Direction{
-	UP = 0;
-	DOWN = 1;
-	LEFT = 2;
-	RIGHT = 3;
+message Direction{
+	float radians = 1;
 }

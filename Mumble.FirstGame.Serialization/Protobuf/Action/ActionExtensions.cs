@@ -19,7 +19,10 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Action
                 return new MoveActionDef
                 {
                     Id = entityContainer.GetEntityId(move.Entity),
-                    Direction = Lookup.DirectionToSerializedMap[move.Velocity.Direction]
+                    Direction = new Direction
+                    {
+                        Radians = move.Velocity.Direction.Radians
+                    }
                 };
             }
             else if (action is IFireWeaponAction)
@@ -28,7 +31,10 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Action
                 return new FireActionDef
                 {
                     Id = entityContainer.GetEntityId(fire.Entity),
-                    Direction = Lookup.DirectionToSerializedMap[fire.Direction]
+                    Direction = new Direction
+                    {
+                        Radians = fire.Direction.Radians
+                    }
                 };
             }
             return null;

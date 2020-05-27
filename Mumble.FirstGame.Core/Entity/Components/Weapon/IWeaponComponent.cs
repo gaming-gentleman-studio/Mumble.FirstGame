@@ -12,7 +12,7 @@ namespace Mumble.FirstGame.Core.Entity.Components.Weapon
         IVelocityComponent VelocityComponent { get; }
         IDamageComponent DamageComponent { get; }
 
-        bool AbleToFire(TimeSpan elapsed);
+        bool AbleToFire(int elapsedTicks);
         List<IProjectileEntity> Fire(float sourceX, float sourceY, Direction direction);
     }
 }

@@ -25,6 +25,12 @@ namespace Mumble.FirstGame.Core.Entity.Components.Velocity
             Y = y;
             Radians = (float)Math.Atan2(Y, X);
         }
+        public Direction(float radians)
+        {
+            X = (float)Math.Cos(radians);
+            Y = (float)Math.Sin(radians);
+            Radians = radians;
+        }
         public static Direction Up => new Direction(0, -1);
         public static Direction Down => new Direction(0, 1);
         public static Direction Left => new Direction(-1, 0);

@@ -7,6 +7,7 @@ using Mumble.FirstGame.Core.Scene.EntityContainer;
 using Mumble.FirstGame.Serialization.Protobuf.Action;
 using Mumble.FirstGame.Serialization.Protobuf.Factory;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -19,20 +20,20 @@ namespace Mumble.FirstGame.Client
     public class OnlineGameClient : IGameClient
     {
         private Socket _socket;
-        private const int _bufSize = 8 * 1024;
+        private const int _bufSize = 8 * 1024 * 2;
         private State _state = new State();
         private EndPoint _sender = new IPEndPoint(IPAddress.Any, 0);
         private AsyncCallback recv = null;
         private IEntityContainer _entityContainer;
         private IActionResultFactory _actionResultFactory;
-        private List<IActionResult> _results;
+        private ConcurrentBag<IActionResult> _resultBuffer;
         public class State
         {
             public byte[] Buffer = new byte[_bufSize];
         }
         public OnlineGameClient(IPEndPoint endpoint)
         {
-            _results = new List<IActionResult>();
+            _resultBuffer = new ConcurrentBag<IActionResult>();
             _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             _socket.Connect(endpoint);
             Receive();
@@ -44,8 +45,12 @@ namespace Mumble.FirstGame.Client
                 State state = (State)ar.AsyncState;
                 int bytes = _socket.EndReceiveFrom(ar, ref _sender);
                 _socket.BeginReceiveFrom(state.Buffer, 0, _bufSize, SocketFlags.None, ref _sender, recv, state);
-                _results.Add(_actionResultFactory.Create(state.Buffer.Take(bytes).ToArray()));
-                Debug.WriteLine("RECV: {0}: {1}, {2}", _sender.ToString(), bytes, Encoding.ASCII.GetString(state.Buffer, 0, bytes));
+                if (bytes > 0)
+                {
+                    _resultBuffer.Add(_actionResultFactory.Create(state.Buffer.Take(bytes).ToArray()));
+                    Debug.WriteLine("RECV: {0}: {1}, {2}", _sender.ToString(), bytes, Encoding.ASCII.GetString(state.Buffer, 0, bytes));
+                }
+
             }, _state);
         }
         private void Send(IAction action)
@@ -85,8 +90,12 @@ namespace Mumble.FirstGame.Client
                     Send(action);
                 }
             }
-            List<IActionResult> retList = _results;
-            _results = new List<IActionResult>();
+            List<IActionResult> retList = new List<IActionResult>();
+            lock (_resultBuffer)
+            {
+                retList.AddRange(_resultBuffer.ToList());
+                _resultBuffer = new ConcurrentBag<IActionResult>();
+            }
             return retList;
         }
 

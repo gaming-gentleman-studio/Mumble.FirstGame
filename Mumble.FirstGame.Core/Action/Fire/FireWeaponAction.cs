@@ -28,10 +28,10 @@ namespace Mumble.FirstGame.Core.Action.Fire
             Entity = sourceEntity;
             Direction = direction;
         }
-        public List<IProjectileEntity> CalculateEffect(TimeSpan elapsed)
+        public List<IProjectileEntity> CalculateEffect(int elapsedTicks)
         {
             List<IProjectileEntity> projectiles = new List<IProjectileEntity>();
-            if (Entity.WeaponComponent.AbleToFire(elapsed))
+            if (Entity.WeaponComponent.AbleToFire(elapsedTicks))
             {
                 projectiles = Entity.WeaponComponent.Fire(Entity.PositionComponent.X, Entity.PositionComponent.Y, Direction);
             }

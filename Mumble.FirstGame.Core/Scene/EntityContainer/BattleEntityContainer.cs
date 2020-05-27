@@ -52,6 +52,14 @@ namespace Mumble.FirstGame.Core.Scene.EntityContainer
                 _entities = _entities.Where(x => entitiesToRemove.Contains(x.Value)).ToDictionary(x => x.Key, x => x.Value);
             }
         }
+        public void AddEntities(HashSet<IEntity> entitiesToAdd)
+        {
+            foreach(IEntity entity in entitiesToAdd)
+            {
+                _idx++;
+                _entities[_idx] = entity;
+            }
+        }
 
         public int GetEntityId(IEntity entity)
         {

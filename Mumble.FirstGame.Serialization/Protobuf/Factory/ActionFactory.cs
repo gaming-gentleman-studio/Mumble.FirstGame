@@ -7,8 +7,10 @@ using Mumble.FirstGame.Core.Scene.EntityContainer;
 using Mumble.FirstGame.Serialization.Protobuf.Action;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using Direction = Mumble.FirstGame.Core.Entity.Components.Velocity.Direction;
 
 namespace Mumble.FirstGame.Serialization.Protobuf.Factory
 {
@@ -26,16 +28,31 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
         {
             int type = data[0];
             byte[] serializedAction = data.Skip(1).Take(data.Length).ToArray();
-            IAction action = null;
+            IAction action = new NullAction();
             switch (type)
             {
                 case Lookup.Move:
-                    MoveActionDef moveDef = MoveActionDef.Parser.ParseFrom(serializedAction);
-                    action = new MoveAction((IMoveableEntity)_entityContainer.GetEntity(moveDef.Id), Lookup.SerializedToDirectionMap[moveDef.Direction]);
+                    try
+                    {
+                        MoveActionDef moveDef = MoveActionDef.Parser.ParseFrom(serializedAction);
+                        action = new MoveAction((IMoveableEntity)_entityContainer.GetEntity(moveDef.Id), new Direction(moveDef.Direction.Radians));
+                    }
+                    catch
+                    {
+                        Debug.WriteLine("Failed to parse move action");
+                    }
                     break;
                 case Lookup.Fire:
-                    FireActionDef fireDef = FireActionDef.Parser.ParseFrom(serializedAction);
-                    action = new FireWeaponAction((ICombatEntity)_entityContainer.GetEntity(fireDef.Id), Lookup.SerializedToDirectionMap[fireDef.Direction]);
+                    try
+                    {
+                        FireActionDef fireDef = FireActionDef.Parser.ParseFrom(serializedAction);
+                        action = new FireWeaponAction((ICombatEntity)_entityContainer.GetEntity(fireDef.Id), new Direction(fireDef.Direction.Radians));
+                    }
+                    catch
+                    {
+                        Debug.WriteLine("Failed to parse fire action");
+
+                    }
                     break;
                 default:
                     throw new Exception("Improper action found while attempting to deserialize");

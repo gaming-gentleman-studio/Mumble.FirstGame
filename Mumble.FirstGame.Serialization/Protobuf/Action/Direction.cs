@@ -24,23 +24,146 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Action {
     static DirectionReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Cg9EaXJlY3Rpb24ucHJvdG8SBmFjdGlvbioyCglEaXJlY3Rpb24SBgoCVVAQ",
-            "ABIICgRET1dOEAESCAoETEVGVBACEgkKBVJJR0hUEANCMaoCLk11bWJsZS5G",
-            "aXJzdEdhbWUuU2VyaWFsaXphdGlvbi5Qcm90b2J1Zi5BY3Rpb25iBnByb3Rv",
-            "Mw=="));
+            "Cg9EaXJlY3Rpb24ucHJvdG8SBmFjdGlvbiIcCglEaXJlY3Rpb24SDwoHcmFk",
+            "aWFucxgBIAEoAkIxqgIuTXVtYmxlLkZpcnN0R2FtZS5TZXJpYWxpemF0aW9u",
+            "LlByb3RvYnVmLkFjdGlvbmIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Mumble.FirstGame.Serialization.Protobuf.Action.Direction), }, null, null));
+          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Mumble.FirstGame.Serialization.Protobuf.Action.Direction), global::Mumble.FirstGame.Serialization.Protobuf.Action.Direction.Parser, new[]{ "Radians" }, null, null, null, null)
+          }));
     }
     #endregion
 
   }
-  #region Enums
-  public enum Direction {
-    [pbr::OriginalName("UP")] Up = 0,
-    [pbr::OriginalName("DOWN")] Down = 1,
-    [pbr::OriginalName("LEFT")] Left = 2,
-    [pbr::OriginalName("RIGHT")] Right = 3,
+  #region Messages
+  public sealed partial class Direction : pb::IMessage<Direction> {
+    private static readonly pb::MessageParser<Direction> _parser = new pb::MessageParser<Direction>(() => new Direction());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<Direction> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Mumble.FirstGame.Serialization.Protobuf.Action.DirectionReflection.Descriptor.MessageTypes[0]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public Direction() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public Direction(Direction other) : this() {
+      radians_ = other.radians_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public Direction Clone() {
+      return new Direction(this);
+    }
+
+    /// <summary>Field number for the "radians" field.</summary>
+    public const int RadiansFieldNumber = 1;
+    private float radians_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public float Radians {
+      get { return radians_; }
+      set {
+        radians_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as Direction);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(Direction other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Radians, other.Radians)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Radians != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Radians);
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (Radians != 0F) {
+        output.WriteRawTag(13);
+        output.WriteFloat(Radians);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (Radians != 0F) {
+        size += 1 + 4;
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(Direction other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Radians != 0F) {
+        Radians = other.Radians;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 13: {
+            Radians = input.ReadFloat();
+            break;
+          }
+        }
+      }
+    }
+
   }
 
   #endregion

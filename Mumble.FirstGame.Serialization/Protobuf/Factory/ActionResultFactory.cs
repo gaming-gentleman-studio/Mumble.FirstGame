@@ -1,10 +1,12 @@
 ﻿using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
+using Mumble.FirstGame.Core.Entity.Components.Velocity;
 using Mumble.FirstGame.Core.Entity.Projectile;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
 using Mumble.FirstGame.Serialization.Protobuf.ActionResult;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -27,19 +29,34 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
             switch (type)
             {
                 case Lookup.Move:
-                    MoveActionResultDef moveDef = MoveActionResultDef.Parser.ParseFrom(serializedResult);
-                    result = new MoveActionResult(_entityContainer.GetEntity(moveDef.Id),moveDef.X,moveDef.Y,moveDef.OutOfBounds);
+                    try
+                    {
+                        MoveActionResultDef moveDef = MoveActionResultDef.Parser.ParseFrom(serializedResult);
+                        result = new MoveActionResult(_entityContainer.GetEntity(moveDef.Id), moveDef.X, moveDef.Y, moveDef.OutOfBounds);
+                    }
+                    catch
+                    {
+                        Debug.WriteLine("Failed to parse move result");
+                    }
+                    
                     break;
                 case Lookup.EntitiesCreated:
-                    EntitiesCreatedActionResultDef createdDef = EntitiesCreatedActionResultDef.Parser.ParseFrom(serializedResult);
-                    List<IEntity> entities = new List<IEntity>();
-                    foreach(EntitiesCreatedActionResultDef.Types.Entity entityDef in createdDef.Entities)
+                    try
                     {
-                        SimpleBullet bullet = new SimpleBullet(entityDef.X, entityDef.Y,0,Lookup.SerializedToDirectionMap[entityDef.Direction],0);
-                        _entityContainer.AddEntity(entityDef.Id, bullet);
-                        entities.Add(bullet);
+                        EntitiesCreatedActionResultDef createdDef = EntitiesCreatedActionResultDef.Parser.ParseFrom(serializedResult);
+                        List<IEntity> entities = new List<IEntity>();
+                        foreach (EntitiesCreatedActionResultDef.Types.Entity entityDef in createdDef.Entities)
+                        {
+                            SimpleBullet bullet = new SimpleBullet(entityDef.X, entityDef.Y, 0, new Direction(entityDef.Direction.Radians), 0);
+                            _entityContainer.AddEntity(entityDef.Id, bullet);
+                            entities.Add(bullet);
+                        }
+                        result = new EntitiesCreatedActionResult(entities);
                     }
-                    result = new EntitiesCreatedActionResult(entities);
+                    catch
+                    {
+                        Debug.WriteLine("Failed to parse entities created result");
+                    }
                     break;
                 default:
                     throw new Exception("Improper action found while attempting to deserialize");

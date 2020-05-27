@@ -13,8 +13,8 @@ namespace Mumble.FirstGame.Core.Entity.Components.Weapon
 
         public IDamageComponent DamageComponent { get; private set; }
 
-        private TimeSpan _cooldown = TimeSpan.FromMilliseconds(100);
-        private TimeSpan _cooldownLeft = TimeSpan.FromSeconds(0);
+        private int _cooldown = 4;
+        private int _cooldownLeft = 0;
 
         public SimpleWeaponComponent(IVelocityComponent velocityComponent, IDamageComponent damageComponent)
         {
@@ -22,10 +22,10 @@ namespace Mumble.FirstGame.Core.Entity.Components.Weapon
             DamageComponent = damageComponent;
         }
 
-        public bool AbleToFire(TimeSpan elapsed)
+        public bool AbleToFire(int elapsedTicks)
         {
-            _cooldownLeft -= elapsed;
-            return !(_cooldownLeft > TimeSpan.FromSeconds(0));
+            _cooldownLeft -= elapsedTicks;
+            return !(_cooldownLeft > 0);
         }
 
         public List<IProjectileEntity> Fire(float sourceX, float sourceY, Direction direction)

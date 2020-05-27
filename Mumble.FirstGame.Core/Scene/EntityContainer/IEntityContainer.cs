@@ -14,5 +14,6 @@ namespace Mumble.FirstGame.Core.Scene.EntityContainer
 
         int GetEntityId(IEntity entity);
         void RemoveEntities(HashSet<IEntity> entitiesToRemove);
+        void AddEntities(HashSet<IEntity> entitiesToAdd);
     }
 }

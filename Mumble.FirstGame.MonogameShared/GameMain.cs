@@ -32,7 +32,7 @@ namespace Mumble.FirstGame.MonogameShared
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        ClientType clientType = ClientType.Online;
+        ClientType clientType = ClientType.Solo;
         IGameClient client;
         Dictionary<IEntity, Vector2> positions = new Dictionary<IEntity, Vector2>();
         Player player;

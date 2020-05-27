@@ -19,8 +19,7 @@ namespace Mumble.FirstGame.Core.Scene.Battle
         public BattleEntityContainer EntityContainer { get; private set; }
         public SceneBoundary Boundary { get; private set; }
 
-        private TimeSpan _elapsed;
-        private DateTime _prevTime;
+        private int _elapsedTicks;
 
         private int _entityTurn = 0;
         
@@ -28,14 +27,12 @@ namespace Mumble.FirstGame.Core.Scene.Battle
         {
             EntityContainer = entityContainer;
             Boundary = boundary;
-            _prevTime = DateTime.Now;
         }
-        public List<IActionResult> Update(List<IAction> actions)
+        public List<IActionResult> Update(List<IAction> actions,int elapsedTicks)
         {
-            DateTime now = DateTime.Now;
-            _elapsed = now.Subtract(_prevTime);
-            _prevTime = now;
             List<IAction> resultingActions = new List<IAction>();
+            _elapsedTicks = elapsedTicks;
+            
             resultingActions.AddRange(ApplyVelocity());
             foreach (IAction action in actions)
             {
@@ -56,7 +53,7 @@ namespace Mumble.FirstGame.Core.Scene.Battle
                 }
             }
             
-            return resultingActions.Select(x => x.Result).ToList<IActionResult>();
+            return resultingActions.Select(x => x.Result).Where(x => x != null).ToList<IActionResult>();
         }
         private List<IAction> ApplyVelocity()
         {
@@ -77,7 +74,7 @@ namespace Mumble.FirstGame.Core.Scene.Battle
         }
         private List<IAction> Update(IFireWeaponAction fireAction)
         {
-            EntityContainer.Projectiles.AddRange(fireAction.CalculateEffect(_elapsed));
+            EntityContainer.AddEntities(new HashSet<IEntity>(fireAction.CalculateEffect(_elapsedTicks)));
             return new List<IAction>() { fireAction };
         }
         private List<IAction> Update(IMoveAction moveAction)

@@ -13,7 +13,7 @@ namespace Mumble.FirstGame.MonogameShared
     {
         public FireWeaponAction HandleMouseClick(IMoveableCombatEntity entity, Vector2 sourcePosition)
         {
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+            if (Mouse.GetState().MiddleButton == ButtonState.Pressed)
             {
                 Vector2 directionVector = Mouse.GetState().Position.ToVector2();
                 directionVector = new Vector2(directionVector.X - sourcePosition.X, directionVector.Y - sourcePosition.Y);
