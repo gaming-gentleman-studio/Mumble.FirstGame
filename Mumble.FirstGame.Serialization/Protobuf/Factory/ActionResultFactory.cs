@@ -25,6 +25,10 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
         {
             int type = data[0];
             byte[] serializedResult = data.Skip(1).Take(data.Length).ToArray();
+            if (serializedResult.Length < 1)
+            {
+                return null;
+            }
             IActionResult result = null;
             switch (type)
             {
@@ -32,11 +36,11 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
                     try
                     {
                         MoveActionResultDef moveDef = MoveActionResultDef.Parser.ParseFrom(serializedResult);
-                        result = new MoveActionResult(_entityContainer.GetEntity(moveDef.Id), moveDef.X, moveDef.Y, moveDef.OutOfBounds);
+                        result = new MoveActionResult(_entityContainer.GetEntity(moveDef.Id,true), moveDef.X, moveDef.Y, moveDef.OutOfBounds);
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        Debug.WriteLine("Failed to parse move result");
+                        Debug.WriteLine("Failed to parse Move result: "+ex.Message);
                     }
                     
                     break;
@@ -53,9 +57,20 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
                         }
                         result = new EntitiesCreatedActionResult(entities);
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        Debug.WriteLine("Failed to parse entities created result");
+                        Debug.WriteLine("Failed to parse Entities created result: "+ex.Message);
+                    }
+                    break;
+                case Lookup.EntityDestroyed:
+                    try
+                    {
+                        EntityDestroyedActionResultDef destroyedDef = EntityDestroyedActionResultDef.Parser.ParseFrom(serializedResult);
+                        result = new EntityDestroyedActionResult(_entityContainer.GetEntity(destroyedDef.Id,true));
+                    }
+                    catch (Exception ex)
+                    {
+                        //Debug.WriteLine("Failed to parse entity destroyed result: "+ex.Message);
                     }
                     break;
                 default:

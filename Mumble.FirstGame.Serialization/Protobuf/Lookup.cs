@@ -14,13 +14,15 @@ namespace Mumble.FirstGame.Serialization.Protobuf
         public const int Move = 0;
         public const int Fire = 1;
         public const int EntitiesCreated = 2;
+        public const int EntityDestroyed = 3;
 
         public static Dictionary<Type, int> TypeToTypeId = new Dictionary<Type, int>()
         {
             { typeof(MoveAction), Move },
             { typeof(MoveActionResult), Move },
             { typeof(FireWeaponAction), Fire },
-            { typeof(EntitiesCreatedActionResult), EntitiesCreated }
+            { typeof(EntitiesCreatedActionResult), EntitiesCreated },
+            { typeof(EntityDestroyedActionResult), EntityDestroyed }
         };
     }
 }

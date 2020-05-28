@@ -18,10 +18,10 @@ namespace Mumble.FirstGame.MonogameShared.Utils
                 foreach (IAction action in actions)
                 {
                     Debug.WriteLine("");
-                    Debug.Write(action.Result.GetType().ToString());
-                    foreach (FieldInfo field in action.Result.GetType().GetFields())
+                    Debug.Write(action.GetType().ToString());
+                    foreach (FieldInfo field in action.GetType().GetFields())
                     {
-                        Debug.Write(";" + field.Name + ":" + field.GetValue(action.Result).ToString());
+                        Debug.Write(";" + field.Name + ":" + field.GetValue(action).ToString());
                     }
                 }
             }

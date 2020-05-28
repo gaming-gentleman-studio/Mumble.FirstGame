@@ -1,0 +1,8 @@
+﻿syntax = "proto3";
+package actionresult;
+
+option csharp_namespace = "Mumble.FirstGame.Serialization.Protobuf.ActionResult";
+
+message EntityDestroyedActionResultDef{
+    int32 id = 1;
+}

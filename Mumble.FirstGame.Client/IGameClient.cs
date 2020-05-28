@@ -16,5 +16,7 @@ namespace Mumble.FirstGame.Client
         void Init(IEntityContainer entityContainer);
         List<Player> GetPlayers();
         List<ICombatAIEntity> GetEnemies();
+
+        // Sometimes, UDP connection misses and entities are left without calls - this will get them
     }
 }

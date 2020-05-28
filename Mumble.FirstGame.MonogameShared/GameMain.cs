@@ -32,7 +32,7 @@ namespace Mumble.FirstGame.MonogameShared
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        ClientType clientType = ClientType.Solo;
+        ClientType clientType = ClientType.Online;
         IGameClient client;
         Dictionary<IEntity, Vector2> positions = new Dictionary<IEntity, Vector2>();
         Player player;
@@ -159,6 +159,10 @@ namespace Mumble.FirstGame.MonogameShared
 
                     }
 
+                }
+                foreach(EntityDestroyedActionResult result in results.Where(x => x is EntityDestroyedActionResult))
+                {
+                    positions.Remove(result.Entity);
                 }
             }
             //DebugUtils.PrintActions(actions);

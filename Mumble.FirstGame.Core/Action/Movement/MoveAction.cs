@@ -2,6 +2,7 @@
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Components.Position;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
+using Mumble.FirstGame.Core.Entity.Projectile;
 using Mumble.FirstGame.Core.Scene.Battle;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Mumble.FirstGame.Core.Action.Movement
     {
 
         public IVelocityComponent Velocity { get; private set; }
-        public IActionResult Result { get; private set; }
+        public List<IActionResult> Results { get; private set; }
         public IMoveableEntity Entity { get; private set; }
 
         //Use when entity velocity has no direction
@@ -21,6 +22,7 @@ namespace Mumble.FirstGame.Core.Action.Movement
         {
             Entity = entity;
             Velocity = new VelocityComponent(direction, Entity.VelocityComponent.Speed);
+            Results = new List<IActionResult>();
             
         }
         //DO NOT USE IN FRONT END Use when entity velocity already has direction
@@ -30,6 +32,7 @@ namespace Mumble.FirstGame.Core.Action.Movement
         {
             Entity = entity;
             Velocity = velocity;
+            Results = new List<IActionResult>();
 
         }
         public bool HasResult()
@@ -43,7 +46,7 @@ namespace Mumble.FirstGame.Core.Action.Movement
             if (boundary.IsInBounds(newPosition))
             {
                 Entity.PositionComponent.Move(newPosition);
-                Result = new MoveActionResult(Entity, newPosition.X, newPosition.Y);
+                Results.Add(new MoveActionResult(Entity, newPosition.X, newPosition.Y));
             }
             else
             {
@@ -56,7 +59,11 @@ namespace Mumble.FirstGame.Core.Action.Movement
                     newPosition = new PositionComponent(boundary.GetBoundsAdjustedX(newPosition), newPosition.Y);
                 }
                 Entity.PositionComponent.Move(newPosition);
-                Result = new MoveActionResult(Entity, Entity.PositionComponent.X, Entity.PositionComponent.Y,true);
+                Results.Add(new MoveActionResult(Entity, Entity.PositionComponent.X, Entity.PositionComponent.Y,true));
+                if (Entity is IProjectileEntity)
+                {
+                    Results.Add(new EntityDestroyedActionResult(Entity));
+                }
             }
             
         }

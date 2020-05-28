@@ -9,6 +9,7 @@
     <Import_RootNamespace>Mumble.FirstGame.Serialization</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Protobuf\ActionResult\Schema\EntityDestroyedActionResultDef.proto" />
     <Content Include="$(MSBuildThisFileDirectory)Protobuf\ActionResult\Schema\MoveActionResultDef.proto" />
     <Content Include="$(MSBuildThisFileDirectory)Protobuf\Action\Schema\FireActionDef.proto" />
     <Content Include="$(MSBuildThisFileDirectory)Protobuf\Action\Schema\MoveActionDef.proto" />
@@ -17,6 +18,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\ActionResult\ActionResultExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\ActionResult\EntitiesCreatedActionResultDef.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Protobuf\ActionResult\EntityDestroyedActionResultDef.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\ActionResult\MoveActionResultDef.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Action\ActionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Action\Direction.cs" />

@@ -30,6 +30,7 @@ namespace Mumble.FirstGame.Core.Scene.Battle
         }
         public List<IActionResult> Update(List<IAction> actions,int elapsedTicks)
         {
+            EntityContainer.HardDeleteEntities();
             List<IAction> resultingActions = new List<IAction>();
             _elapsedTicks = elapsedTicks;
             
@@ -53,23 +54,49 @@ namespace Mumble.FirstGame.Core.Scene.Battle
                 }
             }
             
-            return resultingActions.Select(x => x.Result).Where(x => x != null).ToList<IActionResult>();
+            List<IActionResult> results = new List<IActionResult>();
+            results.AddRange(RegenerateEntityDestroyedResults());
+            HashSet<IEntity> entitiesToRemove = new HashSet<IEntity>();
+            foreach(IAction action in resultingActions)
+            {
+                SingleEntityCleanup(action, entitiesToRemove);
+                results.AddRange(action.Results);
+                
+            }
+            EntityContainer.RemoveEntities(entitiesToRemove);
+            return results;
+        }
+        private void SingleEntityCleanup(IAction action, HashSet<IEntity> entitiesToRemove)
+        {
+            foreach (IActionResult result in action.Results)
+            {
+                if (result is EntityDestroyedActionResult)
+                {
+                    EntityDestroyedActionResult destroyedResult = (EntityDestroyedActionResult)result;
+                    entitiesToRemove.Add(destroyedResult.Entity);
+                }
+            }
+        }
+        private List<IActionResult> RegenerateEntityDestroyedResults()
+        {
+            List<IEntity> entities = EntityContainer.GetSoftDeletedEntities();
+            List<IActionResult> results = new List<IActionResult>();
+            foreach(IEntity entity in entities)
+            {
+                results.Add(new EntityDestroyedActionResult(entity));
+            }
+            return results;
         }
         private List<IAction> ApplyVelocity()
         {
             List<IAction> resultingActions = new List<IAction>();
-            HashSet<IEntity> projectilesToRemove = new HashSet<IEntity>();
             foreach( IProjectileEntity projectile in EntityContainer.Projectiles)
             {
                 MoveAction move = new MoveAction(projectile, projectile.VelocityComponent);
                 move.CalculateEffect(Boundary);
-                if (((MoveActionResult)move.Result).OutOfBounds == true)
-                {
-                    projectilesToRemove.Add(projectile);
-                }
                 resultingActions.Add(move);
             }
-            EntityContainer.RemoveEntities(projectilesToRemove);
+            
             return resultingActions;
         }
         private List<IAction> Update(IFireWeaponAction fireAction)

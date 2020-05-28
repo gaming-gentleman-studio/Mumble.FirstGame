@@ -11,7 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ActionResult\DamageActionResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ActionResult\EntitiesCreatedActionResult.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ActionResult\EntityKilledActionResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ActionResult\EntityDestroyedActionResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ActionResult\IActionResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ActionResult\MoveActionResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Attack\AttackAction.cs" />

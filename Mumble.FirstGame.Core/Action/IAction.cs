@@ -8,7 +8,7 @@ namespace Mumble.FirstGame.Core.Action
     //Sent from UI to logic
     public interface IAction
     {
-        IActionResult Result
+        List<IActionResult> Results
         {
             get;
         }

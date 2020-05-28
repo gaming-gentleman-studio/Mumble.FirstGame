@@ -11,12 +11,13 @@ namespace Mumble.FirstGame.Core.Action.Attack
     {
         private ICombatEntity _source;
         private ICombatEntity _target;
-        public IActionResult Result { get; set; }
+        public List<IActionResult> Results { get; set; }
 
         public AttackAction(ICombatEntity source, ICombatEntity target)
         {
             _source = source;
             _target = target;
+            Results = new List<IActionResult>();
         }
 
         
@@ -27,11 +28,11 @@ namespace Mumble.FirstGame.Core.Action.Attack
                 _source.WeaponComponent.DamageComponent.GetRawDamage());
            if (!_target.HealthComponent.IsAlive())
             {
-                Result = new EntityKilledActionResult(_target);
+                Results.Add(new EntityDestroyedActionResult(_target));
             }
             else
             {
-                Result = new DamageActionResult(_target, _target.WeaponComponent.DamageComponent.GetRawDamage());
+                Results.Add(new DamageActionResult(_target, _target.WeaponComponent.DamageComponent.GetRawDamage()));
             }
         }
 
@@ -42,7 +43,7 @@ namespace Mumble.FirstGame.Core.Action.Attack
 
         public bool HasResult()
         {
-            return (Result != null);
+            return (Results.Count > 0);
         }
     }
 }

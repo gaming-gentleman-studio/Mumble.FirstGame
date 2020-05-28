@@ -5,6 +5,7 @@ using Mumble.FirstGame.Core.Entity.Components.Position;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
 using Mumble.FirstGame.Core.Entity.Projectile;
 using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,7 @@ namespace Mumble.FirstGame.Core.Action.Fire
         public Direction Direction { get; private set; }
         public ICombatEntity Entity { get; private set; }
 
-        public IActionResult Result
+        public List<IActionResult> Results
         {
             get;
             private set;
@@ -27,6 +28,7 @@ namespace Mumble.FirstGame.Core.Action.Fire
         {
             Entity = sourceEntity;
             Direction = direction;
+            Results = new List<IActionResult>();
         }
         public List<IProjectileEntity> CalculateEffect(int elapsedTicks)
         {
@@ -35,7 +37,7 @@ namespace Mumble.FirstGame.Core.Action.Fire
             {
                 projectiles = Entity.WeaponComponent.Fire(Entity.PositionComponent.X, Entity.PositionComponent.Y, Direction);
             }
-            Result = new EntitiesCreatedActionResult(projectiles.ToList<IEntity>());
+            Results.Add(new EntitiesCreatedActionResult(projectiles.ToList<IEntity>()));
             return projectiles;
         }
         public bool HasResult()

@@ -31,7 +31,6 @@ namespace Mumble.FirstGame.Server
         private IEntityContainer _entityContainer;
         private TimeSpan _tickRate = TimeSpan.FromMilliseconds(50);
         private ConcurrentBag<IAction> _actionBuffer;
-        private ConcurrentBag<IActionResult> _resultBuffer;
 
         public class State
         {
@@ -51,18 +50,20 @@ namespace Mumble.FirstGame.Server
         public void Listen()
         {
             _actionBuffer = new ConcurrentBag<IAction>();
-            _resultBuffer = new ConcurrentBag<IActionResult>();
-            SetResultTimer();
-            SetActionTimer();
+            SetTimer();
             _socket.BeginReceiveFrom(_state.Buffer, 0, _bufSize, SocketFlags.None, ref _sender, recv = (ar) =>
                {
                    State state = (State)ar.AsyncState;
                    int bytes = _socket.EndReceiveFrom(ar, ref _sender);
                    _socket.BeginReceiveFrom(state.Buffer, 0, _bufSize, SocketFlags.None, ref _sender, recv, state);
-                   
-                   IAction action =_actionFactory.Create(state.Buffer.Take(bytes).ToArray());
-                   Console.WriteLine("RECV: {0}: {1}, {2}", _sender.ToString(), bytes, action.GetType().ToString());
-                   _actionBuffer.Add(action);
+
+                   byte[] message = state.Buffer.Take(bytes).ToArray();
+                   if (message[0] == message.Length)
+                   {
+                       IAction action = _actionFactory.Create(message.Skip(1).ToArray());
+                       Console.WriteLine("RECV: {0}: {1}, {2}", _sender.ToString(), bytes, action.GetType().ToString());
+                       _actionBuffer.Add(action);
+                   }
                    SendNull();
                }, _state);
         }
@@ -72,63 +73,45 @@ namespace Mumble.FirstGame.Server
             {
                 //TODO - inefficient
                 byte[] untypedData = result.ToProtobufDefinition(_entityContainer).ToByteArray();
-                byte[] data = new byte[untypedData.Length + 1];
-                data[0] = result.GetTypeByte();
-                Array.Copy(untypedData, 0, data, 1, untypedData.Length);
+                byte[] data = new byte[untypedData.Length + 2];
+                data[0] = (byte)(untypedData.Length + 2);
+                data[1] = result.GetTypeByte();
+                Array.Copy(untypedData, 0, data, 2, untypedData.Length);
                 _socket.SendTo(data, _sender);
                 Console.WriteLine("SENT: {0}: {1}, {2}", _sender.ToString(), data.Length, result.GetType().ToString());
             }
                 
         }
-        private void CalculateActions(List<IAction> actions)
+        private void CalculateAndReply(List<IAction> actions)
         {
             List<IActionResult> results = new List<IActionResult>();
             results.AddRange(_scene.Update(new List<IAction>(actions), 1));
-            foreach(IActionResult result in results)
-            {
-                _resultBuffer.Add(result);
-            }
+            SendResults(results);
         }
         private void SendNull()
         {
             _socket.SendTo(new byte[0],_sender);
         }
-        private void SetResultTimer()
+
+        private void SetTimer()
         {
             // Create a timer with a two second interval.
             Timer aTimer = new System.Timers.Timer(_tickRate.TotalMilliseconds);
             // Hook up the Elapsed event for the timer. 
-            aTimer.Elapsed += ResponseEvent;
+            aTimer.Elapsed += TimerEvent;
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
         }
 
-        private void ResponseEvent(object source, ElapsedEventArgs e)
+        private void TimerEvent(object source, ElapsedEventArgs e)
         {
-            lock (_resultBuffer)
-            {
-                SendResults(new List<IActionResult>(_resultBuffer));
-                _resultBuffer = new ConcurrentBag<IActionResult>();
-            }
-            
-        }
-        private void SetActionTimer()
-        {
-            // Create a timer with a two second interval.
-            Timer aTimer = new System.Timers.Timer(_tickRate.TotalMilliseconds);
-            // Hook up the Elapsed event for the timer. 
-            aTimer.Elapsed += RequestEvent;
-            aTimer.AutoReset = true;
-            aTimer.Enabled = true;
-        }
-
-        private void RequestEvent(object source, ElapsedEventArgs e)
-        {
+            List<IAction> actions;
             lock (_actionBuffer)
             {
-                CalculateActions(new List<IAction>(_actionBuffer));
+                actions = new List<IAction>(_actionBuffer);
                 _actionBuffer = new ConcurrentBag<IAction>();
             }
+            CalculateAndReply(actions);
 
         }
     }

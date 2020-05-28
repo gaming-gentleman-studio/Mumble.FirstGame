@@ -7,7 +7,7 @@ namespace Mumble.FirstGame.Core.Action
 {
     public class NullAction : IAction
     {
-        public IActionResult Result => null;
+        public List<IActionResult> Results => new List<IActionResult>();
 
         public bool HasResult()
         {

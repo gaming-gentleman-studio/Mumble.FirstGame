@@ -5,10 +5,10 @@ using System.Text;
 
 namespace Mumble.FirstGame.Core.ActionResult
 {
-    public class EntityKilledActionResult : IActionResult
+    public class EntityDestroyedActionResult : IActionResult
     {
         public readonly IEntity Entity;
-        public EntityKilledActionResult(IEntity entity)
+        public EntityDestroyedActionResult(IEntity entity)
         {
             Entity = entity;
         }

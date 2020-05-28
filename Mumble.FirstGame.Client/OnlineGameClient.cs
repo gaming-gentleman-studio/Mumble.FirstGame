@@ -47,8 +47,17 @@ namespace Mumble.FirstGame.Client
                 _socket.BeginReceiveFrom(state.Buffer, 0, _bufSize, SocketFlags.None, ref _sender, recv, state);
                 if (bytes > 0)
                 {
-                    _resultBuffer.Add(_actionResultFactory.Create(state.Buffer.Take(bytes).ToArray()));
-                    Debug.WriteLine("RECV: {0}: {1}, {2}", _sender.ToString(), bytes, Encoding.ASCII.GetString(state.Buffer, 0, bytes));
+                    byte[] message = state.Buffer.Take(bytes).ToArray();
+                    if (message[0] == message.Length)
+                    {
+                        IActionResult result = _actionResultFactory.Create(message.Skip(1).ToArray());
+                        if (result != null)
+                        {
+                            _resultBuffer.Add(result);
+                        }
+                        
+                    }
+                    
                 }
 
             }, _state);
@@ -61,14 +70,14 @@ namespace Mumble.FirstGame.Client
             }
             //TODO - inefficient
             byte[] untypedData = action.ToProtobufDefinition(_entityContainer).ToByteArray();
-            byte[] data = new byte[untypedData.Length + 1];
-            data[0] = action.GetTypeByte();                         
-            Array.Copy(untypedData, 0, data, 1, untypedData.Length);
+            byte[] data = new byte[untypedData.Length + 2];
+            data[0] = (byte)(untypedData.Length + 2);
+            data[1] = action.GetTypeByte();                         
+            Array.Copy(untypedData, 0, data, 2, untypedData.Length);
             _socket.BeginSend(data, 0, data.Length, SocketFlags.None, (ar) =>
                {
                    State state = (State)ar.AsyncState;
                    int bytes = _socket.EndSend(ar);
-                   Debug.WriteLine("Trying to send...");
                }, _state);
         }
         
@@ -83,6 +92,7 @@ namespace Mumble.FirstGame.Client
         }
         public List<IActionResult> Update(List<IAction> actions)
         {
+            _entityContainer.HardDeleteEntities();
             if (actions.Count > 0)
             {
                 foreach(IAction action in actions)
@@ -96,6 +106,8 @@ namespace Mumble.FirstGame.Client
                 retList.AddRange(_resultBuffer.ToList());
                 _resultBuffer = new ConcurrentBag<IActionResult>();
             }
+            HashSet<IEntity> destroyed = new HashSet<IEntity>(retList.Where(x => x is EntityDestroyedActionResult).Select(x => ((EntityDestroyedActionResult)x).Entity));
+            _entityContainer.RemoveEntities(destroyed);
             return retList;
         }
 
@@ -104,5 +116,6 @@ namespace Mumble.FirstGame.Client
             _entityContainer = entityContainer;
             _actionResultFactory = new ActionResultFactory(entityContainer);
         }
+
     }
 }

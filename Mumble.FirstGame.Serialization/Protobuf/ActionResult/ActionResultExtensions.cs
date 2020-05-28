@@ -28,7 +28,7 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult
             }
             else if (result is EntitiesCreatedActionResult)
             {
-                EntitiesCreatedActionResult entitiesCreatedResult = (EntitiesCreatedActionResult) result;
+                EntitiesCreatedActionResult entitiesCreatedResult = (EntitiesCreatedActionResult)result;
                 EntitiesCreatedActionResultDef message = new EntitiesCreatedActionResultDef();
                 foreach (IMoveableEntity entity in entitiesCreatedResult.Entities)
                 {
@@ -43,6 +43,14 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult
                     message.Entities.Add(entityDef);
                 }
                 return message;
+            }
+            else if (result is EntityDestroyedActionResult)
+            {
+                EntityDestroyedActionResult destroyedResult = (EntityDestroyedActionResult)result;
+                return new EntityDestroyedActionResultDef
+                {
+                    Id = entityContainer.GetEntityId(destroyedResult.Entity)
+                };
             }
             return null;
 
