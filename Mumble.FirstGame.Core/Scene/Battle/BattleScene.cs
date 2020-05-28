@@ -55,7 +55,6 @@ namespace Mumble.FirstGame.Core.Scene.Battle
             }
             
             List<IActionResult> results = new List<IActionResult>();
-            results.AddRange(RegenerateEntityDestroyedResults());
             HashSet<IEntity> entitiesToRemove = new HashSet<IEntity>();
             foreach(IAction action in resultingActions)
             {

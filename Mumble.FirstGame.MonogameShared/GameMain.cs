@@ -32,7 +32,7 @@ namespace Mumble.FirstGame.MonogameShared
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        ClientType clientType = ClientType.Online;
+        ClientType clientType = ClientType.Solo;
         IGameClient client;
         Dictionary<IEntity, Vector2> positions = new Dictionary<IEntity, Vector2>();
         Player player;
@@ -45,6 +45,9 @@ namespace Mumble.FirstGame.MonogameShared
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             graphics.IsFullScreen = false;
+            IsFixedTimeStep = true;
+            //Should line up with server tick rate
+            TargetElapsedTime = TimeSpan.FromMilliseconds(50);
         }
 
         /// <summary>

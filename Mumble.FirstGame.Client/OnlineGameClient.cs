@@ -47,16 +47,18 @@ namespace Mumble.FirstGame.Client
                 _socket.BeginReceiveFrom(state.Buffer, 0, _bufSize, SocketFlags.None, ref _sender, recv, state);
                 if (bytes > 0)
                 {
-                    byte[] message = state.Buffer.Take(bytes).ToArray();
-                    if (message[0] == message.Length)
+                    byte[] packet = state.Buffer.Take(bytes).ToArray();
+                    while (packet.Length > 0)
                     {
+                        byte[] message = packet.Take(packet[0]).ToArray();
                         IActionResult result = _actionResultFactory.Create(message.Skip(1).ToArray());
                         if (result != null)
                         {
                             _resultBuffer.Add(result);
                         }
-                        
+                        packet = packet.Skip(packet[0]).ToArray();
                     }
+
                     
                 }
 
@@ -93,13 +95,6 @@ namespace Mumble.FirstGame.Client
         public List<IActionResult> Update(List<IAction> actions)
         {
             _entityContainer.HardDeleteEntities();
-            if (actions.Count > 0)
-            {
-                foreach(IAction action in actions)
-                {
-                    Send(action);
-                }
-            }
             List<IActionResult> retList = new List<IActionResult>();
             lock (_resultBuffer)
             {
@@ -108,6 +103,13 @@ namespace Mumble.FirstGame.Client
             }
             HashSet<IEntity> destroyed = new HashSet<IEntity>(retList.Where(x => x is EntityDestroyedActionResult).Select(x => ((EntityDestroyedActionResult)x).Entity));
             _entityContainer.RemoveEntities(destroyed);
+            if (actions.Count > 0)
+            {
+                foreach(IAction action in actions)
+                {
+                    Send(action);
+                }
+            }
             return retList;
         }
 

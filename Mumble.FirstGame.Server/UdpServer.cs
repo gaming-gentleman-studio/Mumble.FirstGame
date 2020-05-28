@@ -69,18 +69,27 @@ namespace Mumble.FirstGame.Server
         }
         private void SendResults(List<IActionResult> results)
         {
+            List<byte> data = new List<byte>();
             foreach (IActionResult result in results)
             {
-                //TODO - inefficient
-                byte[] untypedData = result.ToProtobufDefinition(_entityContainer).ToByteArray();
-                byte[] data = new byte[untypedData.Length + 2];
-                data[0] = (byte)(untypedData.Length + 2);
-                data[1] = result.GetTypeByte();
-                Array.Copy(untypedData, 0, data, 2, untypedData.Length);
-                _socket.SendTo(data, _sender);
-                Console.WriteLine("SENT: {0}: {1}, {2}", _sender.ToString(), data.Length, result.GetType().ToString());
+                data.AddRange(GetResultBytes(result));      
             }
-                
+            if (data.Count > 0)
+            {
+                _socket.SendTo(data.ToArray(), _sender);
+                Console.WriteLine("SENT: {0}: {1}", _sender.ToString(), data.Count);
+            }
+
+
+        }
+        private List<byte> GetResultBytes(IActionResult result)
+        {
+            byte[] untypedData = result.ToProtobufDefinition(_entityContainer).ToByteArray();
+            byte[] data = new byte[untypedData.Length + 2];
+            data[0] = (byte)(untypedData.Length + 2);
+            data[1] = result.GetTypeByte();
+            Array.Copy(untypedData, 0, data, 2, untypedData.Length);
+            return data.ToList();
         }
         private void CalculateAndReply(List<IAction> actions)
         {
