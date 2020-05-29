@@ -26,19 +26,17 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
           string.Concat(
             "CjhBY3Rpb25SZXN1bHQvU2NoZW1hL0VudGl0aWVzQ3JlYXRlZEFjdGlvblJl",
             "c3VsdERlZi5wcm90bxIMYWN0aW9ucmVzdWx0Gh1BY3Rpb24vU2NoZW1hL0Rp",
-            "cmVjdGlvbi5wcm90byK9AgoeRW50aXRpZXNDcmVhdGVkQWN0aW9uUmVzdWx0",
+            "cmVjdGlvbi5wcm90byLHAQoeRW50aXRpZXNDcmVhdGVkQWN0aW9uUmVzdWx0",
             "RGVmEkUKCGVudGl0aWVzGAEgAygLMjMuYWN0aW9ucmVzdWx0LkVudGl0aWVz",
-            "Q3JlYXRlZEFjdGlvblJlc3VsdERlZi5FbnRpdHka0wEKBkVudGl0eRIKCgJp",
-            "ZBgBIAEoBRJMCgR0eXBlGAIgASgOMj4uYWN0aW9ucmVzdWx0LkVudGl0aWVz",
-            "Q3JlYXRlZEFjdGlvblJlc3VsdERlZi5FbnRpdHkuRW50aXR5VHlwZRIJCgF4",
-            "GAMgASgCEgkKAXkYBCABKAISJAoJZGlyZWN0aW9uGAUgASgLMhEuYWN0aW9u",
-            "LkRpcmVjdGlvbiIzCgpFbnRpdHlUeXBlEgoKBlBsYXllchAAEgkKBUVuZW15",
-            "EAESDgoKUHJvamVjdGlsZRACQjeqAjRNdW1ibGUuRmlyc3RHYW1lLlNlcmlh",
-            "bGl6YXRpb24uUHJvdG9idWYuQWN0aW9uUmVzdWx0YgZwcm90bzM="));
+            "Q3JlYXRlZEFjdGlvblJlc3VsdERlZi5FbnRpdHkaXgoGRW50aXR5EgoKAmlk",
+            "GAEgASgFEgwKBHR5cGUYAiABKAUSCQoBeBgDIAEoAhIJCgF5GAQgASgCEiQK",
+            "CWRpcmVjdGlvbhgFIAEoCzIRLmFjdGlvbi5EaXJlY3Rpb25CN6oCNE11bWJs",
+            "ZS5GaXJzdEdhbWUuU2VyaWFsaXphdGlvbi5Qcm90b2J1Zi5BY3Rpb25SZXN1",
+            "bHRiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Mumble.FirstGame.Serialization.Protobuf.Action.DirectionReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.EntitiesCreatedActionResultDef), global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.EntitiesCreatedActionResultDef.Parser, new[]{ "Entities" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.EntitiesCreatedActionResultDef.Types.Entity), global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.EntitiesCreatedActionResultDef.Types.Entity.Parser, new[]{ "Id", "Type", "X", "Y", "Direction" }, null, new[]{ typeof(global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.EntitiesCreatedActionResultDef.Types.Entity.Types.EntityType) }, null, null)})
+            new pbr::GeneratedClrTypeInfo(typeof(global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.EntitiesCreatedActionResultDef), global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.EntitiesCreatedActionResultDef.Parser, new[]{ "Entities" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.EntitiesCreatedActionResultDef.Types.Entity), global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.EntitiesCreatedActionResultDef.Types.Entity.Parser, new[]{ "Id", "Type", "X", "Y", "Direction" }, null, null, null, null)})
           }));
     }
     #endregion
@@ -219,9 +217,9 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
 
         /// <summary>Field number for the "type" field.</summary>
         public const int TypeFieldNumber = 2;
-        private global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.EntitiesCreatedActionResultDef.Types.Entity.Types.EntityType type_ = global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.EntitiesCreatedActionResultDef.Types.Entity.Types.EntityType.Player;
+        private int type_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.EntitiesCreatedActionResultDef.Types.Entity.Types.EntityType Type {
+        public int Type {
           get { return type_; }
           set {
             type_ = value;
@@ -286,7 +284,7 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
         public override int GetHashCode() {
           int hash = 1;
           if (Id != 0) hash ^= Id.GetHashCode();
-          if (Type != global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.EntitiesCreatedActionResultDef.Types.Entity.Types.EntityType.Player) hash ^= Type.GetHashCode();
+          if (Type != 0) hash ^= Type.GetHashCode();
           if (X != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(X);
           if (Y != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Y);
           if (direction_ != null) hash ^= Direction.GetHashCode();
@@ -307,9 +305,9 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
             output.WriteRawTag(8);
             output.WriteInt32(Id);
           }
-          if (Type != global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.EntitiesCreatedActionResultDef.Types.Entity.Types.EntityType.Player) {
+          if (Type != 0) {
             output.WriteRawTag(16);
-            output.WriteEnum((int) Type);
+            output.WriteInt32(Type);
           }
           if (X != 0F) {
             output.WriteRawTag(29);
@@ -334,8 +332,8 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
           if (Id != 0) {
             size += 1 + pb::CodedOutputStream.ComputeInt32Size(Id);
           }
-          if (Type != global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.EntitiesCreatedActionResultDef.Types.Entity.Types.EntityType.Player) {
-            size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Type);
+          if (Type != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeInt32Size(Type);
           }
           if (X != 0F) {
             size += 1 + 4;
@@ -360,7 +358,7 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
           if (other.Id != 0) {
             Id = other.Id;
           }
-          if (other.Type != global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.EntitiesCreatedActionResultDef.Types.Entity.Types.EntityType.Player) {
+          if (other.Type != 0) {
             Type = other.Type;
           }
           if (other.X != 0F) {
@@ -391,7 +389,7 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
                 break;
               }
               case 16: {
-                Type = (global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.EntitiesCreatedActionResultDef.Types.Entity.Types.EntityType) input.ReadEnum();
+                Type = input.ReadInt32();
                 break;
               }
               case 29: {
@@ -412,19 +410,6 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
             }
           }
         }
-
-        #region Nested types
-        /// <summary>Container for nested types declared in the Entity message type.</summary>
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public static partial class Types {
-          public enum EntityType {
-            [pbr::OriginalName("Player")] Player = 0,
-            [pbr::OriginalName("Enemy")] Enemy = 1,
-            [pbr::OriginalName("Projectile")] Projectile = 2,
-          }
-
-        }
-        #endregion
 
       }
 

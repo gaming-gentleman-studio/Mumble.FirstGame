@@ -32,7 +32,7 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
             IActionResult result = null;
             switch (type)
             {
-                case Lookup.Move:
+                case ActionTypeLookup.Move:
                     try
                     {
                         MoveActionResultDef moveDef = MoveActionResultDef.Parser.ParseFrom(serializedResult);
@@ -44,7 +44,7 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
                     }
                     
                     break;
-                case Lookup.EntitiesCreated:
+                case ActionTypeLookup.EntitiesCreated:
                     try
                     {
                         EntitiesCreatedActionResultDef createdDef = EntitiesCreatedActionResultDef.Parser.ParseFrom(serializedResult);
@@ -62,7 +62,7 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
                         Debug.WriteLine("Failed to parse Entities created result: "+ex.Message);
                     }
                     break;
-                case Lookup.EntityDestroyed:
+                case ActionTypeLookup.EntityDestroyed:
                     try
                     {
                         EntityDestroyedActionResultDef destroyedDef = EntityDestroyedActionResultDef.Parser.ParseFrom(serializedResult);

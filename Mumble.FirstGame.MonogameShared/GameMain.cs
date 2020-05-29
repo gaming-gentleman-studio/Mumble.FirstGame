@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Mumble.FirstGame.Client;
+using Mumble.FirstGame.Client.Online;
 using Mumble.FirstGame.Core.Action;
 using Mumble.FirstGame.Core.Action.Fire;
 using Mumble.FirstGame.Core.Action.Movement;
@@ -32,7 +33,7 @@ namespace Mumble.FirstGame.MonogameShared
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        ClientType clientType = ClientType.Solo;
+        ClientType clientType = ClientType.Online;
         IGameClient client;
         Dictionary<IEntity, Vector2> positions = new Dictionary<IEntity, Vector2>();
         Player player;
@@ -60,9 +61,8 @@ namespace Mumble.FirstGame.MonogameShared
         {
             keyHandler = new MovementKeyHandler();
             mouseHandler = new MouseHandler();
-
-            player = new Player(3, 10);
-            BattleEntityContainer entityContainer = new BattleEntityContainer(new List<IMoveableCombatEntity>() { player });
+            player = new Player("beau", 3, 10);
+            positions[player] = new Vector2(0, 0);
             //solo
             if (clientType == ClientType.Solo)
             {
@@ -70,13 +70,10 @@ namespace Mumble.FirstGame.MonogameShared
             }
             else if (clientType == ClientType.Online)
             {
-                IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 27000);
-                //IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse("52.151.9.24"), 27000);
-                client = new OnlineGameClient(endpoint);
+                client = new OnlineGameClient();
             }
-            client.Init(entityContainer);
-            
-            positions.Add(player, new Vector2(0, 0));
+            List<IActionResult> results = client.Init();
+            ApplyResults(results);
             // TODO: Add your initialization logic here
             base.Initialize();
         }
@@ -120,6 +117,12 @@ namespace Mumble.FirstGame.MonogameShared
             actions.AddIfNotNull(keyHandler.HandleKeyPress(player));
             actions.AddIfNotNull(mouseHandler.HandleMouseClick(player,positions[player]));
             results = client.Update(actions);
+            ApplyResults(results);
+            //DebugUtils.PrintActions(actions);
+            base.Update(gameTime);
+        }
+        private void ApplyResults(List<IActionResult> results)
+        {
             if (results.Count > 0)
             {
                 foreach (EntitiesCreatedActionResult result in results.Where(x => x is EntitiesCreatedActionResult))
@@ -163,15 +166,12 @@ namespace Mumble.FirstGame.MonogameShared
                     }
 
                 }
-                foreach(EntityDestroyedActionResult result in results.Where(x => x is EntityDestroyedActionResult))
+                foreach (EntityDestroyedActionResult result in results.Where(x => x is EntityDestroyedActionResult))
                 {
                     positions.Remove(result.Entity);
                 }
             }
-            //DebugUtils.PrintActions(actions);
-            base.Update(gameTime);
         }
-
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -183,7 +183,7 @@ namespace Mumble.FirstGame.MonogameShared
             
             foreach (IEntity entity in positions.Keys)
             {
-                if (entity == player)
+                if (entity is Player)
                 {
                     spriteBatch.Draw(contentImages.ImgTheDude, positions[entity], null, Color.DarkGray, 0f, Vector2.Zero, new Vector2(2, 2), SpriteEffects.None, 0f);
                 }

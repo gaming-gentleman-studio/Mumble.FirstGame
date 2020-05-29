@@ -2,10 +2,7 @@
 package action;
 
 option csharp_namespace = "Mumble.FirstGame.Serialization.Protobuf.Action";
-import "Action/Schema/Direction.proto";
-message FireActionDef{
-	int32 id = 1;
-
-	Direction direction = 2;
-
+message SpawnEntityActionDef{
+	string name=1;
+	int32 type=2;
 }

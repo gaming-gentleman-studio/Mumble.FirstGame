@@ -2,6 +2,7 @@
 using Mumble.FirstGame.Core.Action;
 using Mumble.FirstGame.Core.Action.Fire;
 using Mumble.FirstGame.Core.Action.Movement;
+using Mumble.FirstGame.Core.Action.Spawn;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
 using System;
 using System.Collections.Generic;
@@ -37,12 +38,21 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Action
                     }
                 };
             }
+            else if (action is ISpawnEntityAction)
+            {
+                ISpawnEntityAction spawn = (ISpawnEntityAction)action;
+                return new SpawnEntityActionDef
+                {
+                    Name = spawn.Entity.GetName(),
+                    Type = EntityTypeLookup.TypeToTypeId[spawn.Entity.GetType()]
+                };
+            }
             return null;
 
         }
         public static byte GetTypeByte(this IAction action)
         {
-            return (byte)Lookup.TypeToTypeId[action.GetType()];
+            return (byte)ActionTypeLookup.TypeToTypeId[action.GetType()];
         }
     }
 }

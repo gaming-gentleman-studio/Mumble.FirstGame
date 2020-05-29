@@ -13,9 +13,7 @@ namespace Mumble.FirstGame.Client
     {
         List<IActionResult> Update(List<IAction> actions);
 
-        void Init(IEntityContainer entityContainer);
-        List<Player> GetPlayers();
-        List<ICombatAIEntity> GetEnemies();
+        List<IActionResult> Init();
 
         // Sometimes, UDP connection misses and entities are left without calls - this will get them
     }

@@ -11,7 +11,7 @@ using System.Text;
 
 namespace Mumble.FirstGame.Core.Entity.Player
 {
-    public class Player : IMoveableCombatEntity
+    public class Player : IPlayerControlledEntity
     {
         public IWeaponComponent WeaponComponent
         {
@@ -34,18 +34,19 @@ namespace Mumble.FirstGame.Core.Entity.Player
             get;
             private set;
         }
-
-        public Player(int damage, int health)
+        private string _name;
+        public Player(string name, int damage, int health)
         {
             WeaponComponent = new SimpleWeaponComponent(new VelocityComponent(Direction.None,1),new DamageComponent(damage));
             HealthComponent = new HealthComponent(health);
             PositionComponent = new PositionComponent(0, 0);
             VelocityComponent = new VelocityComponent(Direction.None,1);
+            _name = name;
         }
 
         public string GetName()
         {
-            return "Player";
+            return _name;
         }
     }
 }

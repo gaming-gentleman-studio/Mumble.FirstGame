@@ -2,44 +2,44 @@
 using Mumble.FirstGame.Core.Action;
 using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
-using Mumble.FirstGame.Core.Entity.Player;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
 using Mumble.FirstGame.Serialization.Protobuf.Action;
 using Mumble.FirstGame.Serialization.Protobuf.Factory;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-namespace Mumble.FirstGame.Client
+namespace Mumble.FirstGame.Client.Online
 {
-    public class OnlineGameClient : IGameClient
+    public abstract class SocketSender
     {
-        private Socket _socket;
+        protected Socket _socket;
         private const int _bufSize = 8 * 1024 * 2;
         private State _state = new State();
         private EndPoint _sender = new IPEndPoint(IPAddress.Any, 0);
         private AsyncCallback recv = null;
-        private IEntityContainer _entityContainer;
+        
         private IActionResultFactory _actionResultFactory;
         private ConcurrentBag<IActionResult> _resultBuffer;
         public class State
         {
             public byte[] Buffer = new byte[_bufSize];
         }
-        public OnlineGameClient(IPEndPoint endpoint)
+        public SocketSender(IPEndPoint endpoint)
         {
+            
             _resultBuffer = new ConcurrentBag<IActionResult>();
-            _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            _socket.Connect(endpoint);
-            Receive();
+            BindSocket(endpoint);
+            
         }
-        private void Receive()
+        protected abstract void BindSocket(IPEndPoint endpoint);
+        protected void Receive(IEntityContainer entityContainer)
         {
+            _actionResultFactory = new ActionResultFactory(entityContainer);
             _socket.BeginReceiveFrom(_state.Buffer, 0, _bufSize, SocketFlags.None, ref _sender, recv = (ar) =>
             {
                 State state = (State)ar.AsyncState;
@@ -59,42 +59,33 @@ namespace Mumble.FirstGame.Client
                         packet = packet.Skip(packet[0]).ToArray();
                     }
 
-                    
+
                 }
 
             }, _state);
         }
-        private void Send(IAction action)
+        public void Send(IAction action, IEntityContainer entityContainer)
         {
             if (action == null)
             {
                 return;
             }
             //TODO - inefficient
-            byte[] untypedData = action.ToProtobufDefinition(_entityContainer).ToByteArray();
+            byte[] untypedData = action.ToProtobufDefinition(entityContainer).ToByteArray();
             byte[] data = new byte[untypedData.Length + 2];
             data[0] = (byte)(untypedData.Length + 2);
-            data[1] = action.GetTypeByte();                         
+            data[1] = action.GetTypeByte();
             Array.Copy(untypedData, 0, data, 2, untypedData.Length);
             _socket.BeginSend(data, 0, data.Length, SocketFlags.None, (ar) =>
-               {
-                   State state = (State)ar.AsyncState;
-                   int bytes = _socket.EndSend(ar);
-               }, _state);
-        }
-        
-        public List<ICombatAIEntity> GetEnemies()
-        {
-            return new List<ICombatAIEntity>();
+            {
+                State state = (State)ar.AsyncState;
+                int bytes = _socket.EndSend(ar);
+            }, _state);
         }
 
-        public List<Player> GetPlayers()
+        public List<IActionResult> Update(List<IAction> actions,IEntityContainer entityContainer)
         {
-            return new List<Player>(); 
-        }
-        public List<IActionResult> Update(List<IAction> actions)
-        {
-            _entityContainer.HardDeleteEntities();
+            entityContainer.HardDeleteEntities();
             List<IActionResult> retList = new List<IActionResult>();
             lock (_resultBuffer)
             {
@@ -102,22 +93,15 @@ namespace Mumble.FirstGame.Client
                 _resultBuffer = new ConcurrentBag<IActionResult>();
             }
             HashSet<IEntity> destroyed = new HashSet<IEntity>(retList.Where(x => x is EntityDestroyedActionResult).Select(x => ((EntityDestroyedActionResult)x).Entity));
-            _entityContainer.RemoveEntities(destroyed);
+            entityContainer.RemoveEntities(destroyed);
             if (actions.Count > 0)
             {
-                foreach(IAction action in actions)
+                foreach (IAction action in actions)
                 {
-                    Send(action);
+                    Send(action,entityContainer);
                 }
             }
             return retList;
         }
-
-        public void Init(IEntityContainer entityContainer)
-        {
-            _entityContainer = entityContainer;
-            _actionResultFactory = new ActionResultFactory(entityContainer);
-        }
-
     }
 }

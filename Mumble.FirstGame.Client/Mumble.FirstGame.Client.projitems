@@ -11,7 +11,10 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ClientType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IGameClient.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)OnlineGameClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Online\OnlineGameClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Online\SocketSender.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Online\TcpClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Online\UdpClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SoloGameClient.cs" />
   </ItemGroup>
 </Project>

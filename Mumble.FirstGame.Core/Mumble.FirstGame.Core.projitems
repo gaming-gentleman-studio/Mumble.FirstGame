@@ -22,6 +22,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Action\Movement\IMoveAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Movement\MoveAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\NullAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\ISpawnEntityAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\SpawnPlayerAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\AI\ICombatAIComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\AI\SimpleAttackAIComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Damage\DamageComponent.cs" />
@@ -42,6 +44,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entity\IEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\IMoveableCombatEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\IMoveableEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\IPlayerControlledEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Player\Player.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Projectile\IProjectileEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Projectile\SimpleBullet.cs" />

@@ -24,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Action\Direction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Action\FireActionDef.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Action\MoveActionDef.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Action\SpawnEntityActionDef.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Factory\ActionFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Factory\ActionResultFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Factory\IActionFactory.cs" />
@@ -33,5 +34,6 @@
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Protobuf\ActionResult\Schema\EntitiesCreatedActionResultDef.proto" />
     <None Include="$(MSBuildThisFileDirectory)Protobuf\Action\Schema\Direction.proto" />
+    <None Include="$(MSBuildThisFileDirectory)Protobuf\Action\Schema\SpawnEntityActionDef.proto" />
   </ItemGroup>
 </Project>

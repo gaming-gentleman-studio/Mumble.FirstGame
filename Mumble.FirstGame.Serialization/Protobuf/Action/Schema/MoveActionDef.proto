@@ -2,7 +2,7 @@
 package action;
 
 option csharp_namespace = "Mumble.FirstGame.Serialization.Protobuf.Action";
-import "Direction.proto";
+import "Action/Schema/Direction.proto";
 message MoveActionDef{
 	int32 id = 1;
 	Direction direction = 2;

@@ -8,8 +8,8 @@ namespace Mumble.FirstGame.ServerConsole
     {
         static void Main(string[] args)
         {
-            IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, 27000);
-            UdpServer server = new UdpServer(endpoint);
+            
+            ServerManager server = new ServerManager();
             server.Listen();
             Console.ReadKey();
         }

@@ -33,6 +33,7 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult
                 foreach (IMoveableEntity entity in entitiesCreatedResult.Entities)
                 {
                     var entityDef = new EntitiesCreatedActionResultDef.Types.Entity();
+                    entityDef.Type = EntityTypeLookup.TypeToTypeId[entity.GetType()];
                     entityDef.Id = entityContainer.GetEntityId(entity);
                     entityDef.Direction = new Direction
                     {
@@ -57,7 +58,7 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult
         }
         public static byte GetTypeByte(this IActionResult action)
         {
-            return (byte)Lookup.TypeToTypeId[action.GetType()];
+            return (byte)ActionTypeLookup.TypeToTypeId[action.GetType()];
         }
     }
 }

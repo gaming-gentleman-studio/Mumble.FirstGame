@@ -42,7 +42,10 @@ namespace Mumble.FirstGame.Core.Scene.EntityContainer
             }
             
         }
-
+        public BattleEntityContainer()
+        {
+            _entities = new ConcurrentDictionary<int, EntityMeta>();
+        }
         public BattleEntityContainer(List<IMoveableCombatEntity> players)
         {
             _entities = new ConcurrentDictionary<int, EntityMeta>();

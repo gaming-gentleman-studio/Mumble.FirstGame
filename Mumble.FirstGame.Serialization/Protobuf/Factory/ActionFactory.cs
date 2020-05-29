@@ -1,6 +1,7 @@
 ﻿using Mumble.FirstGame.Core.Action;
 using Mumble.FirstGame.Core.Action.Fire;
 using Mumble.FirstGame.Core.Action.Movement;
+using Mumble.FirstGame.Core.Action.Spawn;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
@@ -31,7 +32,7 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
             IAction action = new NullAction();
             switch (type)
             {
-                case Lookup.Move:
+                case ActionTypeLookup.Move:
                     try
                     {
                         MoveActionDef moveDef = MoveActionDef.Parser.ParseFrom(serializedAction);
@@ -42,7 +43,7 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
                         Debug.WriteLine("Failed to parse move action");
                     }
                     break;
-                case Lookup.Fire:
+                case ActionTypeLookup.Fire:
                     try
                     {
                         FireActionDef fireDef = FireActionDef.Parser.ParseFrom(serializedAction);
@@ -52,6 +53,25 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
                     {
                         Debug.WriteLine("Failed to parse fire action");
 
+                    }
+                    break;
+                case ActionTypeLookup.EntitiesCreated:
+                    try
+                    {
+                        SpawnEntityActionDef spawnDef = SpawnEntityActionDef.Parser.ParseFrom(serializedAction);
+                        switch (spawnDef.Type)
+                        {
+                            case (EntityTypeLookup.Player):
+                                action = new SpawnPlayerAction(spawnDef.Name, 3, 10);
+                                break;
+                            default:
+                                throw new Exception("Unhandled entity found while attempting to deserialize");
+                        }
+                            
+                    }
+                    catch
+                    {
+                        Debug.WriteLine("Failed to parse spawn action");
                     }
                     break;
                 default:
