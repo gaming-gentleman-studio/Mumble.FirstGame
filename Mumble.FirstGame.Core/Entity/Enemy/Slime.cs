@@ -5,6 +5,7 @@ using Mumble.FirstGame.Core.Entity.Components.Health;
 using Mumble.FirstGame.Core.Entity.Components.Position;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
 using Mumble.FirstGame.Core.Entity.Components.Weapon;
+using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -41,6 +42,12 @@ namespace Mumble.FirstGame.Core.Entity.Enemy
             private set;
         }
 
+        public IOwnerIdentifier OwnerIdentifier
+        {
+            get;
+            private set;
+        }
+
         public Slime(int damage, int health, int x, int y)
         {
             WeaponComponent = new SimpleWeaponComponent(new VelocityComponent(Direction.None, 1),new DamageComponent(damage));
@@ -48,6 +55,7 @@ namespace Mumble.FirstGame.Core.Entity.Enemy
             CombatAIComponent = new SimpleAttackAIComponent();
             PositionComponent = new PositionComponent(x, y);
             VelocityComponent = new VelocityComponent(Direction.None, 1);
+            OwnerIdentifier = IntOwnerIdentifier.NonPlayerOwned;
 
         }
 

@@ -1,4 +1,5 @@
-﻿using Mumble.FirstGame.Core.Scene.EntityContainer;
+﻿using Mumble.FirstGame.Core.Action;
+using Mumble.FirstGame.Core.Scene.EntityContainer;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -22,6 +23,10 @@ namespace Mumble.FirstGame.Client.Online
         public void Listen(IEntityContainer container)
         {
             Receive(container);
+        }
+        public void Send(IAction action,IEntityContainer container)
+        {
+            SendInternal(action, container);
         }
     }
 }

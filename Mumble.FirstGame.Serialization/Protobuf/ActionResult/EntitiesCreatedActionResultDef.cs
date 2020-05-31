@@ -26,17 +26,17 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
           string.Concat(
             "CjhBY3Rpb25SZXN1bHQvU2NoZW1hL0VudGl0aWVzQ3JlYXRlZEFjdGlvblJl",
             "c3VsdERlZi5wcm90bxIMYWN0aW9ucmVzdWx0Gh1BY3Rpb24vU2NoZW1hL0Rp",
-            "cmVjdGlvbi5wcm90byLHAQoeRW50aXRpZXNDcmVhdGVkQWN0aW9uUmVzdWx0",
+            "cmVjdGlvbi5wcm90byLkAQoeRW50aXRpZXNDcmVhdGVkQWN0aW9uUmVzdWx0",
             "RGVmEkUKCGVudGl0aWVzGAEgAygLMjMuYWN0aW9ucmVzdWx0LkVudGl0aWVz",
-            "Q3JlYXRlZEFjdGlvblJlc3VsdERlZi5FbnRpdHkaXgoGRW50aXR5EgoKAmlk",
+            "Q3JlYXRlZEFjdGlvblJlc3VsdERlZi5FbnRpdHkaewoGRW50aXR5EgoKAmlk",
             "GAEgASgFEgwKBHR5cGUYAiABKAUSCQoBeBgDIAEoAhIJCgF5GAQgASgCEiQK",
-            "CWRpcmVjdGlvbhgFIAEoCzIRLmFjdGlvbi5EaXJlY3Rpb25CN6oCNE11bWJs",
-            "ZS5GaXJzdEdhbWUuU2VyaWFsaXphdGlvbi5Qcm90b2J1Zi5BY3Rpb25SZXN1",
-            "bHRiBnByb3RvMw=="));
+            "CWRpcmVjdGlvbhgFIAEoCzIRLmFjdGlvbi5EaXJlY3Rpb24SDAoEbmFtZRgG",
+            "IAEoCRINCgVvd25lchgHIAEoBUI3qgI0TXVtYmxlLkZpcnN0R2FtZS5TZXJp",
+            "YWxpemF0aW9uLlByb3RvYnVmLkFjdGlvblJlc3VsdGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Mumble.FirstGame.Serialization.Protobuf.Action.DirectionReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.EntitiesCreatedActionResultDef), global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.EntitiesCreatedActionResultDef.Parser, new[]{ "Entities" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.EntitiesCreatedActionResultDef.Types.Entity), global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.EntitiesCreatedActionResultDef.Types.Entity.Parser, new[]{ "Id", "Type", "X", "Y", "Direction" }, null, null, null, null)})
+            new pbr::GeneratedClrTypeInfo(typeof(global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.EntitiesCreatedActionResultDef), global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.EntitiesCreatedActionResultDef.Parser, new[]{ "Entities" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.EntitiesCreatedActionResultDef.Types.Entity), global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.EntitiesCreatedActionResultDef.Types.Entity.Parser, new[]{ "Id", "Type", "X", "Y", "Direction", "Name", "Owner" }, null, null, null, null)})
           }));
     }
     #endregion
@@ -196,6 +196,8 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
           x_ = other.x_;
           y_ = other.y_;
           direction_ = other.direction_ != null ? other.direction_.Clone() : null;
+          name_ = other.name_;
+          owner_ = other.owner_;
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
 
@@ -259,6 +261,28 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
           }
         }
 
+        /// <summary>Field number for the "name" field.</summary>
+        public const int NameFieldNumber = 6;
+        private string name_ = "";
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string Name {
+          get { return name_; }
+          set {
+            name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+          }
+        }
+
+        /// <summary>Field number for the "owner" field.</summary>
+        public const int OwnerFieldNumber = 7;
+        private int owner_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int Owner {
+          get { return owner_; }
+          set {
+            owner_ = value;
+          }
+        }
+
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public override bool Equals(object other) {
           return Equals(other as Entity);
@@ -277,6 +301,8 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
           if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(X, other.X)) return false;
           if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Y, other.Y)) return false;
           if (!object.Equals(Direction, other.Direction)) return false;
+          if (Name != other.Name) return false;
+          if (Owner != other.Owner) return false;
           return Equals(_unknownFields, other._unknownFields);
         }
 
@@ -288,6 +314,8 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
           if (X != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(X);
           if (Y != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Y);
           if (direction_ != null) hash ^= Direction.GetHashCode();
+          if (Name.Length != 0) hash ^= Name.GetHashCode();
+          if (Owner != 0) hash ^= Owner.GetHashCode();
           if (_unknownFields != null) {
             hash ^= _unknownFields.GetHashCode();
           }
@@ -321,6 +349,14 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
             output.WriteRawTag(42);
             output.WriteMessage(Direction);
           }
+          if (Name.Length != 0) {
+            output.WriteRawTag(50);
+            output.WriteString(Name);
+          }
+          if (Owner != 0) {
+            output.WriteRawTag(56);
+            output.WriteInt32(Owner);
+          }
           if (_unknownFields != null) {
             _unknownFields.WriteTo(output);
           }
@@ -343,6 +379,12 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
           }
           if (direction_ != null) {
             size += 1 + pb::CodedOutputStream.ComputeMessageSize(Direction);
+          }
+          if (Name.Length != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
+          }
+          if (Owner != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeInt32Size(Owner);
           }
           if (_unknownFields != null) {
             size += _unknownFields.CalculateSize();
@@ -372,6 +414,12 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
               Direction = new global::Mumble.FirstGame.Serialization.Protobuf.Action.Direction();
             }
             Direction.MergeFrom(other.Direction);
+          }
+          if (other.Name.Length != 0) {
+            Name = other.Name;
+          }
+          if (other.Owner != 0) {
+            Owner = other.Owner;
           }
           _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
         }
@@ -405,6 +453,14 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
                   Direction = new global::Mumble.FirstGame.Serialization.Protobuf.Action.Direction();
                 }
                 input.ReadMessage(Direction);
+                break;
+              }
+              case 50: {
+                Name = input.ReadString();
+                break;
+              }
+              case 56: {
+                Owner = input.ReadInt32();
                 break;
               }
             }

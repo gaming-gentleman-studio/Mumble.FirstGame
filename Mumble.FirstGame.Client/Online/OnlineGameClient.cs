@@ -3,6 +3,7 @@ using Mumble.FirstGame.Core.Action;
 using Mumble.FirstGame.Core.Action.Spawn;
 using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
+using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Entity.Player;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
 using Mumble.FirstGame.Serialization.Protobuf.Action;
@@ -44,10 +45,11 @@ namespace Mumble.FirstGame.Client.Online
         public List<IActionResult> Init()
         {
             _entityContainer = new BattleEntityContainer();
-            SpawnPlayerAction spawnAction = new SpawnPlayerAction("beau", 3, 10);
-            _tcpClient.Send(spawnAction, _entityContainer);
-            _udpClient.Listen(_entityContainer)
-            return new List<IActionResult>();
+            // some of these fields don't actually matter - just need to tell server where we are spawning
+            SpawnPlayerAction spawnAction = new SpawnPlayerAction("beau", 3, 10,new IntOwnerIdentifier(1));
+            List<IActionResult> results =_tcpClient.Send(spawnAction, _entityContainer);
+            _udpClient.Listen(_entityContainer);
+            return results;
             
         }
 

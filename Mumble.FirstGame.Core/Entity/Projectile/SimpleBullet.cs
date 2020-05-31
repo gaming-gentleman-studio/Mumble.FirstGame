@@ -1,6 +1,7 @@
 ﻿using Mumble.FirstGame.Core.Entity.Components.Damage;
 using Mumble.FirstGame.Core.Entity.Components.Position;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
+using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,11 +28,25 @@ namespace Mumble.FirstGame.Core.Entity.Projectile
             private set;
         }
 
+        public IOwnerIdentifier OwnerIdentifier
+        {
+            get;
+            private set;
+        }
+
         public SimpleBullet(float x, float y, int damage, Direction direction, float speed)
         {
             PositionComponent = new PositionComponent(x,y);
             DamageComponent = new DamageComponent(damage);
             VelocityComponent = new VelocityComponent(direction, speed);
+            OwnerIdentifier = IntOwnerIdentifier.NonPlayerOwned;
+        }
+        public SimpleBullet(float x, float y, Direction direction)
+        {
+            PositionComponent = new PositionComponent(x, y);
+            DamageComponent = null;
+            VelocityComponent = new VelocityComponent(direction, 0f);
+            OwnerIdentifier = IntOwnerIdentifier.NonPlayerOwned;
         }
         public string GetName()
         {

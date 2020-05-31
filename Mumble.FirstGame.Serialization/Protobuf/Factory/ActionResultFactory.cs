@@ -15,9 +15,11 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
     public class ActionResultFactory : IActionResultFactory
     {
         private IEntityContainer _entityContainer;
+        private IEntityFactory _entityFactory;
         public ActionResultFactory(IEntityContainer entityContainer)
         {
             _entityContainer = entityContainer;
+            _entityFactory = new EntityFactory();
         }
 
 
@@ -51,9 +53,9 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
                         List<IEntity> entities = new List<IEntity>();
                         foreach (EntitiesCreatedActionResultDef.Types.Entity entityDef in createdDef.Entities)
                         {
-                            SimpleBullet bullet = new SimpleBullet(entityDef.X, entityDef.Y, 0, new Direction(entityDef.Direction.Radians), 0);
-                            _entityContainer.AddEntity(entityDef.Id, bullet);
-                            entities.Add(bullet);
+                            IEntity entity = _entityFactory.CreateEntity(entityDef);
+                            _entityContainer.AddEntity(entityDef.Id, entity);
+                            entities.Add(entity);
                         }
                         result = new EntitiesCreatedActionResult(entities);
                     }

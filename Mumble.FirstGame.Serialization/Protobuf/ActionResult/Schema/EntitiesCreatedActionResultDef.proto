@@ -14,6 +14,8 @@ message EntitiesCreatedActionResultDef{
         float x = 3;
         float y = 4;
         action.Direction direction = 5;
+        string name = 6;
+        int32 owner = 7;
 
 	}
 }

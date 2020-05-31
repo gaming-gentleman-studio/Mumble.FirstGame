@@ -3,6 +3,7 @@ using Google.Protobuf.Collections;
 using Mumble.FirstGame.Core.Action;
 using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
+using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
 using Mumble.FirstGame.Serialization.Protobuf.Action;
 using System;
@@ -41,6 +42,14 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult
                     };
                     entityDef.X = entity.PositionComponent.X;
                     entityDef.Y = entity.PositionComponent.Y;
+                    if (entity.OwnerIdentifier.PlayerOwned())
+                    {
+                        entityDef.Owner = ((IntOwnerIdentifier)entity.OwnerIdentifier).Id;
+                    }
+                    else
+                    {
+                        entityDef.Owner = 0;
+                    }
                     message.Entities.Add(entityDef);
                 }
                 return message;

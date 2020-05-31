@@ -37,34 +37,46 @@ namespace Mumble.FirstGame.Client.Online
             
         }
         protected abstract void BindSocket(IPEndPoint endpoint);
-        protected void Receive(IEntityContainer entityContainer)
+        protected void Receive(IEntityContainer entityContainer,bool async=true)
         {
             _actionResultFactory = new ActionResultFactory(entityContainer);
-            _socket.BeginReceiveFrom(_state.Buffer, 0, _bufSize, SocketFlags.None, ref _sender, recv = (ar) =>
+            if (async)
             {
-                State state = (State)ar.AsyncState;
-                int bytes = _socket.EndReceiveFrom(ar, ref _sender);
-                _socket.BeginReceiveFrom(state.Buffer, 0, _bufSize, SocketFlags.None, ref _sender, recv, state);
-                if (bytes > 0)
+                _socket.BeginReceiveFrom(_state.Buffer, 0, _bufSize, SocketFlags.None, ref _sender, recv = (ar) =>
                 {
-                    byte[] packet = state.Buffer.Take(bytes).ToArray();
-                    while (packet.Length > 0)
-                    {
-                        byte[] message = packet.Take(packet[0]).ToArray();
-                        IActionResult result = _actionResultFactory.Create(message.Skip(1).ToArray());
-                        if (result != null)
-                        {
-                            _resultBuffer.Add(result);
-                        }
-                        packet = packet.Skip(packet[0]).ToArray();
-                    }
+                    State state = (State)ar.AsyncState;
+                    int bytes = _socket.EndReceiveFrom(ar, ref _sender);
+                    _socket.BeginReceiveFrom(state.Buffer, 0, _bufSize, SocketFlags.None, ref _sender, recv, state);
+                    ParseBytesReceived(state, bytes);
 
+                }, _state);
+            }
+            else
+            {
+                State state = new State();
+                int bytes = _socket.Receive(state.Buffer);
+                ParseBytesReceived(state, bytes);
+            }
 
-                }
-
-            }, _state);
         }
-        public void Send(IAction action, IEntityContainer entityContainer)
+        private void ParseBytesReceived(State state, int bytes)
+        {
+            if (bytes > 0)
+            {
+                byte[] packet = state.Buffer.Take(bytes).ToArray();
+                while (packet.Length > 0)
+                {
+                    byte[] message = packet.Take(packet[0]).ToArray();
+                    IActionResult result = _actionResultFactory.Create(message.Skip(1).ToArray());
+                    if (result != null)
+                    {
+                        _resultBuffer.Add(result);
+                    }
+                    packet = packet.Skip(packet[0]).ToArray();
+                }
+            }
+        }
+        protected void SendInternal(IAction action, IEntityContainer entityContainer, bool async=true)
         {
             if (action == null)
             {
@@ -76,29 +88,41 @@ namespace Mumble.FirstGame.Client.Online
             data[0] = (byte)(untypedData.Length + 2);
             data[1] = action.GetTypeByte();
             Array.Copy(untypedData, 0, data, 2, untypedData.Length);
-            _socket.BeginSend(data, 0, data.Length, SocketFlags.None, (ar) =>
+            if (async)
             {
-                State state = (State)ar.AsyncState;
-                int bytes = _socket.EndSend(ar);
-            }, _state);
+                _socket.BeginSend(data, 0, data.Length, SocketFlags.None, (ar) =>
+                {
+                    State state = (State)ar.AsyncState;
+                    int bytes = _socket.EndSend(ar);
+                }, _state);
+            }
+            else
+            {
+                _socket.Send(data);
+            }
         }
-
-        public List<IActionResult> Update(List<IAction> actions,IEntityContainer entityContainer)
+        protected List<IActionResult> ClearResultBuffer()
         {
-            entityContainer.HardDeleteEntities();
             List<IActionResult> retList = new List<IActionResult>();
             lock (_resultBuffer)
             {
                 retList.AddRange(_resultBuffer.ToList());
                 _resultBuffer = new ConcurrentBag<IActionResult>();
             }
+            return retList;
+
+        }
+        public List<IActionResult> Update(List<IAction> actions,IEntityContainer entityContainer)
+        {
+            entityContainer.HardDeleteEntities();
+            List<IActionResult> retList = ClearResultBuffer();
             HashSet<IEntity> destroyed = new HashSet<IEntity>(retList.Where(x => x is EntityDestroyedActionResult).Select(x => ((EntityDestroyedActionResult)x).Entity));
             entityContainer.RemoveEntities(destroyed);
             if (actions.Count > 0)
             {
                 foreach (IAction action in actions)
                 {
-                    Send(action,entityContainer);
+                    SendInternal(action,entityContainer);
                 }
             }
             return retList;

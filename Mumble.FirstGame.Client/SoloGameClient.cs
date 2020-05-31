@@ -3,6 +3,7 @@ using Mumble.FirstGame.Core.Action.Spawn;
 using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Enemy;
+using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Entity.Player;
 using Mumble.FirstGame.Core.Scene;
 using Mumble.FirstGame.Core.Scene.Battle;
@@ -19,7 +20,7 @@ namespace Mumble.FirstGame.Client
         public List<IActionResult> Init()
         {
             _scene = new BattleScene();
-            SpawnPlayerAction action = new SpawnPlayerAction("beau",3,10);
+            SpawnPlayerAction action = new SpawnPlayerAction("beau",3,10, new IntOwnerIdentifier(1));
             return _scene.Update(new List<IAction>() { action }, 0);
         }
 

@@ -45,6 +45,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entity\IMoveableCombatEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\IMoveableEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\IPlayerControlledEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\OwnerIdentifier\IntOwnerIdentifier.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\OwnerIdentifier\IOwnerIdentifier.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Player\Player.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Projectile\IProjectileEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Projectile\SimpleBullet.cs" />

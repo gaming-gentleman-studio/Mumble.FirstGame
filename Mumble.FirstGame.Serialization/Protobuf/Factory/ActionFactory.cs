@@ -4,6 +4,7 @@ using Mumble.FirstGame.Core.Action.Movement;
 using Mumble.FirstGame.Core.Action.Spawn;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
+using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
 using Mumble.FirstGame.Serialization.Protobuf.Action;
 using System;
@@ -25,7 +26,7 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
         }
 
         
-        public IAction Create(byte[] data)
+        public IAction Create(byte[] data,IOwnerIdentifier owner)
         {
             int type = data[0];
             byte[] serializedAction = data.Skip(1).Take(data.Length).ToArray();
@@ -62,7 +63,7 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
                         switch (spawnDef.Type)
                         {
                             case (EntityTypeLookup.Player):
-                                action = new SpawnPlayerAction(spawnDef.Name, 3, 10);
+                                action = new SpawnPlayerAction(spawnDef.Name, 3, 10, owner);
                                 break;
                             default:
                                 throw new Exception("Unhandled entity found while attempting to deserialize");

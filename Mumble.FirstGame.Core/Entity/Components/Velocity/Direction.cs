@@ -12,18 +12,20 @@ namespace Mumble.FirstGame.Core.Entity.Components.Velocity
         public readonly float Radians;
         public Direction(float x, float y)
         {
-            if ((x > 1) || (x < -1))
-            {
-                throw new Exception("Invalid X argument to direction - must be between -1 and 1");
-            }
-            if ((y>1) || (y < -1))
-            {
-                throw new Exception("Invalid Y argument to direction - must be between -1 and 1");
-
-            }
-            X = x;
-            Y = y;
+            X = 0f;
+            Y = 0f;
+            Radians = 0f;
+            Tuple<float, float> normalized = Normalize(x, y);
+            X = normalized.Item1;
+            Y = normalized.Item2;
             Radians = (float)Math.Atan2(Y, X);
+        }
+        private Tuple<float,float> Normalize(float x, float y)
+        {
+            float len = Math.Abs(x *x + y * y);
+            float normalizedX = x / len;
+            float normalizedY = y / len;
+            return new Tuple<float, float>(normalizedX, normalizedY);
         }
         public Direction(float radians)
         {

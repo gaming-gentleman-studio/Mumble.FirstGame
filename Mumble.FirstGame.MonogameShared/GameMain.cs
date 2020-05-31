@@ -10,6 +10,7 @@ using Mumble.FirstGame.Core.Action.Movement;
 using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Enemy;
+using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Entity.Player;
 using Mumble.FirstGame.Core.Entity.Projectile;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
@@ -61,8 +62,6 @@ namespace Mumble.FirstGame.MonogameShared
         {
             keyHandler = new MovementKeyHandler();
             mouseHandler = new MouseHandler();
-            player = new Player("beau", 3, 10);
-            positions[player] = new Vector2(0, 0);
             //solo
             if (clientType == ClientType.Solo)
             {
@@ -73,6 +72,12 @@ namespace Mumble.FirstGame.MonogameShared
                 client = new OnlineGameClient();
             }
             List<IActionResult> results = client.Init();
+            EntitiesCreatedActionResult createdResult = (EntitiesCreatedActionResult)results.Where(x => x is EntitiesCreatedActionResult).FirstOrDefault();
+            player = (Player)createdResult.Entities[0];
+            positions[player] = new Vector2(
+                (player.PositionComponent.X * 2 * scaling),
+                (player.PositionComponent.Y * 2 * scaling)
+            );
             ApplyResults(results);
             // TODO: Add your initialization logic here
             base.Initialize();
@@ -129,10 +134,18 @@ namespace Mumble.FirstGame.MonogameShared
                 {
                     foreach (IEntity entity in result.Entities)
                     {
-                        positions[entity] = new Vector2(
-                            (entity.PositionComponent.X * 2 * scaling) + 16,
-                            (entity.PositionComponent.Y * 2 * scaling) + 16
-                        );
+                        if(entity is Player)
+                        {
+
+                        }
+                        else
+                        { // Why is this needed?
+                            positions[entity] = new Vector2(
+                                (entity.PositionComponent.X * 2 * scaling) + 16,
+                                (entity.PositionComponent.Y * 2 * scaling) + 16
+                            );
+                        }
+
                     }
                 }
                 foreach (MoveActionResult result in results.Where(x => x is MoveActionResult))
