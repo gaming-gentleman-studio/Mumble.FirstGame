@@ -134,17 +134,10 @@ namespace Mumble.FirstGame.MonogameShared
                 {
                     foreach (IEntity entity in result.Entities)
                     {
-                        if(entity is Player)
-                        {
-
-                        }
-                        else
-                        { // Why is this needed?
-                            positions[entity] = new Vector2(
-                                (entity.PositionComponent.X * 2 * scaling) + 16,
-                                (entity.PositionComponent.Y * 2 * scaling) + 16
-                            );
-                        }
+                        positions[entity] = new Vector2(
+                            (entity.PositionComponent.X * 2 * scaling) + 16,
+                            (entity.PositionComponent.Y * 2 * scaling) + 16
+                        );
 
                     }
                 }

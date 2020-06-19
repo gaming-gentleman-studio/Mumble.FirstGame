@@ -18,6 +18,7 @@ namespace Mumble.FirstGame.Core.Scene.EntityContainer
 
         public List<IProjectileEntity> Projectiles => _entities.Values.Where(x => (x.Entity is IProjectileEntity && x.SoftDeleted == false)).Select(x => x.Entity).Cast<IProjectileEntity>().ToList();
 
+        public List<IEntity> Entities => _entities.Values.Where(x => (x.SoftDeleted == false)).Select(x => x.Entity).ToList();
         private ConcurrentDictionary<int, EntityMeta> _entities;
         private int _idx = 0;
 

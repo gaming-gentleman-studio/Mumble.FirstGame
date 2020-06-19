@@ -21,9 +21,11 @@ namespace Mumble.FirstGame.Core.Action.Spawn
         }
         public IEntity CalculateEffect()
         {
-            EntitiesCreatedActionResult result = new EntitiesCreatedActionResult(new List<IEntity>() { Entity });
-            Results.Add(result);
             return Entity;
+        }
+        public void AddCreatedEntities(EntitiesCreatedActionResult result)
+        {
+            Results.Add(result);
         }
     }
 }

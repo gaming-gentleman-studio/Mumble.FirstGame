@@ -5,6 +5,7 @@ using Mumble.FirstGame.Core.Action.Movement;
 using Mumble.FirstGame.Core.Action.Spawn;
 using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
+using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Entity.Projectile;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
 using System;
@@ -30,36 +31,41 @@ namespace Mumble.FirstGame.Core.Scene.Battle
             _battleEntityContainer = new BattleEntityContainer();
             Boundary = new SceneBoundary(100, 100);
         }
-        public List<IActionResult> Update(List<IAction> actions,int elapsedTicks)
+        public List<IActionResult> Update(Dictionary<IOwnerIdentifier, List<IAction>> actions, int elapsedTicks)
         {
             EntityContainer.HardDeleteEntities();
             List<IAction> resultingActions = new List<IAction>();
             _elapsedTicks = elapsedTicks;
             
             resultingActions.AddRange(ApplyVelocity());
-            foreach (IAction action in actions)
+            foreach(IOwnerIdentifier owner in actions.Keys)
             {
-                if (action is IMoveAction)
+                foreach (IAction action in actions[owner])
                 {
-                    IMoveAction moveAction = (IMoveAction)action;
-                    resultingActions.AddRange(Update(moveAction));
-                }
-                else if (action is IAttackAction)
-                {
-                    IAttackAction combatAction = (IAttackAction)action;
-                    resultingActions.AddRange(Update(combatAction));
-                }
-                else if (action is IFireWeaponAction)
-                {
-                    IFireWeaponAction fireAction = (IFireWeaponAction)action;
-                    resultingActions.AddRange(Update(fireAction));
-                }
-                else if (action is ISpawnEntityAction)
-                {
-                    ISpawnEntityAction spawnAction = (ISpawnEntityAction)action;
-                    resultingActions.AddRange(Update(spawnAction));
+
+                    if (action is IMoveAction)
+                    {
+                        IMoveAction moveAction = (IMoveAction)action;
+                        resultingActions.AddRange(Update(moveAction));
+                    }
+                    else if (action is IAttackAction)
+                    {
+                        IAttackAction combatAction = (IAttackAction)action;
+                        resultingActions.AddRange(Update(combatAction));
+                    }
+                    else if (action is IFireWeaponAction)
+                    {
+                        IFireWeaponAction fireAction = (IFireWeaponAction)action;
+                        resultingActions.AddRange(Update(fireAction));
+                    }
+                    else if (action is ISpawnEntityAction)
+                    {
+                        ISpawnEntityAction spawnAction = (ISpawnEntityAction)action;
+                        resultingActions.AddRange(Update(spawnAction));
+                    }
                 }
             }
+
             
             List<IActionResult> results = new List<IActionResult>();
             HashSet<IEntity> entitiesToRemove = new HashSet<IEntity>();
@@ -143,6 +149,10 @@ namespace Mumble.FirstGame.Core.Scene.Battle
         private List<IAction> Update(ISpawnEntityAction spawnAction)
         {
             EntityContainer.AddEntity(spawnAction.CalculateEffect());
+            if (spawnAction is SpawnPlayerAction)
+            {
+                ((SpawnPlayerAction)spawnAction).AddCreatedEntities(new EntitiesCreatedActionResult(_battleEntityContainer.Entities));
+            }
             return new List<IAction>() { spawnAction };
         }
         private bool isEnemyTurn()

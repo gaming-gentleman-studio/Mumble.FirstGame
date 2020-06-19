@@ -30,10 +30,10 @@ namespace Mumble.FirstGame.Server
         protected IActionFactory _actionFactory;
         protected IScene _scene;
         
-        protected ConcurrentBag<IAction> _actionBuffer;
+        protected ConcurrentDictionary<IOwnerIdentifier,ConcurrentBag<IAction>> _actionBuffer;
         protected EndPoint _sender = new IPEndPoint(IPAddress.Any, 0);
         protected const int _bufSize = 8 * 1024 * 2;
-        private Dictionary<IPEndPoint, IOwnerIdentifier> _ownerMap = new Dictionary<IPEndPoint, IOwnerIdentifier>();
+        private ConcurrentDictionary<IPEndPoint, IOwnerIdentifier> _ownerMap = new ConcurrentDictionary<IPEndPoint, IOwnerIdentifier>();
         private int _nextOwnerId = 1;
 
         public SocketListener(IPEndPoint endpoint,IScene scene)
@@ -41,7 +41,7 @@ namespace Mumble.FirstGame.Server
 
             _scene = scene;
             _actionFactory = new ActionFactory(_scene.EntityContainer);
-            _actionBuffer = new ConcurrentBag<IAction>();
+            _actionBuffer = new ConcurrentDictionary<IOwnerIdentifier,ConcurrentBag<IAction>>();
             BindSocket(endpoint);
         }
         public class State
@@ -55,10 +55,17 @@ namespace Mumble.FirstGame.Server
         {
             if (message[0] == message.Length)
             {
-                
                 IAction action = _actionFactory.Create(message.Skip(1).ToArray(),GetOwnerIdentifier((IPEndPoint)_sender));
                 Console.WriteLine("RECV: {0}: {1}, {2}", _sender.ToString(), len, action.GetType().ToString());
-                _actionBuffer.Add(action);
+                IOwnerIdentifier identifier = GetOwnerIdentifier((IPEndPoint)_sender);
+                if (!_actionBuffer.ContainsKey(identifier))
+                {
+                    if (!_actionBuffer.TryAdd(identifier, new ConcurrentBag<IAction>()))
+                    {
+                        throw new Exception("Unable to add new owner to buffer");
+                    }
+                }
+                _actionBuffer[identifier].Add(action);
             }
         }
         private IOwnerIdentifier GetOwnerIdentifier(IPEndPoint endpoint)
@@ -69,8 +76,9 @@ namespace Mumble.FirstGame.Server
             }
             IntOwnerIdentifier identifier = new IntOwnerIdentifier(_nextOwnerId);
             _nextOwnerId++;
-            _ownerMap.Add(endpoint, identifier);
+            _ownerMap.TryAdd(endpoint, identifier);
             return identifier;
+
         }
         protected List<byte> GetResultBytes(IActionResult result)
         {
@@ -100,17 +108,21 @@ namespace Mumble.FirstGame.Server
                 
             }
         }
-        protected void CalculateAndReply(int numTicks,Socket socket)
+        public void CalculateAndReply(int numTicks, Socket socket)
         {
-            List<IAction> actions;
+            Dictionary<IOwnerIdentifier, List<IAction>> actions = new Dictionary<IOwnerIdentifier, List<IAction>>();
             lock (_actionBuffer)
             {
-                actions = new List<IAction>(_actionBuffer);
-                _actionBuffer = new ConcurrentBag<IAction>();
+                foreach(IOwnerIdentifier key in _actionBuffer.Keys)
+                {
+                    actions.Add(key, _actionBuffer[key].ToList());
+                }
+                _actionBuffer = new ConcurrentDictionary<IOwnerIdentifier,ConcurrentBag<IAction>>();
             }
             List<IActionResult> results = new List<IActionResult>();
-            results.AddRange(_scene.Update(new List<IAction>(actions), numTicks));
+            results.AddRange(_scene.Update(actions, numTicks));
             SendResults(results, socket);
+
         }
 
     }
