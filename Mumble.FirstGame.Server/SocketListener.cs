@@ -104,7 +104,11 @@ namespace Mumble.FirstGame.Server
             }
             if (data.Count > 0)
             {
-                socket.SendTo(data.ToArray(), _sender);
+                foreach(IPEndPoint endpoint in _ownerMap.Keys)
+                {
+                    socket.SendTo(data.ToArray(), endpoint);
+                }
+                
                 
             }
         }
