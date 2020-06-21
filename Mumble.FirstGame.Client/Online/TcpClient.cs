@@ -1,5 +1,6 @@
 ﻿using Mumble.FirstGame.Core.Action;
 using Mumble.FirstGame.Core.ActionResult;
+using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
 using Mumble.FirstGame.Serialization.Protobuf.Action;
 using System;
@@ -16,15 +17,22 @@ namespace Mumble.FirstGame.Client.Online
         {
 
         }
-        protected override void BindSocket(IPEndPoint endpoint)
+        protected override void BindSocket()
         {
             _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            _socket.Connect(endpoint);
+            _socket.Connect(Endpoint);
         }
-        public List<IActionResult> Send(IAction action, IEntityContainer entityContainer)
+        public List<IActionResult> Send(IntOwnerIdentifier identifier,IAction action, IEntityContainer entityContainer)
         {
-            base.SendInternal(action, entityContainer, false);
+            if (!_socket.Connected)
+            {
+                BindSocket();
+            }
+            
+            base.SendInternal(identifier,action, entityContainer, false);
             Receive(entityContainer,false);
+            _socket.Shutdown(SocketShutdown.Both);
+            _socket.Close();
             return ClearResultBuffer();
 
         }

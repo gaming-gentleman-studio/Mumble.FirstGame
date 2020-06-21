@@ -6,6 +6,7 @@ using Mumble.FirstGame.Core.Entity.Player;
 using Mumble.FirstGame.Core.Scene;
 using Mumble.FirstGame.Core.Scene.Battle;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
+using Mumble.FirstGame.Serialization.Protobuf;
 using Mumble.FirstGame.Serialization.Protobuf.ActionResult;
 using Mumble.FirstGame.Serialization.Protobuf.Factory;
 using System;
@@ -33,7 +34,8 @@ namespace Mumble.FirstGame.Server
         protected ConcurrentDictionary<IOwnerIdentifier,ConcurrentBag<IAction>> _actionBuffer;
         protected EndPoint _sender = new IPEndPoint(IPAddress.Any, 0);
         protected const int _bufSize = 8 * 1024 * 2;
-        private ConcurrentDictionary<IPEndPoint, IOwnerIdentifier> _ownerMap = new ConcurrentDictionary<IPEndPoint, IOwnerIdentifier>();
+        private static ConcurrentBag<IOwnerIdentifier> _ownerSet = new ConcurrentBag<IOwnerIdentifier>();
+        private ConcurrentDictionary<IPEndPoint,IOwnerIdentifier> _ownerMap = new ConcurrentDictionary<IPEndPoint, IOwnerIdentifier>();
         private int _nextOwnerId = 1;
 
         public SocketListener(IPEndPoint endpoint,IScene scene)
@@ -51,13 +53,20 @@ namespace Mumble.FirstGame.Server
         protected abstract void BindSocket(IPEndPoint endpoint);
         public abstract void Listen();
 
+        // byte array
+        // array[0] = length
+        // array[1] = identifier
+        // below is repeated..
+        // array[2] = action type
+        // array[2-n] = message
         protected void AddToActionBuffer(int len,byte[] message)
         {
             if (message[0] == message.Length)
             {
-                IAction action = _actionFactory.Create(message.Skip(1).ToArray(),GetOwnerIdentifier((IPEndPoint)_sender));
+                IntOwnerIdentifier identifier = GetIdentifier(message);
+
+                IAction action = _actionFactory.Create(message.Skip(2).ToArray(),identifier);
                 Console.WriteLine("RECV: {0}: {1}, {2}", _sender.ToString(), len, action.GetType().ToString());
-                IOwnerIdentifier identifier = GetOwnerIdentifier((IPEndPoint)_sender);
                 if (!_actionBuffer.ContainsKey(identifier))
                 {
                     if (!_actionBuffer.TryAdd(identifier, new ConcurrentBag<IAction>()))
@@ -68,17 +77,27 @@ namespace Mumble.FirstGame.Server
                 _actionBuffer[identifier].Add(action);
             }
         }
-        private IOwnerIdentifier GetOwnerIdentifier(IPEndPoint endpoint)
+        private IntOwnerIdentifier GetIdentifier(byte[] message)
         {
-            if (_ownerMap.ContainsKey(endpoint))
+            IntOwnerIdentifier identifier;
+            if (message[2] != ActionTypeLookup.ClientRegistration)
             {
-                return _ownerMap[endpoint];
+                identifier = IntOwnerIdentifier.FromByte(message[1]);
+                if (!_ownerSet.Contains(identifier))
+                {
+                    //Who tf are you?
+                    throw new Exception("Unknown client");
+                }
+                _ownerMap.TryAdd((IPEndPoint)_sender,identifier);
             }
-            IntOwnerIdentifier identifier = new IntOwnerIdentifier(_nextOwnerId);
-            _nextOwnerId++;
-            _ownerMap.TryAdd(endpoint, identifier);
+            else
+            {
+                identifier = new IntOwnerIdentifier(_nextOwnerId);
+                _nextOwnerId++;
+                _ownerSet.Add(identifier);
+                _ownerMap.TryAdd((IPEndPoint)_sender, identifier);
+            }
             return identifier;
-
         }
         protected List<byte> GetResultBytes(IActionResult result)
         {
@@ -100,13 +119,14 @@ namespace Mumble.FirstGame.Server
             foreach (IActionResult result in results)
             {
                 data.AddRange(GetResultBytes(result));
-                Console.WriteLine("SENT: {0}: {1}, {2}", _sender.ToString(), data.Count,result.GetType().ToString());
+                Console.WriteLine("SENT: {0}, {1}", data.Count,result.GetType().ToString());
             }
             if (data.Count > 0)
             {
                 foreach(IPEndPoint endpoint in _ownerMap.Keys)
                 {
                     socket.SendTo(data.ToArray(), endpoint);
+                    Console.WriteLine("SENT TO: {0}", endpoint.ToString());
                 }
                 
                 

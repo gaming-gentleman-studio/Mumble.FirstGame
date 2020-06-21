@@ -5,6 +5,7 @@ using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
+using Mumble.FirstGame.Serialization.OnlineActionResult;
 using Mumble.FirstGame.Serialization.Protobuf.Action;
 using System;
 using System.Collections.Generic;
@@ -60,6 +61,14 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult
                 return new EntityDestroyedActionResultDef
                 {
                     Id = entityContainer.GetEntityId(destroyedResult.Entity)
+                };
+            }
+            else if (result is ClientRegisteredActionResult)
+            {
+                ClientRegisteredActionResult registered = (ClientRegisteredActionResult)result;
+                return new ClientRegisteredActionResultDef
+                {
+                    OwnerId = ((IntOwnerIdentifier)registered.OwnerIdentifier).Id
                 };
             }
             return null;

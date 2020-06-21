@@ -9,14 +9,19 @@
     <Import_RootNamespace>Mumble.FirstGame.Serialization</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Protobuf\ActionResult\Schema\ClientRegisteredActionResultDef.proto" />
     <Content Include="$(MSBuildThisFileDirectory)Protobuf\ActionResult\Schema\EntityDestroyedActionResultDef.proto" />
     <Content Include="$(MSBuildThisFileDirectory)Protobuf\ActionResult\Schema\MoveActionResultDef.proto" />
     <Content Include="$(MSBuildThisFileDirectory)Protobuf\Action\Schema\FireActionDef.proto" />
     <Content Include="$(MSBuildThisFileDirectory)Protobuf\Action\Schema\MoveActionDef.proto" />
+    <Content Include="$(MSBuildThisFileDirectory)Protobuf\Action\Schema\RegisterClientActionDef.proto" />
     <Content Include="$(MSBuildThisFileDirectory)Protobuf\README.md" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)OnlineActionResult\ClientRegisteredActionResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OnlineAction\RegisterClientAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\ActionResult\ActionResultExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Protobuf\ActionResult\ClientRegisteredActionResultDef.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\ActionResult\EntitiesCreatedActionResultDef.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\ActionResult\EntityDestroyedActionResultDef.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\ActionResult\MoveActionResultDef.cs" />
@@ -24,6 +29,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Action\Direction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Action\FireActionDef.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Action\MoveActionDef.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Action\RegisterClientActionDef.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Action\SpawnEntityActionDef.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Factory\ActionFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Factory\ActionResultFactory.cs" />

@@ -5,6 +5,8 @@ using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
 using Mumble.FirstGame.Core.Entity.Player;
 using Mumble.FirstGame.Core.Entity.Projectile;
+using Mumble.FirstGame.Serialization.OnlineAction;
+using Mumble.FirstGame.Serialization.OnlineActionResult;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,6 +20,7 @@ namespace Mumble.FirstGame.Serialization.Protobuf
         public const int Fire = 1;
         public const int EntitiesCreated = 2;
         public const int EntityDestroyed = 3;
+        public const int ClientRegistration = 4;
 
         public static Dictionary<Type, int> TypeToTypeId = new Dictionary<Type, int>()
         {
@@ -26,7 +29,9 @@ namespace Mumble.FirstGame.Serialization.Protobuf
             { typeof(FireWeaponAction), Fire },
             { typeof(EntitiesCreatedActionResult), EntitiesCreated },
             { typeof(SpawnPlayerAction), EntitiesCreated },
-            { typeof(EntityDestroyedActionResult), EntityDestroyed }
+            { typeof(EntityDestroyedActionResult), EntityDestroyed },
+            { typeof(RegisterClientAction),ClientRegistration },
+            { typeof(ClientRegisteredActionResult),ClientRegistration }
         };
     }
     public static class EntityTypeLookup

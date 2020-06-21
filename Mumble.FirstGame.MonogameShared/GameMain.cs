@@ -71,9 +71,10 @@ namespace Mumble.FirstGame.MonogameShared
             {
                 client = new OnlineGameClient();
             }
-            List<IActionResult> results = client.Init();
+            IOwnerIdentifier owner = client.Register();
+            List<IActionResult> results = client.Init(owner);
             EntitiesCreatedActionResult createdResult = (EntitiesCreatedActionResult)results.Where(x => x is EntitiesCreatedActionResult).FirstOrDefault();
-            player = (Player)createdResult.Entities[0];
+            player = (Player)createdResult.Entities.Where(x => x.OwnerIdentifier.Equals(owner)).FirstOrDefault();
             positions[player] = new Vector2(
                 (player.PositionComponent.X * 2 * scaling),
                 (player.PositionComponent.Y * 2 * scaling)

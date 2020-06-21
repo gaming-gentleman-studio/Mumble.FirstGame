@@ -20,16 +20,18 @@ namespace Mumble.FirstGame.Core.Scene.Battle
     {
         public IEntityContainer EntityContainer => _battleEntityContainer;
         private BattleEntityContainer _battleEntityContainer;
+        private List<IActionInterceptor> _actionInterceptors;
         public SceneBoundary Boundary { get; private set; }
 
         private int _elapsedTicks;
 
         private int _entityTurn = 0;
         
-        public BattleScene()
+        public BattleScene(List<IActionInterceptor> actionIntercepters)
         {
             _battleEntityContainer = new BattleEntityContainer();
             Boundary = new SceneBoundary(100, 100);
+            _actionInterceptors = actionIntercepters;
         }
         public List<IActionResult> Update(Dictionary<IOwnerIdentifier, List<IAction>> actions, int elapsedTicks)
         {
@@ -42,7 +44,16 @@ namespace Mumble.FirstGame.Core.Scene.Battle
             {
                 foreach (IAction action in actions[owner])
                 {
-
+                    bool intercepted = false;
+                    foreach(IActionInterceptor interceptor in _actionInterceptors)
+                    {
+                        intercepted = interceptor.TryHandleAction(action, owner);
+                    }
+                    if (intercepted)
+                    {
+                        resultingActions.Add(action);
+                        continue;
+                    }
                     if (action is IMoveAction)
                     {
                         IMoveAction moveAction = (IMoveAction)action;

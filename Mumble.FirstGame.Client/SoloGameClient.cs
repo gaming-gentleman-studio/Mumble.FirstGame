@@ -17,15 +17,22 @@ namespace Mumble.FirstGame.Client
         private int _tickRate = 1;
         private IOwnerIdentifier _ownerIdentifier;
 
-
-        public List<IActionResult> Init()
+        public SoloGameClient()
         {
-            _scene = new BattleScene();
             _ownerIdentifier = new IntOwnerIdentifier(1);
+        }
+        public List<IActionResult> Init(IOwnerIdentifier owner)
+        {
+            _scene = new BattleScene(new List<IActionInterceptor>());
             SpawnPlayerAction action = new SpawnPlayerAction("beau",3,10, _ownerIdentifier);
             Dictionary<IOwnerIdentifier, List<IAction>> ownedActions = new Dictionary<IOwnerIdentifier, List<IAction>>();
             ownedActions.Add(_ownerIdentifier, new List<IAction> { action });
             return _scene.Update(ownedActions, 0);
+        }
+
+        public IOwnerIdentifier Register()
+        {
+            return _ownerIdentifier;
         }
 
         public List<IActionResult> Update(List<IAction> actions)

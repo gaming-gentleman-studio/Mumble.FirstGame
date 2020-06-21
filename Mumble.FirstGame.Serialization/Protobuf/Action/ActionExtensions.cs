@@ -4,6 +4,7 @@ using Mumble.FirstGame.Core.Action.Fire;
 using Mumble.FirstGame.Core.Action.Movement;
 using Mumble.FirstGame.Core.Action.Spawn;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
+using Mumble.FirstGame.Serialization.OnlineAction;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -46,6 +47,11 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Action
                     Name = spawn.Entity.GetName(),
                     Type = EntityTypeLookup.TypeToTypeId[spawn.Entity.GetType()]
                 };
+            }
+            else if (action is RegisterClientAction)
+            {
+                RegisterClientAction registration = (RegisterClientAction)action;
+                return new RegisterClientActionDef();
             }
             return null;
 

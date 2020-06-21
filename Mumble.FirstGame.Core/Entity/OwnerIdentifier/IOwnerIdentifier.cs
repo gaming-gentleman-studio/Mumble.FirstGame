@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Mumble.FirstGame.Core.Entity.OwnerIdentifier
 {
-    public interface IOwnerIdentifier
+    public interface IOwnerIdentifier : IEquatable<IOwnerIdentifier>
     {
         bool PlayerOwned();
     }

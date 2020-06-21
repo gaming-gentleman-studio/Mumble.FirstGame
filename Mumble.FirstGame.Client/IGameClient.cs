@@ -1,6 +1,7 @@
 ﻿using Mumble.FirstGame.Core.Action;
 using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
+using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Entity.Player;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
 using System;
@@ -13,8 +14,9 @@ namespace Mumble.FirstGame.Client
     {
         List<IActionResult> Update(List<IAction> actions);
 
-        List<IActionResult> Init();
+        IOwnerIdentifier Register();
+        List<IActionResult> Init(IOwnerIdentifier owner);
 
-        // Sometimes, UDP connection misses and entities are left without calls - this will get them
+       
     }
 }

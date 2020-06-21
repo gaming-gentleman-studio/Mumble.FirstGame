@@ -1,0 +1,7 @@
+﻿syntax = "proto3";
+package action;
+
+option csharp_namespace = "Mumble.FirstGame.Serialization.Protobuf.Action";
+message ClientRegisteredActionResultDef{
+	int32 ownerId = 1;
+}

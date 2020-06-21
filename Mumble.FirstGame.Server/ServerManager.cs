@@ -16,7 +16,8 @@ namespace Mumble.FirstGame.Server
         private TimeSpan _tickRate = TimeSpan.FromMilliseconds(50);
         public ServerManager()
         {
-            _scene = new BattleScene();
+            OnlineActionIntercepter interceptor = new OnlineActionIntercepter();
+            _scene = new BattleScene(new List<IActionInterceptor> { interceptor });
             IPEndPoint udpEndpoint = new IPEndPoint(IPAddress.Any, 27000);
             _udp = new UdpServer(udpEndpoint,_scene);
             IPEndPoint tcpEndpoint = new IPEndPoint(IPAddress.Any, 27000);

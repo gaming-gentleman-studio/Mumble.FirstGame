@@ -6,6 +6,8 @@ using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Entity.Player;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
+using Mumble.FirstGame.Serialization.OnlineAction;
+using Mumble.FirstGame.Serialization.OnlineActionResult;
 using Mumble.FirstGame.Serialization.Protobuf.Action;
 using Mumble.FirstGame.Serialization.Protobuf.Factory;
 using System;
@@ -24,34 +26,46 @@ namespace Mumble.FirstGame.Client.Online
         private UdpClient _udpClient;
         private TcpClient _tcpClient;
         private IEntityContainer _entityContainer;
+        private IntOwnerIdentifier _identifier;
+        
         public OnlineGameClient()
         {
             IPEndPoint tcpEndpoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 27000);
             _tcpClient = new TcpClient(tcpEndpoint);
             IPEndPoint udpEndpoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 27000);
             _udpClient = new UdpClient(udpEndpoint);
+            _entityContainer = new BattleEntityContainer();
         }
 
         public void Send(IAction action)
         {
-            _udpClient.Send(action, _entityContainer);
+            _udpClient.Send(_identifier,action, _entityContainer);
         }
         
         public List<IActionResult> Update(List<IAction> actions)
         {
-            return _udpClient.Update(actions, _entityContainer);
+            return _udpClient.Update(_identifier,actions, _entityContainer);
         }
 
-        public List<IActionResult> Init()
+        public List<IActionResult> Init(IOwnerIdentifier owner)
         {
-            _entityContainer = new BattleEntityContainer();
+            
             // some of these fields don't actually matter - just need to tell server where we are spawning
-            SpawnPlayerAction spawnAction = new SpawnPlayerAction("beau", 3, 10,new IntOwnerIdentifier(1));
-            List<IActionResult> results =_tcpClient.Send(spawnAction, _entityContainer);
+            SpawnPlayerAction spawnAction = new SpawnPlayerAction("beau", 3, 10,owner);
+            List<IActionResult> results =_tcpClient.Send(_identifier,spawnAction, _entityContainer);
             _udpClient.Listen(_entityContainer);
             return results;
             
         }
 
+        public IOwnerIdentifier Register()
+        {
+            RegisterClientAction registerAction = new RegisterClientAction();
+            IntOwnerIdentifier tempIdentifier = new IntOwnerIdentifier(0);
+            List<IActionResult> results = _tcpClient.Send(tempIdentifier,registerAction, _entityContainer);
+            ClientRegisteredActionResult result = results.Where(x => x is ClientRegisteredActionResult).Cast<ClientRegisteredActionResult>().FirstOrDefault();
+            _identifier = (IntOwnerIdentifier)result.OwnerIdentifier; 
+            return result.OwnerIdentifier;
+        }
     }
 }

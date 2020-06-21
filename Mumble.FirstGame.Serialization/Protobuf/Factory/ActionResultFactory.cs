@@ -1,8 +1,11 @@
 ﻿using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
+using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Entity.Projectile;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
+using Mumble.FirstGame.Serialization.OnlineActionResult;
+using Mumble.FirstGame.Serialization.Protobuf.Action;
 using Mumble.FirstGame.Serialization.Protobuf.ActionResult;
 using System;
 using System.Collections.Generic;
@@ -73,6 +76,17 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
                     catch (Exception ex)
                     {
                         //Debug.WriteLine("Failed to parse entity destroyed result: "+ex.Message);
+                    }
+                    break;
+                case ActionTypeLookup.ClientRegistration:
+                    try
+                    {
+                        ClientRegisteredActionResultDef registrationDef = ClientRegisteredActionResultDef.Parser.ParseFrom(serializedResult);
+                        result = new ClientRegisteredActionResult(new IntOwnerIdentifier(registrationDef.OwnerId));
+                    }
+                    catch
+                    {
+                        Debug.WriteLine("Failed to parse Client Registered result");
                     }
                     break;
                 default:

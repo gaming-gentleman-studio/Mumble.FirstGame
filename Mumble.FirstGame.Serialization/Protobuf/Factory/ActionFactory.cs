@@ -6,6 +6,7 @@ using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
 using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
+using Mumble.FirstGame.Serialization.OnlineAction;
 using Mumble.FirstGame.Serialization.Protobuf.Action;
 using System;
 using System.Collections.Generic;
@@ -73,6 +74,17 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
                     catch
                     {
                         Debug.WriteLine("Failed to parse spawn action");
+                    }
+                    break;
+                case ActionTypeLookup.ClientRegistration:
+                    try
+                    {
+                        RegisterClientActionDef registerClientDef = RegisterClientActionDef.Parser.ParseFrom(serializedAction);
+                        action = new RegisterClientAction();
+                    }
+                    catch
+                    {
+                        Debug.WriteLine("Failed to parse client registration action");
                     }
                     break;
                 default:

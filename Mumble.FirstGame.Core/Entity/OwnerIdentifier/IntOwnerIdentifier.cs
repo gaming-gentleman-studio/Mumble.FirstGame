@@ -24,5 +24,23 @@ namespace Mumble.FirstGame.Core.Entity.OwnerIdentifier
         {
             return !SystemOwned;
         }
+
+        public bool Equals(IOwnerIdentifier other)
+        {
+            if (!(other is IntOwnerIdentifier))
+            {
+                return false;
+            }
+            IntOwnerIdentifier otherInt = (IntOwnerIdentifier)other;
+            if(otherInt.Id == Id)
+            {
+                return true;
+            }
+            return false;
+        }
+        public static IntOwnerIdentifier FromByte(byte message)
+        {
+            return new IntOwnerIdentifier((int)message);
+        }
     }
 }

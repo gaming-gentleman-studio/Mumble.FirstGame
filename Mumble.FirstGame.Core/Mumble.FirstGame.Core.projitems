@@ -54,6 +54,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\SceneBoundary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\EntityContainer\BattleEntityContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\EntityContainer\IEntityContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scene\IActionInterceptor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\IScene.cs" />
   </ItemGroup>
 </Project>

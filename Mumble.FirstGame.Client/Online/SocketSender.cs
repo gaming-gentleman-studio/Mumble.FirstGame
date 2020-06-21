@@ -2,6 +2,7 @@
 using Mumble.FirstGame.Core.Action;
 using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
+using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
 using Mumble.FirstGame.Serialization.Protobuf.Action;
 using Mumble.FirstGame.Serialization.Protobuf.Factory;
@@ -25,6 +26,7 @@ namespace Mumble.FirstGame.Client.Online
         
         private IActionResultFactory _actionResultFactory;
         private ConcurrentBag<IActionResult> _resultBuffer;
+        protected IPEndPoint Endpoint;
         public class State
         {
             public byte[] Buffer = new byte[_bufSize];
@@ -33,10 +35,11 @@ namespace Mumble.FirstGame.Client.Online
         {
             
             _resultBuffer = new ConcurrentBag<IActionResult>();
-            BindSocket(endpoint);
+            Endpoint = endpoint;
+            BindSocket();
             
         }
-        protected abstract void BindSocket(IPEndPoint endpoint);
+        protected abstract void BindSocket();
         protected void Receive(IEntityContainer entityContainer,bool async=true)
         {
             _actionResultFactory = new ActionResultFactory(entityContainer);
@@ -76,7 +79,7 @@ namespace Mumble.FirstGame.Client.Online
                 }
             }
         }
-        protected void SendInternal(IAction action, IEntityContainer entityContainer, bool async=true)
+        protected void SendInternal(IntOwnerIdentifier identifier,IAction action, IEntityContainer entityContainer, bool async=true)
         {
             if (action == null)
             {
@@ -84,10 +87,11 @@ namespace Mumble.FirstGame.Client.Online
             }
             //TODO - inefficient
             byte[] untypedData = action.ToProtobufDefinition(entityContainer).ToByteArray();
-            byte[] data = new byte[untypedData.Length + 2];
-            data[0] = (byte)(untypedData.Length + 2);
-            data[1] = action.GetTypeByte();
-            Array.Copy(untypedData, 0, data, 2, untypedData.Length);
+            byte[] data = new byte[untypedData.Length + 3];
+            data[0] = (byte)(untypedData.Length + 3);
+            data[1] = (byte)identifier.Id;
+            data[2] = action.GetTypeByte();
+            Array.Copy(untypedData, 0, data, 3, untypedData.Length);
             if (async)
             {
                 _socket.BeginSend(data, 0, data.Length, SocketFlags.None, (ar) =>
@@ -112,7 +116,7 @@ namespace Mumble.FirstGame.Client.Online
             return retList;
 
         }
-        public List<IActionResult> Update(List<IAction> actions,IEntityContainer entityContainer)
+        public List<IActionResult> Update(IntOwnerIdentifier identifier,List<IAction> actions,IEntityContainer entityContainer)
         {
             entityContainer.HardDeleteEntities();
             List<IActionResult> retList = ClearResultBuffer();
@@ -122,7 +126,7 @@ namespace Mumble.FirstGame.Client.Online
             {
                 foreach (IAction action in actions)
                 {
-                    SendInternal(action,entityContainer);
+                    SendInternal(identifier,action,entityContainer);
                 }
             }
             return retList;

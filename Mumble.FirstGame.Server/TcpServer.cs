@@ -35,6 +35,8 @@ namespace Mumble.FirstGame.Server
                 byte[] message = state.Buffer.Take(bytes).ToArray();
                 AddToActionBuffer(bytes, message);
                 CalculateAndReply(0,confirmed);
+                confirmed.Shutdown(SocketShutdown.Both);
+                confirmed.Close();
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Mumble.FirstGame.Core.Action;
+using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
 using System;
 using System.Collections.Generic;
@@ -14,19 +15,19 @@ namespace Mumble.FirstGame.Client.Online
         {
             
         }
-        protected override void BindSocket(IPEndPoint endpoint)
+        protected override void BindSocket()
         {
             
             _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            _socket.Connect(endpoint);
+            _socket.Connect(Endpoint);
         }
         public void Listen(IEntityContainer container)
         {
             Receive(container);
         }
-        public void Send(IAction action,IEntityContainer container)
+        public void Send(IntOwnerIdentifier identifier,IAction action,IEntityContainer container)
         {
-            SendInternal(action, container);
+            SendInternal(identifier,action, container);
         }
     }
 }
