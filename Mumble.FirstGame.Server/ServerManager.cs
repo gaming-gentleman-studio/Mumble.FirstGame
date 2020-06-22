@@ -10,25 +10,28 @@ namespace Mumble.FirstGame.Server
 {
     public class ServerManager
     {
-        private UdpServer _udp;
-        private TcpServer _tcp;
+        private UdpServer _udpChannel;
+        private TcpServer _tcpChannel;
         private IScene _scene;
         private TimeSpan _tickRate = TimeSpan.FromMilliseconds(50);
         public ServerManager()
         {
             OnlineActionIntercepter interceptor = new OnlineActionIntercepter();
             _scene = new BattleScene(new List<IActionInterceptor> { interceptor });
+
             IPEndPoint udpEndpoint = new IPEndPoint(IPAddress.Any, 27000);
-            _udp = new UdpServer(udpEndpoint,_scene);
+            _udpChannel = new UdpServer(udpEndpoint,_scene);
             IPEndPoint tcpEndpoint = new IPEndPoint(IPAddress.Any, 27000);
-            _tcp = new TcpServer(tcpEndpoint, _scene);
+            _tcpChannel = new TcpServer(tcpEndpoint, _scene);
+
         }
         public void Listen()
         {
 
-            _udp.Listen();
+            _udpChannel.Listen();
+            _tcpChannel.Listen();
             SetTimer();
-            _tcp.Listen();
+            
             
         }
         private void SetTimer()
@@ -43,7 +46,8 @@ namespace Mumble.FirstGame.Server
 
         private void TimerEvent(object source, ElapsedEventArgs e)
         {
-            _udp.TimerEvent(1);
+            _udpChannel.StartUpdateTask(1);
+            _tcpChannel.StartUpdateTask(1);
         }
     }
 }

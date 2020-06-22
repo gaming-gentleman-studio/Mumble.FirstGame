@@ -23,11 +23,12 @@ namespace Mumble.FirstGame.Server
 {
     public abstract class SocketListener
     {
+        public enum SocketScope
+        {
+            Shared,
+            Private
+        };
         protected Socket _socket;
-        
-        
-        
-        
         protected IActionFactory _actionFactory;
         protected IScene _scene;
         
@@ -40,7 +41,6 @@ namespace Mumble.FirstGame.Server
 
         public SocketListener(IPEndPoint endpoint,IScene scene)
         {
-
             _scene = scene;
             _actionFactory = new ActionFactory(_scene.EntityContainer);
             _actionBuffer = new ConcurrentDictionary<IOwnerIdentifier,ConcurrentBag<IAction>>();
@@ -49,6 +49,7 @@ namespace Mumble.FirstGame.Server
         public class State
         {
             public byte[] Buffer = new byte[_bufSize];
+            public Socket workSocket = null;
         }
         protected abstract void BindSocket(IPEndPoint endpoint);
         public abstract void Listen();
@@ -63,39 +64,57 @@ namespace Mumble.FirstGame.Server
         {
             if (message[0] == message.Length)
             {
-                IntOwnerIdentifier identifier = GetIdentifier(message);
-
-                IAction action = _actionFactory.Create(message.Skip(2).ToArray(),identifier);
-                Console.WriteLine("RECV: {0}: {1}, {2}", _sender.ToString(), len, action.GetType().ToString());
-                if (!_actionBuffer.ContainsKey(identifier))
+                if (message[2] == ActionTypeLookup.ClientRegistration || IsAuthenticated(message))
                 {
-                    if (!_actionBuffer.TryAdd(identifier, new ConcurrentBag<IAction>()))
+                    IntOwnerIdentifier identifier;
+                    if (message[2] == ActionTypeLookup.ClientRegistration)
                     {
-                        throw new Exception("Unable to add new owner to buffer");
+                        identifier = RegisterNewClient(message);
                     }
+                    else
+                    {
+                        identifier = GetIdentifier(message);
+                    }
+
+                    IAction action = _actionFactory.Create(message.Skip(2).ToArray(), identifier);
+                    Console.WriteLine("RECV: {0}: {1}, {2}", _sender.ToString(), len, action.GetType().ToString());
+                    if (!_actionBuffer.ContainsKey(identifier))
+                    {
+                        if (!_actionBuffer.TryAdd(identifier, new ConcurrentBag<IAction>()))
+                        {
+                            throw new Exception("Unable to add new owner to buffer");
+                        }
+                    }
+                    _actionBuffer[identifier].Add(action);
                 }
-                _actionBuffer[identifier].Add(action);
+
             }
+        }
+        private bool IsAuthenticated(byte[] message)
+        {
+            IntOwnerIdentifier identifier = IntOwnerIdentifier.FromByte(message[1]);
+            if (!_ownerSet.Contains(identifier))
+            {
+                return false;
+            }
+            _ownerMap.TryAdd((IPEndPoint)_sender, identifier);
+            return true;
+        }
+        private IntOwnerIdentifier RegisterNewClient(byte[] message)
+        {
+            IntOwnerIdentifier identifier = new IntOwnerIdentifier(_nextOwnerId);
+            _nextOwnerId++;
+            _ownerSet.Add(identifier);
+            _ownerMap.TryAdd((IPEndPoint)_sender, identifier);
+            return identifier;
         }
         private IntOwnerIdentifier GetIdentifier(byte[] message)
         {
             IntOwnerIdentifier identifier;
-            if (message[2] != ActionTypeLookup.ClientRegistration)
+            identifier = IntOwnerIdentifier.FromByte(message[1]);
+            if (!_ownerSet.Contains(identifier))
             {
-                identifier = IntOwnerIdentifier.FromByte(message[1]);
-                if (!_ownerSet.Contains(identifier))
-                {
-                    //Who tf are you?
-                    throw new Exception("Unknown client");
-                }
-                _ownerMap.TryAdd((IPEndPoint)_sender,identifier);
-            }
-            else
-            {
-                identifier = new IntOwnerIdentifier(_nextOwnerId);
-                _nextOwnerId++;
-                _ownerSet.Add(identifier);
-                _ownerMap.TryAdd((IPEndPoint)_sender, identifier);
+                throw new Exception("Identifier not found");
             }
             return identifier;
         }
@@ -109,11 +128,35 @@ namespace Mumble.FirstGame.Server
             return data.ToList();
         }
 
-        protected void SendNull()
+        protected void SendNull(Socket socket,SocketScope scope)
         {
-            _socket.SendTo(new byte[0],_sender);
+            if (scope == SocketScope.Shared)
+            {
+                socket.SendTo(new byte[0], _sender);
+            }
+            else if (socket.Connected)
+            {
+                socket.Send(new byte[0]);
+            }
+            
         }
-        private void SendResults(List<IActionResult> results, Socket socket)
+        private void SendRaw(byte[] data,Socket socket,SocketScope scope)
+        {
+            if (scope == SocketScope.Shared)
+            {
+                foreach (IPEndPoint endpoint in _ownerMap.Keys)
+                {
+                    socket.SendTo(data, endpoint);
+                    Console.WriteLine("SENT TO: {0}", endpoint.ToString());
+                }
+            }
+            else if (socket.Connected)
+            {
+                socket.Send(data);
+                Console.WriteLine("SENT TO: {0}", _sender.ToString());
+            }
+        }
+        protected void SendResults(List<IActionResult> results, Socket socket, SocketScope scope)
         {
             List<byte> data = new List<byte>();
             foreach (IActionResult result in results)
@@ -123,30 +166,33 @@ namespace Mumble.FirstGame.Server
             }
             if (data.Count > 0)
             {
-                foreach(IPEndPoint endpoint in _ownerMap.Keys)
-                {
-                    socket.SendTo(data.ToArray(), endpoint);
-                    Console.WriteLine("SENT TO: {0}", endpoint.ToString());
-                }
-                
-                
+                SendRaw(data.ToArray(),socket,scope);
             }
         }
-        public void CalculateAndReply(int numTicks, Socket socket)
+        protected void CalculateAndReply(int numTicks, Socket socket, SocketScope scope)
+        {
+            List<IActionResult> results = CalculateResults(numTicks);
+            if (results.Count > 0)
+            {
+                SendResults(results, socket, scope);
+            }
+            
+
+        }
+        protected List<IActionResult> CalculateResults(int numTicks)
         {
             Dictionary<IOwnerIdentifier, List<IAction>> actions = new Dictionary<IOwnerIdentifier, List<IAction>>();
             lock (_actionBuffer)
             {
-                foreach(IOwnerIdentifier key in _actionBuffer.Keys)
+                foreach (IOwnerIdentifier key in _actionBuffer.Keys)
                 {
                     actions.Add(key, _actionBuffer[key].ToList());
                 }
-                _actionBuffer = new ConcurrentDictionary<IOwnerIdentifier,ConcurrentBag<IAction>>();
+                _actionBuffer = new ConcurrentDictionary<IOwnerIdentifier, ConcurrentBag<IAction>>();
             }
             List<IActionResult> results = new List<IActionResult>();
             results.AddRange(_scene.Update(actions, numTicks));
-            SendResults(results, socket);
-
+            return results;
         }
 
     }

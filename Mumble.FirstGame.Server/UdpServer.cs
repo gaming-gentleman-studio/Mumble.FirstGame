@@ -39,15 +39,12 @@ namespace Mumble.FirstGame.Server
 
                 byte[] message = state.Buffer.Take(bytes).ToArray();
                 AddToActionBuffer(bytes, message);
-                SendNull();
+                SendNull(_socket,SocketScope.Shared);
             }, _state);
         }
-        public void TimerEvent(int numTicks)
+        public void StartUpdateTask(int numTicks)
         {
-            CalculateAndReply(numTicks, _socket);
+            CalculateAndReply(numTicks, _socket,SocketScope.Shared);
         }
-
-
-
     }
 }

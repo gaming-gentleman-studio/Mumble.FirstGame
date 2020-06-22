@@ -31,8 +31,6 @@ namespace Mumble.FirstGame.Client.Online
             
             base.SendInternal(identifier,action, entityContainer, false);
             Receive(entityContainer,false);
-            _socket.Shutdown(SocketShutdown.Both);
-            _socket.Close();
             return ClearResultBuffer();
 
         }
