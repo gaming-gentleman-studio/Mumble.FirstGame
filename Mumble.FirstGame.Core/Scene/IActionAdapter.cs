@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Mumble.FirstGame.Core.Scene
 {
-    public interface IActionInterceptor
+    public interface IActionAdapter
     {
         bool TryHandleAction(IAction action, IOwnerIdentifier owner);
     }

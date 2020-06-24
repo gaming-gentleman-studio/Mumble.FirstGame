@@ -44,7 +44,9 @@ namespace Mumble.FirstGame.Client.Online
         
         public List<IActionResult> Update(List<IAction> actions)
         {
-            return _udpClient.Update(_identifier,actions, _entityContainer);
+            List<IActionResult> results = _udpClient.Update(_identifier, actions, _entityContainer);
+            results.AddRange(_tcpClient.GetNewResults());
+            return results;
         }
 
         public List<IActionResult> Init(IOwnerIdentifier owner)
@@ -54,6 +56,7 @@ namespace Mumble.FirstGame.Client.Online
             SpawnPlayerAction spawnAction = new SpawnPlayerAction("beau", 3, 10,owner);
             List<IActionResult> results =_tcpClient.Send(_identifier,spawnAction, _entityContainer);
             _udpClient.Listen(_entityContainer);
+            _tcpClient.Listen(_entityContainer);
             return results;
             
         }

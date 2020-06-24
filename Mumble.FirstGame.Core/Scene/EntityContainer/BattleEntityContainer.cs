@@ -65,7 +65,11 @@ namespace Mumble.FirstGame.Core.Scene.EntityContainer
         public void AddEntity(int idx, IEntity entity)
         {
             _idx = idx;
-            _entities[idx] = new EntityMeta(entity);
+            if (!_entities.ContainsKey(_idx))
+            {
+                _entities[idx] = new EntityMeta(entity);
+            }
+            
         }
         public IEntity GetEntity(int idx, bool includeSoftDeleted = false)
         {
@@ -124,6 +128,26 @@ namespace Mumble.FirstGame.Core.Scene.EntityContainer
         public List<IEntity> GetSoftDeletedEntities()
         {
             return _entities.Values.Where(x => x.SoftDeleted == true).Select(x => x.Entity).ToList();
+        }
+
+        public bool HasEntity(int idx, bool includeSoftDeleted = false)
+        {
+            if (_entities.ContainsKey(idx))
+            {
+                EntityMeta meta = _entities[idx];
+                if (meta.SoftDeleted && !includeSoftDeleted)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

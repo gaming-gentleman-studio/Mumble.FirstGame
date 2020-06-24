@@ -153,7 +153,7 @@ namespace Mumble.FirstGame.Server
             else if (socket.Connected)
             {
                 socket.Send(data);
-                Console.WriteLine("SENT TO: {0}", _sender.ToString());
+                Console.WriteLine("SENT TO: {0}", socket.RemoteEndPoint.ToString());
             }
         }
         protected void SendResults(List<IActionResult> results, Socket socket, SocketScope scope)

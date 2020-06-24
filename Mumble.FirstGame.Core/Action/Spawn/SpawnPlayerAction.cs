@@ -2,6 +2,7 @@
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Entity.Player;
+using Mumble.FirstGame.Core.Scene.EntityContainer;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,15 +18,13 @@ namespace Mumble.FirstGame.Core.Action.Spawn
         public SpawnPlayerAction(string name, int damage, int health, IOwnerIdentifier owner)
         {
             Entity = new Player(name, damage, health, owner);
-            Results = new List<IActionResult>();
+            
         }
-        public IEntity CalculateEffect()
+        public void CalculateEffect(IEntityContainer container)
         {
-            return Entity;
-        }
-        public void AddCreatedEntities(EntitiesCreatedActionResult result)
-        {
-            Results.Add(result);
+            container.AddEntity(Entity);
+            Results = new List<IActionResult>() { new EntitiesCreatedActionResult(container.Entities) };
+            
         }
     }
 }

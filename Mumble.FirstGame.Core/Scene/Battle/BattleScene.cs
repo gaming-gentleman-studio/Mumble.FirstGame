@@ -18,20 +18,19 @@ namespace Mumble.FirstGame.Core.Scene.Battle
 
     public class BattleScene : IScene
     {
-        public IEntityContainer EntityContainer => _battleEntityContainer;
-        private BattleEntityContainer _battleEntityContainer;
-        private List<IActionInterceptor> _actionInterceptors;
+        public IEntityContainer EntityContainer { get; private set; }
+        private List<IActionAdapter> _actionAdapters;
         public SceneBoundary Boundary { get; private set; }
 
         private int _elapsedTicks;
 
         private int _entityTurn = 0;
         
-        public BattleScene(List<IActionInterceptor> actionIntercepters)
+        public BattleScene(IEntityContainer container,List<IActionAdapter> actionAdapters)
         {
-            _battleEntityContainer = new BattleEntityContainer();
+            EntityContainer = container;
             Boundary = new SceneBoundary(100, 100);
-            _actionInterceptors = actionIntercepters;
+            _actionAdapters = actionAdapters;
         }
         public List<IActionResult> Update(Dictionary<IOwnerIdentifier, List<IAction>> actions, int elapsedTicks)
         {
@@ -39,20 +38,22 @@ namespace Mumble.FirstGame.Core.Scene.Battle
             List<IAction> resultingActions = new List<IAction>();
             _elapsedTicks = elapsedTicks;
             
-            resultingActions.AddRange(ApplyVelocity());
+            for(int i = 0; i<elapsedTicks; i++)
+            {
+                resultingActions.AddRange(ApplyVelocity());
+            }
+            
             foreach(IOwnerIdentifier owner in actions.Keys)
             {
                 foreach (IAction action in actions[owner])
                 {
-                    bool intercepted = false;
-                    foreach(IActionInterceptor interceptor in _actionInterceptors)
+                    foreach(IActionAdapter adapter in _actionAdapters)
                     {
-                        intercepted = interceptor.TryHandleAction(action, owner);
-                    }
-                    if (intercepted)
-                    {
-                        resultingActions.Add(action);
-                        continue;
+                        if (adapter.TryHandleAction(action, owner))
+                        {
+                            resultingActions.Add(action);
+                        }
+                        
                     }
                     if (action is IMoveAction)
                     {
@@ -113,7 +114,7 @@ namespace Mumble.FirstGame.Core.Scene.Battle
         private List<IAction> ApplyVelocity()
         {
             List<IAction> resultingActions = new List<IAction>();
-            foreach( IProjectileEntity projectile in _battleEntityContainer.Projectiles)
+            foreach( IProjectileEntity projectile in EntityContainer.Projectiles)
             {
                 MoveAction move = new MoveAction(projectile, projectile.VelocityComponent);
                 move.CalculateEffect(Boundary);
@@ -144,10 +145,10 @@ namespace Mumble.FirstGame.Core.Scene.Battle
                 _entityTurn++;
                 if (isEnemyTurn())
                 {
-                    foreach(ICombatAIEntity enemy in _battleEntityContainer.EnemyTeam)
+                    foreach(ICombatAIEntity enemy in EntityContainer.EnemyTeam)
                     {
                         //PlayerTeam.ToList inneficient?
-                        IAttackAction enemyAction = enemy.CombatAIComponent.GenerateCombatAction(enemy, _battleEntityContainer.PlayerTeam.ToList<ICombatEntity>());
+                        IAttackAction enemyAction = enemy.CombatAIComponent.GenerateCombatAction(enemy, EntityContainer.PlayerTeam.ToList<ICombatEntity>());
                         enemyAction.CalculateEffect();
                         results.Add(enemyAction);
                     }
@@ -159,21 +160,17 @@ namespace Mumble.FirstGame.Core.Scene.Battle
         }
         private List<IAction> Update(ISpawnEntityAction spawnAction)
         {
-            EntityContainer.AddEntity(spawnAction.CalculateEffect());
-            if (spawnAction is SpawnPlayerAction)
-            {
-                ((SpawnPlayerAction)spawnAction).AddCreatedEntities(new EntitiesCreatedActionResult(_battleEntityContainer.Entities));
-            }
+            spawnAction.CalculateEffect(EntityContainer);
             return new List<IAction>() { spawnAction };
         }
         private bool isEnemyTurn()
         {
-            return _entityTurn > _battleEntityContainer.PlayerTeam.Count()-1;
+            return _entityTurn > EntityContainer.PlayerTeam.Count()-1;
         }
 
         public bool IsSceneActive()
         {
-            return (_battleEntityContainer.EnemyTeam.Count(enemy => enemy.HealthComponent.IsAlive()) > 0);
+            return (EntityContainer.EnemyTeam.Count(enemy => enemy.HealthComponent.IsAlive()) > 0);
         }
     }
 }

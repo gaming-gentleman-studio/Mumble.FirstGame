@@ -34,5 +34,13 @@ namespace Mumble.FirstGame.Client.Online
             return ClearResultBuffer();
 
         }
+        public void Listen(IEntityContainer container)
+        {
+            Receive(container);
+        }
+        public List<IActionResult> GetNewResults()
+        {
+            return ClearResultBuffer();
+        }
     }
 }

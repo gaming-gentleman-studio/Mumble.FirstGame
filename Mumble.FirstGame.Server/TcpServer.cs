@@ -15,8 +15,6 @@ namespace Mumble.FirstGame.Server
         private State _state = new State();
 
 
-        private AsyncCallback recv = null;
-
         private ConcurrentBag<Socket> _clients = new ConcurrentBag<Socket>();
         public TcpServer(IPEndPoint endpoint,IScene scene) : base(endpoint, scene)
         {
@@ -59,7 +57,9 @@ namespace Mumble.FirstGame.Server
             Socket handler = _socket.EndAccept(ar);
             state.workSocket = handler;
             _clients.Add(handler);
-            handler.BeginReceive(state.Buffer, 0, _bufSize, SocketFlags.None, new AsyncCallback(ReadCallback), _state);
+            handler.BeginReceive(state.Buffer, 0, _bufSize, SocketFlags.None, new AsyncCallback(ReadCallback), state);
+            _socket.BeginAccept(new AsyncCallback(AcceptCallback), _state);
+                        
         }
         private void ReadCallback(IAsyncResult ar)
         {
@@ -70,18 +70,14 @@ namespace Mumble.FirstGame.Server
             byte[] message = state.Buffer.Take(bytes).ToArray();
             AddToActionBuffer(bytes, message);
             SendNull(handler, SocketScope.Private);
+            handler.BeginReceive(state.Buffer, 0, _bufSize, SocketFlags.None, new AsyncCallback(ReadCallback), state);
         }
         public void StartUpdateTask(int numTicks)
         {
-            //need to handle issue with action buffer not being private
-            //basically need to implement private buffer
-            CalculateAndReply(numTicks, _socket,SocketScope.Private);
-        }
-        public void SendResultsToAllClients(List<IActionResult> results)
-        {
-            foreach(Socket client in _clients)
+            List<IActionResult> results = CalculateResults(numTicks);
+            foreach (Socket client in _clients)
             {
-                SendResults(results, client, SocketScope.Shared);
+                SendResults(results, client, SocketScope.Private);
             }
             
         }

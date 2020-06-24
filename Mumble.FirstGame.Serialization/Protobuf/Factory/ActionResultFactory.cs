@@ -56,8 +56,17 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
                         List<IEntity> entities = new List<IEntity>();
                         foreach (EntitiesCreatedActionResultDef.Types.Entity entityDef in createdDef.Entities)
                         {
-                            IEntity entity = _entityFactory.CreateEntity(entityDef);
-                            _entityContainer.AddEntity(entityDef.Id, entity);
+                            IEntity entity;
+                            if (_entityContainer.HasEntity(entityDef.Id))
+                            {
+                                entity = _entityContainer.GetEntity(entityDef.Id);
+                            }
+                            else
+                            {
+                                entity = _entityFactory.CreateEntity(entityDef);
+                                _entityContainer.AddEntity(entityDef.Id, entity);
+                            }
+                            
                             entities.Add(entity);
                         }
                         result = new EntitiesCreatedActionResult(entities);

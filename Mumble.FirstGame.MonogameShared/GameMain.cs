@@ -15,6 +15,7 @@ using Mumble.FirstGame.Core.Entity.Player;
 using Mumble.FirstGame.Core.Entity.Projectile;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
 using Mumble.FirstGame.MonogameShared.Utils;
+using Mumble.FirstGame.Serialization.OnlineActionResult;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -135,10 +136,21 @@ namespace Mumble.FirstGame.MonogameShared
                 {
                     foreach (IEntity entity in result.Entities)
                     {
-                        positions[entity] = new Vector2(
-                            (entity.PositionComponent.X * 2 * scaling) + 16,
-                            (entity.PositionComponent.Y * 2 * scaling) + 16
-                        );
+                        if (entity is SimpleBullet)
+                        {
+                            positions[entity] = new Vector2(
+                                (entity.PositionComponent.X * 2 * scaling) + 16,
+                                (entity.PositionComponent.Y * 2 * scaling) + 16
+                            );
+                        }
+                        if (entity is Player)
+                        {
+                            positions[entity] = new Vector2(
+                                entity.PositionComponent.X * 2 * scaling,
+                                entity.PositionComponent.Y * 2 * scaling
+                            );
+                        }
+
 
                     }
                 }

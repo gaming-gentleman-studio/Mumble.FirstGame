@@ -1,5 +1,6 @@
 ﻿using Mumble.FirstGame.Core.Scene;
 using Mumble.FirstGame.Core.Scene.Battle;
+using Mumble.FirstGame.Core.Scene.EntityContainer;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -16,8 +17,9 @@ namespace Mumble.FirstGame.Server
         private TimeSpan _tickRate = TimeSpan.FromMilliseconds(50);
         public ServerManager()
         {
-            OnlineActionIntercepter interceptor = new OnlineActionIntercepter();
-            _scene = new BattleScene(new List<IActionInterceptor> { interceptor });
+            BattleEntityContainer container = new BattleEntityContainer();
+            OnlineActionAdapter adapter = new OnlineActionAdapter(container);
+            _scene = new BattleScene(container,new List<IActionAdapter> { adapter });
 
             IPEndPoint udpEndpoint = new IPEndPoint(IPAddress.Any, 27000);
             _udpChannel = new UdpServer(udpEndpoint,_scene);
