@@ -167,14 +167,14 @@ namespace Mumble.FirstGame.MonogameShared
                     }
                     else
                     {
-                        if (result.Entity != player)
+                        if (result.Entity is SimpleBullet)
                         {
                             positions[result.Entity] = new Vector2(
                                 result.XPos * 2 * scaling + 16,
                                 result.YPos * 2 * scaling + 16
                             );
                         }
-                        else
+                        else if (result.Entity is Player)
                         {
                             positions[result.Entity] = new Vector2(
                                 result.XPos * 2 * scaling,
