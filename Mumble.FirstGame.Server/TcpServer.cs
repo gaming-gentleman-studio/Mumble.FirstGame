@@ -29,23 +29,6 @@ namespace Mumble.FirstGame.Server
             _socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.ReuseAddress, true);
             _socket.Bind(endpoint);
         }
-        //public override void Listen()
-        //{
-        //    _socket.Listen(5);
-        //    State state = new State();
-        //    while (true)
-        //    {
-                
-        //        Socket confirmed = _socket.Accept();
-        //        _sender = confirmed.RemoteEndPoint;
-        //        _clients.Add(confirmed);
-        //        int bytes = confirmed.Receive(state.Buffer);
-        //        Console.WriteLine("{0} bytes received", bytes);
-        //        byte[] message = state.Buffer.Take(bytes).ToArray();
-        //        AddToActionBuffer(bytes, message);
-        //        CalculateAndReply(0,confirmed);
-        //    }
-        //}
         public override void Listen()
         {
             _socket.Listen(100);

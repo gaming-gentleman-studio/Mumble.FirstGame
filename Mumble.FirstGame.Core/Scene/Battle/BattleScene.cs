@@ -19,14 +19,14 @@ namespace Mumble.FirstGame.Core.Scene.Battle
     public class BattleScene : IScene
     {
         public IEntityContainer EntityContainer { get; private set; }
-        private List<IActionAdapter> _actionAdapters;
+        private IEnumerable<IActionAdapter> _actionAdapters;
         public SceneBoundary Boundary { get; private set; }
 
         private int _elapsedTicks;
 
         private int _entityTurn = 0;
         
-        public BattleScene(IEntityContainer container,List<IActionAdapter> actionAdapters)
+        public BattleScene(IEntityContainer container,IEnumerable<IActionAdapter> actionAdapters)
         {
             EntityContainer = container;
             Boundary = new SceneBoundary(100, 100);

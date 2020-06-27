@@ -13,7 +13,10 @@ using Mumble.FirstGame.Core.Entity.Enemy;
 using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Entity.Player;
 using Mumble.FirstGame.Core.Entity.Projectile;
+using Mumble.FirstGame.Core.Scene;
+using Mumble.FirstGame.Core.Scene.Battle;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
+using Mumble.FirstGame.MonogameShared.Settings;
 using Mumble.FirstGame.MonogameShared.Utils;
 using Mumble.FirstGame.Serialization.OnlineActionResult;
 using System;
@@ -43,6 +46,7 @@ namespace Mumble.FirstGame.MonogameShared
         ContentImages contentImages;
         MovementKeyHandler keyHandler;
         MouseHandler mouseHandler;
+        GameServiceContainer provider;
         public GameMain()
         {   
             graphics = new GraphicsDeviceManager(this);
@@ -51,8 +55,17 @@ namespace Mumble.FirstGame.MonogameShared
             IsFixedTimeStep = true;
             //Should line up with server tick rate
             TargetElapsedTime = TimeSpan.FromMilliseconds(50);
+            RegisterServices();
+            
         }
+        private void RegisterServices()
+        {
 
+            provider = new GameServiceContainer();
+            provider.AddService<IGameSettings>(new GameSettings());
+            provider.AddService<IEntityContainer>(new BattleEntityContainer());
+            provider.AddService<IScene>(new BattleScene(provider.GetService<IEntityContainer>(),new List<IActionAdapter>()));
+        }
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
         /// This is where it can query for any required services and load any non-graphic
@@ -66,11 +79,11 @@ namespace Mumble.FirstGame.MonogameShared
             //solo
             if (clientType == ClientType.Solo)
             {
-                client = new SoloGameClient();
+                client = new SoloGameClient(provider.GetService<IScene>());
             }
             else if (clientType == ClientType.Online)
             {
-                client = new OnlineGameClient();
+                client = new OnlineGameClient(provider.GetService<IEntityContainer>(),provider.GetService<IGameSettings>());
             }
             IOwnerIdentifier owner = client.Register();
             List<IActionResult> results = client.Init(owner);

@@ -6,6 +6,7 @@ using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Entity.Player;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
+using Mumble.FirstGame.MonogameShared.Settings;
 using Mumble.FirstGame.Serialization.OnlineAction;
 using Mumble.FirstGame.Serialization.OnlineActionResult;
 using Mumble.FirstGame.Serialization.Protobuf.Action;
@@ -28,13 +29,11 @@ namespace Mumble.FirstGame.Client.Online
         private IEntityContainer _entityContainer;
         private IntOwnerIdentifier _identifier;
         
-        public OnlineGameClient()
+        public OnlineGameClient(IEntityContainer container, IGameSettings settings)
         {
-            IPEndPoint tcpEndpoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 27000);
-            _tcpClient = new TcpClient(tcpEndpoint);
-            IPEndPoint udpEndpoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 27000);
-            _udpClient = new UdpClient(udpEndpoint);
-            _entityContainer = new BattleEntityContainer();
+            _tcpClient = new TcpClient(settings.Server);
+            _udpClient = new UdpClient(settings.Server);
+            _entityContainer = container;
         }
 
         public void Send(IAction action)
