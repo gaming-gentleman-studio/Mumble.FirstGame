@@ -31,18 +31,18 @@ namespace Mumble.FirstGame.Client.Online
         {
             public byte[] Buffer = new byte[_bufSize];
         }
-        public SocketSender(IPEndPoint endpoint)
+        public SocketSender(IPEndPoint endpoint, IActionResultFactory resultFactory)
         {
             
             _resultBuffer = new ConcurrentBag<IActionResult>();
+            _actionResultFactory = resultFactory;
             Endpoint = endpoint;
             BindSocket();
             
         }
         protected abstract void BindSocket();
-        protected void Receive(IEntityContainer entityContainer,bool async=true)
-        {
-            _actionResultFactory = new ActionResultFactory(entityContainer);
+        protected void Receive(bool async=true)
+        {       
             if (async)
             {
                 _socket.BeginReceiveFrom(_state.Buffer, 0, _bufSize, SocketFlags.None, ref _sender, recv = (ar) =>

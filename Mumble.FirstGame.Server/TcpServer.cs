@@ -1,5 +1,6 @@
 ﻿using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Scene;
+using Mumble.FirstGame.Serialization.Protobuf.Factory;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace Mumble.FirstGame.Server
 
 
         private ConcurrentBag<Socket> _clients = new ConcurrentBag<Socket>();
-        public TcpServer(IPEndPoint endpoint,IScene scene) : base(endpoint, scene)
+        public TcpServer(IPEndPoint endpoint,IScene scene, IActionFactory actionFactory) : base(endpoint, scene, actionFactory)
         {
 
         }

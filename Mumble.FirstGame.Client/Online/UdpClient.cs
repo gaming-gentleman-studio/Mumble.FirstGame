@@ -1,6 +1,7 @@
 ﻿using Mumble.FirstGame.Core.Action;
 using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
+using Mumble.FirstGame.Serialization.Protobuf.Factory;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -11,7 +12,7 @@ namespace Mumble.FirstGame.Client.Online
 {
     public class UdpClient : SocketSender
     {
-        public UdpClient(IPEndPoint endpoint) : base(endpoint)
+        public UdpClient(IPEndPoint endpoint, IActionResultFactory resultFactory) : base(endpoint, resultFactory)
         {
             
         }
@@ -21,9 +22,9 @@ namespace Mumble.FirstGame.Client.Online
             _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             _socket.Connect(Endpoint);
         }
-        public void Listen(IEntityContainer container)
+        public void Listen()
         {
-            Receive(container);
+            Receive();
         }
         public void Send(IntOwnerIdentifier identifier,IAction action,IEntityContainer container)
         {

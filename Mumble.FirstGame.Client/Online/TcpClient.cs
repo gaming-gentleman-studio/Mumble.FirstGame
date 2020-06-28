@@ -3,6 +3,7 @@ using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
 using Mumble.FirstGame.Serialization.Protobuf.Action;
+using Mumble.FirstGame.Serialization.Protobuf.Factory;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -13,7 +14,7 @@ namespace Mumble.FirstGame.Client.Online
 {
     public class TcpClient : SocketSender
     {
-        public TcpClient(IPEndPoint endpoint) : base(endpoint)
+        public TcpClient(IPEndPoint endpoint, IActionResultFactory resultFactory) : base(endpoint, resultFactory)
         {
 
         }
@@ -30,13 +31,13 @@ namespace Mumble.FirstGame.Client.Online
             }
             
             base.SendInternal(identifier,action, entityContainer, false);
-            Receive(entityContainer,false);
+            Receive(false);
             return ClearResultBuffer();
 
         }
-        public void Listen(IEntityContainer container)
+        public void Listen()
         {
-            Receive(container);
+            Receive();
         }
         public List<IActionResult> GetNewResults()
         {

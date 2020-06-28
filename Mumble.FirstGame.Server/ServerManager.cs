@@ -2,6 +2,7 @@
 using Mumble.FirstGame.Core.Scene;
 using Mumble.FirstGame.Core.Scene.Battle;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
+using Mumble.FirstGame.Serialization.Protobuf.Factory;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -15,17 +16,15 @@ namespace Mumble.FirstGame.Server
         private UdpServer _udpChannel;
         private TcpServer _tcpChannel;
         private IScene _scene;
-        private TimeSpan _tickRate = TimeSpan.FromMilliseconds(50);
-        public ServerManager(IScene scene, IServerSettings settings)
+        private IServerSettings _settings;
+        public ServerManager(IScene scene, IServerSettings settings, IActionFactory actionFactory)
         {
-            //BattleEntityContainer container = new BattleEntityContainer();
-            //OnlineActionAdapter adapter = new OnlineActionAdapter(container);
-            //_scene = new BattleScene(container,new List<IActionAdapter> { adapter });
             _scene = scene;
+            _settings = settings;
             IPEndPoint udpEndpoint = new IPEndPoint(IPAddress.Any, settings.ServerPort);
-            _udpChannel = new UdpServer(udpEndpoint,_scene);
+            _udpChannel = new UdpServer(udpEndpoint,_scene, actionFactory);
             IPEndPoint tcpEndpoint = new IPEndPoint(IPAddress.Any, settings.ServerPort);
-            _tcpChannel = new TcpServer(tcpEndpoint, _scene);
+            _tcpChannel = new TcpServer(tcpEndpoint, _scene,actionFactory);
 
         }
         public void Listen()
@@ -40,7 +39,7 @@ namespace Mumble.FirstGame.Server
         private void SetTimer()
         {
             // Create a timer with a two second interval.
-            Timer aTimer = new System.Timers.Timer(_tickRate.TotalMilliseconds);
+            Timer aTimer = new System.Timers.Timer(_settings.TickRate.TotalMilliseconds);
             // Hook up the Elapsed event for the timer. 
             aTimer.Elapsed += TimerEvent;
             aTimer.AutoReset = true;
@@ -49,8 +48,8 @@ namespace Mumble.FirstGame.Server
 
         private void TimerEvent(object source, ElapsedEventArgs e)
         {
-            _udpChannel.StartUpdateTask(1);
-            _tcpChannel.StartUpdateTask(1);
+            _udpChannel.StartUpdateTask(_settings.UpdateCyclesPerTick);
+            _tcpChannel.StartUpdateTask(0);
         }
     }
 }

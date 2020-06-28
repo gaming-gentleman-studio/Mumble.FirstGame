@@ -39,10 +39,10 @@ namespace Mumble.FirstGame.Server
         private ConcurrentDictionary<IPEndPoint,IOwnerIdentifier> _ownerMap = new ConcurrentDictionary<IPEndPoint, IOwnerIdentifier>();
         private int _nextOwnerId = 1;
 
-        public SocketListener(IPEndPoint endpoint,IScene scene)
+        public SocketListener(IPEndPoint endpoint,IScene scene, IActionFactory actionFactory)
         {
             _scene = scene;
-            _actionFactory = new ActionFactory(_scene.EntityContainer);
+            _actionFactory = actionFactory;
             _actionBuffer = new ConcurrentDictionary<IOwnerIdentifier,ConcurrentBag<IAction>>();
             BindSocket(endpoint);
         }

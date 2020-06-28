@@ -29,10 +29,10 @@ namespace Mumble.FirstGame.Client.Online
         private IEntityContainer _entityContainer;
         private IntOwnerIdentifier _identifier;
         
-        public OnlineGameClient(IEntityContainer container, IGameSettings settings)
+        public OnlineGameClient(IEntityContainer container, IGameSettings settings, IActionResultFactory resultFactory)
         {
-            _tcpClient = new TcpClient(settings.Server);
-            _udpClient = new UdpClient(settings.Server);
+            _tcpClient = new TcpClient(settings.Server, resultFactory);
+            _udpClient = new UdpClient(settings.Server, resultFactory);
             _entityContainer = container;
         }
 
@@ -54,8 +54,8 @@ namespace Mumble.FirstGame.Client.Online
             // some of these fields don't actually matter - just need to tell server where we are spawning
             SpawnPlayerAction spawnAction = new SpawnPlayerAction("beau", 3, 10,owner);
             List<IActionResult> results =_tcpClient.Send(_identifier,spawnAction, _entityContainer);
-            _udpClient.Listen(_entityContainer);
-            _tcpClient.Listen(_entityContainer);
+            _udpClient.Listen();
+            _tcpClient.Listen();
             return results;
             
         }

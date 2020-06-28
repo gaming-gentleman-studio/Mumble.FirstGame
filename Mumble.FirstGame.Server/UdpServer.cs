@@ -1,6 +1,7 @@
 ﻿using Mumble.FirstGame.Core.Action;
 using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Scene;
+using Mumble.FirstGame.Serialization.Protobuf.Factory;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace Mumble.FirstGame.Server
 
         
         private AsyncCallback recv = null;
-        public UdpServer(IPEndPoint endpoint,IScene scene) : base(endpoint, scene)
+        public UdpServer(IPEndPoint endpoint,IScene scene, IActionFactory actionFactory) : base(endpoint, scene, actionFactory)
         {
 
         }
