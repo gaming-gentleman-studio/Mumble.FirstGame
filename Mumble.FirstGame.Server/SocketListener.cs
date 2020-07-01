@@ -29,7 +29,7 @@ namespace Mumble.FirstGame.Server
             Private
         };
         protected Socket _socket;
-        protected IActionFactory _actionFactory;
+        protected IFactoryContainer _factoryContainer;
         protected IScene _scene;
         
         protected ConcurrentDictionary<IOwnerIdentifier,ConcurrentBag<IAction>> _actionBuffer;
@@ -39,10 +39,10 @@ namespace Mumble.FirstGame.Server
         private ConcurrentDictionary<IPEndPoint,IOwnerIdentifier> _ownerMap = new ConcurrentDictionary<IPEndPoint, IOwnerIdentifier>();
         private int _nextOwnerId = 1;
 
-        public SocketListener(IPEndPoint endpoint,IScene scene, IActionFactory actionFactory)
+        public SocketListener(IPEndPoint endpoint,IScene scene, IFactoryContainer factoryContainer)
         {
             _scene = scene;
-            _actionFactory = actionFactory;
+            _factoryContainer = factoryContainer;
             _actionBuffer = new ConcurrentDictionary<IOwnerIdentifier,ConcurrentBag<IAction>>();
             BindSocket(endpoint);
         }
@@ -76,7 +76,7 @@ namespace Mumble.FirstGame.Server
                         identifier = GetIdentifier(message);
                     }
 
-                    IAction action = _actionFactory.Create(message.Skip(2).ToArray(), identifier);
+                    IAction action = _factoryContainer.ActionFactory.ToAction(message.Skip(2).ToArray(), identifier);
                     Console.WriteLine("RECV: {0}: {1}, {2}", _sender.ToString(), len, action.GetType().ToString());
                     if (!_actionBuffer.ContainsKey(identifier))
                     {
@@ -120,7 +120,7 @@ namespace Mumble.FirstGame.Server
         }
         protected List<byte> GetResultBytes(IActionResult result)
         {
-            byte[] untypedData = result.ToProtobufDefinition(_scene.EntityContainer).ToByteArray();
+            byte[] untypedData = _factoryContainer.ActionResultFactory.ToProtobufDef(result).ToByteArray();
             byte[] data = new byte[untypedData.Length + 2];
             data[0] = (byte)(untypedData.Length + 2);
             data[1] = result.GetTypeByte();
@@ -152,8 +152,16 @@ namespace Mumble.FirstGame.Server
             }
             else if (socket.Connected)
             {
-                socket.Send(data);
-                Console.WriteLine("SENT TO: {0}", socket.RemoteEndPoint.ToString());
+                try
+                {
+                    socket.Send(data);
+                    Console.WriteLine("SENT TO: {0}", socket.RemoteEndPoint.ToString());
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
             }
         }
         protected void SendResults(List<IActionResult> results, Socket socket, SocketScope scope)

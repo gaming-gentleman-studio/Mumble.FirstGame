@@ -68,6 +68,8 @@ namespace Mumble.FirstGame.MonogameShared
             provider.AddService<IScene>(new BattleScene(provider.GetService<IEntityContainer>(),new List<IActionAdapter>()));
             provider.AddService<IActionResultFactory>(new ActionResultFactory(provider.GetService<IEntityContainer>()));
             provider.AddService<IActionFactory>(new ActionFactory(provider.GetService<IEntityContainer>()));
+            provider.AddService<IEntityFactory>(new EntityFactory());
+            provider.AddService<IFactoryContainer>(new FactoryContainer(provider.GetService<IActionFactory>(), provider.GetService<IActionResultFactory>(), provider.GetService<IEntityFactory>()));
         }
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
@@ -86,7 +88,7 @@ namespace Mumble.FirstGame.MonogameShared
             }
             else if (clientType == ClientType.Online)
             {
-                client = new OnlineGameClient(provider.GetService<IEntityContainer>(),provider.GetService<IGameSettings>(),provider.GetService<IActionResultFactory>());
+                client = new OnlineGameClient(provider.GetService<IEntityContainer>(),provider.GetService<IGameSettings>(),provider.GetService<IFactoryContainer>());
             }
             IOwnerIdentifier owner = client.Register();
             List<IActionResult> results = client.Init(owner);

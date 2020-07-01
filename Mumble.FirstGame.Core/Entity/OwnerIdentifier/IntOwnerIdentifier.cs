@@ -42,5 +42,9 @@ namespace Mumble.FirstGame.Core.Entity.OwnerIdentifier
         {
             return new IntOwnerIdentifier((int)message);
         }
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
     }
 }

@@ -24,18 +24,18 @@ namespace Mumble.FirstGame.Client.Online
         private EndPoint _sender = new IPEndPoint(IPAddress.Any, 0);
         private AsyncCallback recv = null;
         
-        private IActionResultFactory _actionResultFactory;
+        private IFactoryContainer _factoryContainer;
         private ConcurrentBag<IActionResult> _resultBuffer;
         protected IPEndPoint Endpoint;
         public class State
         {
             public byte[] Buffer = new byte[_bufSize];
         }
-        public SocketSender(IPEndPoint endpoint, IActionResultFactory resultFactory)
+        public SocketSender(IPEndPoint endpoint,  IFactoryContainer factoryContainer)
         {
             
             _resultBuffer = new ConcurrentBag<IActionResult>();
-            _actionResultFactory = resultFactory;
+            _factoryContainer = factoryContainer;
             Endpoint = endpoint;
             BindSocket();
             
@@ -70,7 +70,7 @@ namespace Mumble.FirstGame.Client.Online
                 while (packet.Length > 0)
                 {
                     byte[] message = packet.Take(packet[0]).ToArray();
-                    IActionResult result = _actionResultFactory.Create(message.Skip(1).ToArray());
+                    IActionResult result = _factoryContainer.ActionResultFactory.ToResult(message.Skip(1).ToArray());
                     if (result != null)
                     {
                         _resultBuffer.Add(result);
@@ -86,7 +86,7 @@ namespace Mumble.FirstGame.Client.Online
                 return;
             }
             //TODO - inefficient
-            byte[] untypedData = action.ToProtobufDefinition(entityContainer).ToByteArray();
+            byte[] untypedData = _factoryContainer.ActionFactory.ToProtobufDef(action).ToByteArray();
             byte[] data = new byte[untypedData.Length + 3];
             data[0] = (byte)(untypedData.Length + 3);
             data[1] = (byte)identifier.Id;

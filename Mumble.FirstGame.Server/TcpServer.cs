@@ -4,6 +4,7 @@ using Mumble.FirstGame.Serialization.Protobuf.Factory;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -17,7 +18,7 @@ namespace Mumble.FirstGame.Server
 
 
         private ConcurrentBag<Socket> _clients = new ConcurrentBag<Socket>();
-        public TcpServer(IPEndPoint endpoint,IScene scene, IActionFactory actionFactory) : base(endpoint, scene, actionFactory)
+        public TcpServer(IPEndPoint endpoint,IScene scene, IFactoryContainer factoryContainer) : base(endpoint, scene, factoryContainer)
         {
 
         }
@@ -49,12 +50,27 @@ namespace Mumble.FirstGame.Server
         {
             State state = (State)ar.AsyncState;
             Socket handler = state.workSocket;
-            
-            int bytes = handler.EndReceive(ar);
-            byte[] message = state.Buffer.Take(bytes).ToArray();
-            AddToActionBuffer(bytes, message);
-            SendNull(handler, SocketScope.Private);
-            handler.BeginReceive(state.Buffer, 0, _bufSize, SocketFlags.None, new AsyncCallback(ReadCallback), state);
+            try
+            {
+                int bytes = handler.EndReceive(ar);
+                byte[] message = state.Buffer.Take(bytes).ToArray();
+                AddToActionBuffer(bytes, message);
+                SendNull(handler, SocketScope.Private);
+                handler.BeginReceive(state.Buffer, 0, _bufSize, SocketFlags.None, new AsyncCallback(ReadCallback), state);
+            }
+            catch (SocketException ex)
+            {
+                lock (_clients)
+                {
+                    _clients = new ConcurrentBag<Socket>(_clients.Except(new[] { handler }));
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
         }
         public void StartUpdateTask(int numTicks)
         {

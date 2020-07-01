@@ -17,14 +17,14 @@ namespace Mumble.FirstGame.Server
         private TcpServer _tcpChannel;
         private IScene _scene;
         private IServerSettings _settings;
-        public ServerManager(IScene scene, IServerSettings settings, IActionFactory actionFactory)
+        public ServerManager(IScene scene, IServerSettings settings, IFactoryContainer factoryContainer)
         {
             _scene = scene;
             _settings = settings;
             IPEndPoint udpEndpoint = new IPEndPoint(IPAddress.Any, settings.ServerPort);
-            _udpChannel = new UdpServer(udpEndpoint,_scene, actionFactory);
+            _udpChannel = new UdpServer(udpEndpoint,_scene, factoryContainer);
             IPEndPoint tcpEndpoint = new IPEndPoint(IPAddress.Any, settings.ServerPort);
-            _tcpChannel = new TcpServer(tcpEndpoint, _scene,actionFactory);
+            _tcpChannel = new TcpServer(tcpEndpoint, _scene, factoryContainer);
 
         }
         public void Listen()

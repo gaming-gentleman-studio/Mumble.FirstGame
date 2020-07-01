@@ -34,9 +34,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Factory\ActionFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Factory\ActionResultFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Factory\EntityFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Factory\FactoryContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Factory\IActionFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Factory\IActionResultFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Factory\IEntityFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Factory\IFactoryContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\Lookup.cs" />
   </ItemGroup>
   <ItemGroup>

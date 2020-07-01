@@ -14,7 +14,7 @@ namespace Mumble.FirstGame.ServerConsole
         static void Main(string[] args)
         {
             IServiceProvider provider = RegisterServices();
-            ServerManager server = new ServerManager(provider.GetService<IScene>(),provider.GetService<IServerSettings>(), provider.GetService<IActionFactory>());
+            ServerManager server = new ServerManager(provider.GetService<IScene>(),provider.GetService<IServerSettings>(), provider.GetService<IFactoryContainer>());
             server.Listen();
             Console.ReadKey();
         }
@@ -27,6 +27,7 @@ namespace Mumble.FirstGame.ServerConsole
                 .AddTransient<IActionFactory, ActionFactory>()
                 .AddTransient<IActionResultFactory,ActionResultFactory>()
                 .AddTransient<IEntityFactory,EntityFactory>()
+                .AddTransient<IFactoryContainer,FactoryContainer>()
                 .AddSingleton<IScene,BattleScene>()
                 
                 .BuildServiceProvider();

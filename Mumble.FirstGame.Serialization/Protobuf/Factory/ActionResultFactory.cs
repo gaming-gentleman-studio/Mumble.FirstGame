@@ -1,4 +1,5 @@
-﻿using Mumble.FirstGame.Core.ActionResult;
+﻿using Google.Protobuf;
+using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
 using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
@@ -25,8 +26,67 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
             _entityFactory = new EntityFactory();
         }
 
+        public IMessage ToProtobufDef(IActionResult result)
+        {
+            if (result is MoveActionResult)
+            {
+                MoveActionResult move = (MoveActionResult)result;
+                return new MoveActionResultDef
+                {
+                    Id = _entityContainer.GetEntityId(move.Entity),
+                    X = move.XPos,
+                    Y = move.YPos,
+                    OutOfBounds = move.OutOfBounds
+                };
+            }
+            else if (result is EntitiesCreatedActionResult)
+            {
+                EntitiesCreatedActionResult entitiesCreatedResult = (EntitiesCreatedActionResult)result;
+                EntitiesCreatedActionResultDef message = new EntitiesCreatedActionResultDef();
+                foreach (IMoveableEntity entity in entitiesCreatedResult.Entities)
+                {
+                    var entityDef = new EntitiesCreatedActionResultDef.Types.Entity();
+                    entityDef.Type = EntityTypeLookup.TypeToTypeId[entity.GetType()];
+                    entityDef.Id = _entityContainer.GetEntityId(entity);
+                    entityDef.Direction = new Protobuf.Action.Direction
+                    {
+                        Radians = entity.VelocityComponent.Direction.Radians
+                    };
+                    entityDef.X = entity.PositionComponent.X;
+                    entityDef.Y = entity.PositionComponent.Y;
+                    if (entity.OwnerIdentifier.PlayerOwned())
+                    {
+                        entityDef.Owner = ((IntOwnerIdentifier)entity.OwnerIdentifier).Id;
+                    }
+                    else
+                    {
+                        entityDef.Owner = 0;
+                    }
+                    message.Entities.Add(entityDef);
+                }
+                return message;
+            }
+            else if (result is EntityDestroyedActionResult)
+            {
+                EntityDestroyedActionResult destroyedResult = (EntityDestroyedActionResult)result;
+                return new EntityDestroyedActionResultDef
+                {
+                    Id = _entityContainer.GetEntityId(destroyedResult.Entity)
+                };
+            }
+            else if (result is ClientRegisteredActionResult)
+            {
+                ClientRegisteredActionResult registered = (ClientRegisteredActionResult)result;
+                return new ClientRegisteredActionResultDef
+                {
+                    OwnerId = ((IntOwnerIdentifier)registered.OwnerIdentifier).Id
+                };
+            }
+            return null;
 
-        public IActionResult Create(byte[] data)
+        }
+
+        public IActionResult ToResult(byte[] data)
         {
             int type = data[0];
             byte[] serializedResult = data.Skip(1).Take(data.Length).ToArray();

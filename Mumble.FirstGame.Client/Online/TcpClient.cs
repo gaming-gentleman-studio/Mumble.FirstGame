@@ -14,7 +14,7 @@ namespace Mumble.FirstGame.Client.Online
 {
     public class TcpClient : SocketSender
     {
-        public TcpClient(IPEndPoint endpoint, IActionResultFactory resultFactory) : base(endpoint, resultFactory)
+        public TcpClient(IPEndPoint endpoint, IFactoryContainer factoryContainer) : base(endpoint, factoryContainer)
         {
 
         }

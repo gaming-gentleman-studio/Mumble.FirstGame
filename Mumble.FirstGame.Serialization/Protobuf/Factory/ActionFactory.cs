@@ -1,4 +1,5 @@
-﻿using Mumble.FirstGame.Core.Action;
+﻿using Google.Protobuf;
+using Mumble.FirstGame.Core.Action;
 using Mumble.FirstGame.Core.Action.Fire;
 using Mumble.FirstGame.Core.Action.Movement;
 using Mumble.FirstGame.Core.Action.Spawn;
@@ -27,7 +28,7 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
         }
 
         
-        public IAction Create(byte[] data,IOwnerIdentifier owner)
+        public IAction ToAction(byte[] data,IOwnerIdentifier owner)
         {
             int type = data[0];
             byte[] serializedAction = data.Skip(1).Take(data.Length).ToArray();
@@ -91,6 +92,49 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
                     throw new Exception("Improper action found while attempting to deserialize");
             }
             return action;
+        }
+
+        public IMessage ToProtobufDef(IAction action)
+        {
+            if (action is IMoveAction)
+            {
+                IMoveAction move = (IMoveAction)action;
+                return new MoveActionDef
+                {
+                    Id = _entityContainer.GetEntityId(move.Entity),
+                    Direction = new Protobuf.Action.Direction
+                    {
+                        Radians = move.Velocity.Direction.Radians
+                    }
+                };
+            }
+            else if (action is IFireWeaponAction)
+            {
+                IFireWeaponAction fire = (IFireWeaponAction)action;
+                return new FireActionDef
+                {
+                    Id = _entityContainer.GetEntityId(fire.Entity),
+                    Direction = new Protobuf.Action.Direction
+                    {
+                        Radians = fire.Direction.Radians
+                    }
+                };
+            }
+            else if (action is ISpawnEntityAction)
+            {
+                ISpawnEntityAction spawn = (ISpawnEntityAction)action;
+                return new SpawnEntityActionDef
+                {
+                    Name = spawn.Entity.GetName(),
+                    Type = EntityTypeLookup.TypeToTypeId[spawn.Entity.GetType()]
+                };
+            }
+            else if (action is RegisterClientAction)
+            {
+                RegisterClientAction registration = (RegisterClientAction)action;
+                return new RegisterClientActionDef();
+            }
+            return null;
         }
     }
 }

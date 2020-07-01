@@ -19,7 +19,7 @@ namespace Mumble.FirstGame.Server
 
         
         private AsyncCallback recv = null;
-        public UdpServer(IPEndPoint endpoint,IScene scene, IActionFactory actionFactory) : base(endpoint, scene, actionFactory)
+        public UdpServer(IPEndPoint endpoint,IScene scene, IFactoryContainer factoryContainer) : base(endpoint, scene, factoryContainer)
         {
 
         }
