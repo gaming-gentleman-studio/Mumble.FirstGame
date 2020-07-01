@@ -19,10 +19,14 @@ namespace Mumble.FirstGame.Core.Entity.Components.Position
             get;
             private set;
         }
+
+        public Direction Facing { get; private set; }
+
         public PositionComponent(float x, float y)
         {
             X = x;
             Y = y;
+            Facing = Direction.Down;
         }
         public IPositionComponent GetNewCoords(IVelocityComponent velocity)
         {
@@ -32,6 +36,10 @@ namespace Mumble.FirstGame.Core.Entity.Components.Position
         {
             X = destinationPosition.X;
             Y = destinationPosition.Y;
+        }
+        public void ChangeFacing(Direction direction)
+        {
+            Facing = direction;
         }
     }
 }

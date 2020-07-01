@@ -39,7 +39,6 @@ namespace Mumble.FirstGame.MonogameShared
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        ClientType clientType = ClientType.Online;
         IGameClient client;
         Dictionary<IEntity, Vector2> positions = new Dictionary<IEntity, Vector2>();
         Player player;
@@ -82,11 +81,11 @@ namespace Mumble.FirstGame.MonogameShared
             keyHandler = new MovementKeyHandler();
             mouseHandler = new MouseHandler();
             //solo
-            if (clientType == ClientType.Solo)
+            if (provider.GetService<IGameSettings>().ClientType == ClientType.Solo)
             {
                 client = new SoloGameClient(provider.GetService<IScene>());
             }
-            else if (clientType == ClientType.Online)
+            else if (provider.GetService<IGameSettings>().ClientType == ClientType.Online)
             {
                 client = new OnlineGameClient(provider.GetService<IEntityContainer>(),provider.GetService<IGameSettings>(),provider.GetService<IFactoryContainer>());
             }
@@ -222,7 +221,7 @@ namespace Mumble.FirstGame.MonogameShared
             {
                 if (entity is Player)
                 {
-                    spriteBatch.Draw(contentImages.ImgTheDude, positions[entity], null, Color.DarkGray, 0f, Vector2.Zero, new Vector2(2, 2), SpriteEffects.None, 0f);
+                    spriteBatch.Draw(contentImages.ImgTheDude, positions[entity], contentImages.SpritesheetPosByDirection[entity.PositionComponent.Facing], Color.DarkGray, 0f, Vector2.Zero, new Vector2(2, 2), SpriteEffects.None, 0f);
                 }
                 if (entity is SimpleBullet)
                 {

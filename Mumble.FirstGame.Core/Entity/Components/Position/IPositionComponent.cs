@@ -11,7 +11,11 @@ namespace Mumble.FirstGame.Core.Entity.Components.Position
         float X { get;  }
         float Y { get; }
 
+        Direction Facing { get; }
         IPositionComponent GetNewCoords(IVelocityComponent velocity);
         void Move(IPositionComponent destinationPosition);
+
+        void ChangeFacing(Direction direction);
+
     }
 }

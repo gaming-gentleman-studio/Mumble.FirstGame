@@ -65,7 +65,8 @@ namespace Mumble.FirstGame.Core.Action.Movement
                     Results.Add(new EntityDestroyedActionResult(Entity));
                 }
             }
-            
+            Entity.PositionComponent.ChangeFacing(Velocity.Direction);
+
         }
     }
 }
