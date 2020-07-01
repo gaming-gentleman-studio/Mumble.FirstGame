@@ -33,6 +33,19 @@ namespace Mumble.FirstGame.Core.Entity.Components.Velocity
             Y = (float)Math.Sin(radians);
             Radians = radians;
         }
+        public override int GetHashCode()
+        {
+            return Radians.GetHashCode();
+        }
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Direction))
+            {
+                return false;
+            }
+            Direction other = (Direction)obj;
+            return Radians.Equals(other.Radians);
+        }
         public static Direction Up => new Direction(0, -1);
         public static Direction Down => new Direction(0, 1);
         public static Direction Left => new Direction(-1, 0);

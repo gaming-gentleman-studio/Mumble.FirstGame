@@ -25,14 +25,15 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "Ci1BY3Rpb25SZXN1bHQvU2NoZW1hL01vdmVBY3Rpb25SZXN1bHREZWYucHJv",
-            "dG8SDGFjdGlvbnJlc3VsdCJMChNNb3ZlQWN0aW9uUmVzdWx0RGVmEgoKAmlk",
-            "GAEgASgFEgkKAXgYAiABKAISCQoBeRgDIAEoAhITCgtvdXRPZkJvdW5kcxgE",
-            "IAEoCEI3qgI0TXVtYmxlLkZpcnN0R2FtZS5TZXJpYWxpemF0aW9uLlByb3Rv",
-            "YnVmLkFjdGlvblJlc3VsdGIGcHJvdG8z"));
+            "dG8SDGFjdGlvbnJlc3VsdBodQWN0aW9uL1NjaGVtYS9EaXJlY3Rpb24ucHJv",
+            "dG8ibwoTTW92ZUFjdGlvblJlc3VsdERlZhIKCgJpZBgBIAEoBRIJCgF4GAIg",
+            "ASgCEgkKAXkYAyABKAISEwoLb3V0T2ZCb3VuZHMYBCABKAgSIQoGZmFjaW5n",
+            "GAUgASgLMhEuYWN0aW9uLkRpcmVjdGlvbkI3qgI0TXVtYmxlLkZpcnN0R2Ft",
+            "ZS5TZXJpYWxpemF0aW9uLlByb3RvYnVmLkFjdGlvblJlc3VsdGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { },
+          new pbr::FileDescriptor[] { global::Mumble.FirstGame.Serialization.Protobuf.Action.DirectionReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.MoveActionResultDef), global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.MoveActionResultDef.Parser, new[]{ "Id", "X", "Y", "OutOfBounds" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.MoveActionResultDef), global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.MoveActionResultDef.Parser, new[]{ "Id", "X", "Y", "OutOfBounds", "Facing" }, null, null, null, null)
           }));
     }
     #endregion
@@ -68,6 +69,7 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
       x_ = other.x_;
       y_ = other.y_;
       outOfBounds_ = other.outOfBounds_;
+      facing_ = other.facing_ != null ? other.facing_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -120,6 +122,17 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
       }
     }
 
+    /// <summary>Field number for the "facing" field.</summary>
+    public const int FacingFieldNumber = 5;
+    private global::Mumble.FirstGame.Serialization.Protobuf.Action.Direction facing_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Mumble.FirstGame.Serialization.Protobuf.Action.Direction Facing {
+      get { return facing_; }
+      set {
+        facing_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as MoveActionResultDef);
@@ -137,6 +150,7 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(X, other.X)) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Y, other.Y)) return false;
       if (OutOfBounds != other.OutOfBounds) return false;
+      if (!object.Equals(Facing, other.Facing)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -147,6 +161,7 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
       if (X != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(X);
       if (Y != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Y);
       if (OutOfBounds != false) hash ^= OutOfBounds.GetHashCode();
+      if (facing_ != null) hash ^= Facing.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -176,6 +191,10 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
         output.WriteRawTag(32);
         output.WriteBool(OutOfBounds);
       }
+      if (facing_ != null) {
+        output.WriteRawTag(42);
+        output.WriteMessage(Facing);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -195,6 +214,9 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
       }
       if (OutOfBounds != false) {
         size += 1 + 1;
+      }
+      if (facing_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Facing);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -218,6 +240,12 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
       }
       if (other.OutOfBounds != false) {
         OutOfBounds = other.OutOfBounds;
+      }
+      if (other.facing_ != null) {
+        if (facing_ == null) {
+          Facing = new global::Mumble.FirstGame.Serialization.Protobuf.Action.Direction();
+        }
+        Facing.MergeFrom(other.Facing);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -244,6 +272,13 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
           }
           case 32: {
             OutOfBounds = input.ReadBool();
+            break;
+          }
+          case 42: {
+            if (facing_ == null) {
+              Facing = new global::Mumble.FirstGame.Serialization.Protobuf.Action.Direction();
+            }
+            input.ReadMessage(Facing);
             break;
           }
         }

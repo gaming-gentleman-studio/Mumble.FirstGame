@@ -36,7 +36,11 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
                     Id = _entityContainer.GetEntityId(move.Entity),
                     X = move.XPos,
                     Y = move.YPos,
-                    OutOfBounds = move.OutOfBounds
+                    OutOfBounds = move.OutOfBounds,
+                    Facing = new Protobuf.Action.Direction
+                    {
+                        Radians = move.Entity.PositionComponent.Facing.Radians
+                    }
                 };
             }
             else if (result is EntitiesCreatedActionResult)
@@ -101,7 +105,9 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
                     try
                     {
                         MoveActionResultDef moveDef = MoveActionResultDef.Parser.ParseFrom(serializedResult);
-                        result = new MoveActionResult(_entityContainer.GetEntity(moveDef.Id,true), moveDef.X, moveDef.Y, moveDef.OutOfBounds);
+                        IEntity entity = _entityContainer.GetEntity(moveDef.Id, true);
+                        result = new MoveActionResult(entity, moveDef.X, moveDef.Y, moveDef.OutOfBounds);
+                        entity.PositionComponent.ChangeFacing (new Core.Entity.Components.Velocity.Direction(moveDef.Facing.Radians));
                     }
                     catch (Exception ex)
                     {
