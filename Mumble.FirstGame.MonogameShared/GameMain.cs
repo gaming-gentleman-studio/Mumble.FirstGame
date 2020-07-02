@@ -9,6 +9,7 @@ using Mumble.FirstGame.Core.Action.Fire;
 using Mumble.FirstGame.Core.Action.Movement;
 using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
+using Mumble.FirstGame.Core.Entity.Components.Position;
 using Mumble.FirstGame.Core.Entity.Enemy;
 using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Entity.Player;
@@ -17,6 +18,7 @@ using Mumble.FirstGame.Core.Scene;
 using Mumble.FirstGame.Core.Scene.Battle;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
 using Mumble.FirstGame.MonogameShared.Settings;
+using Mumble.FirstGame.MonogameShared.SpriteMetadata;
 using Mumble.FirstGame.MonogameShared.Utils;
 using Mumble.FirstGame.Serialization.OnlineActionResult;
 using Mumble.FirstGame.Serialization.Protobuf.Factory;
@@ -40,7 +42,7 @@ namespace Mumble.FirstGame.MonogameShared
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         IGameClient client;
-        Dictionary<IEntity, Vector2> positions = new Dictionary<IEntity, Vector2>();
+        Dictionary<IEntity, ISpriteMetadata> sprites = new Dictionary<IEntity, ISpriteMetadata>();
         Player player;
         int scaling = 5;
         ContentImages contentImages;
@@ -93,10 +95,9 @@ namespace Mumble.FirstGame.MonogameShared
             List<IActionResult> results = client.Init(owner);
             EntitiesCreatedActionResult createdResult = (EntitiesCreatedActionResult)results.Where(x => x is EntitiesCreatedActionResult).FirstOrDefault();
             player = (Player)createdResult.Entities.Where(x => x.OwnerIdentifier.Equals(owner)).FirstOrDefault();
-            positions[player] = new Vector2(
-                (player.PositionComponent.X * 2 * scaling),
-                (player.PositionComponent.Y * 2 * scaling)
-            );
+            sprites[player] = SpriteMetadataUtil.CreateSpriteMetadata(player);
+                
+                
             ApplyResults(results);
             // TODO: Add your initialization logic here
             base.Initialize();
@@ -139,7 +140,7 @@ namespace Mumble.FirstGame.MonogameShared
             List<IActionResult> results = new List<IActionResult>();
             List<IAction> actions = new List<IAction>();
             actions.AddIfNotNull(keyHandler.HandleKeyPress(player));
-            actions.AddIfNotNull(mouseHandler.HandleMouseClick(player,positions[player]));
+            actions.AddIfNotNull(mouseHandler.HandleMouseClick(player,sprites[player].GetPosition()));
             results = client.Update(actions);
             ApplyResults(results);
             //DebugUtils.PrintActions(actions);
@@ -153,20 +154,7 @@ namespace Mumble.FirstGame.MonogameShared
                 {
                     foreach (IEntity entity in result.Entities)
                     {
-                        if (entity is SimpleBullet)
-                        {
-                            positions[entity] = new Vector2(
-                                (entity.PositionComponent.X * 2 * scaling) + 16,
-                                (entity.PositionComponent.Y * 2 * scaling) + 16
-                            );
-                        }
-                        if (entity is Player)
-                        {
-                            positions[entity] = new Vector2(
-                                entity.PositionComponent.X * 2 * scaling,
-                                entity.PositionComponent.Y * 2 * scaling
-                            );
-                        }
+                        sprites[entity] = SpriteMetadataUtil.CreateSpriteMetadata(entity);
 
 
                     }
@@ -178,33 +166,21 @@ namespace Mumble.FirstGame.MonogameShared
                     {
                         if (result.Entity != player)
                         {
-                            positions.Remove(result.Entity);
+                            sprites.Remove(result.Entity);
                         }
 
                     }
                     else
                     {
-                        if (result.Entity is SimpleBullet)
-                        {
-                            positions[result.Entity] = new Vector2(
-                                result.XPos * 2 * scaling + 16,
-                                result.YPos * 2 * scaling + 16
-                            );
-                        }
-                        else if (result.Entity is Player)
-                        {
-                            positions[result.Entity] = new Vector2(
-                                result.XPos * 2 * scaling,
-                                result.YPos * 2 * scaling
-                            );
-                        }
-
+                        //this is a little awkwardly placed I think
+                        PositionComponent newPos = new PositionComponent(result.XPos, result.YPos);
+                        result.Entity.PositionComponent.Move(newPos);
                     }
 
                 }
                 foreach (EntityDestroyedActionResult result in results.Where(x => x is EntityDestroyedActionResult))
                 {
-                    positions.Remove(result.Entity);
+                    sprites.Remove(result.Entity);
                 }
             }
         }
@@ -217,21 +193,12 @@ namespace Mumble.FirstGame.MonogameShared
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
             
-            foreach (IEntity entity in positions.Keys)
+            foreach (IEntity entity in sprites.Keys)
             {
-                if (entity is Player)
-                {
-                    spriteBatch.Draw(contentImages.ImgTheDude, positions[entity], contentImages.SpritesheetPosByDirection[entity.PositionComponent.Facing], Color.DarkGray, 0f, Vector2.Zero, new Vector2(2, 2), SpriteEffects.None, 0f);
-                }
-                if (entity is SimpleBullet)
-                {
-                    SimpleBullet bulletEntity = (SimpleBullet)entity;
-                    //origin = <width/2,height/2>
-                    spriteBatch.Draw(contentImages.Bullet, positions[bulletEntity], null, Color.DarkGray, bulletEntity.VelocityComponent.Direction.Radians, new Vector2(8,8), new Vector2(1, 1), SpriteEffects.None, 0f);
-                }
+                ISpriteMetadata sprite = sprites[entity];
+                spriteBatch.Draw(sprite.GetImage(contentImages), sprite.GetPosition(), sprite.GetSpritesheetRectange(), Color.DarkGray, sprite.GetRotation(), sprite.GetOrigin(), sprite.GetScale(), SpriteEffects.None, 0f);
             }
             spriteBatch.End();
-            //TODO: Add your drawing code here
 
             base.Draw(gameTime);
         }

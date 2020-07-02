@@ -12,6 +12,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)ContentImages.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings\GameSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings\IGameSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\ISpriteMetadata.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\PlayerSpriteMetadata.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\SimpleBulletSpriteMetadata.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\SpriteMetadataUtil.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\DebugUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameMain.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MouseHandler.cs" />
