@@ -15,7 +15,11 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
     {
 
         private IEntity _entity;
-        private const int _scaling = 5;
+        private const int SCALING = 5;
+        private int _animationStep = 0;
+        private int _animationDelay = 0;
+        private const int MAX_ANIMATION_DELAY = 2;
+        private const int MAX_ANIMATION_STEPS = 3;
 
         public PlayerSpriteMetadata(Player entity)
         {
@@ -32,14 +36,31 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         }
         public Rectangle GetSpritesheetRectange()
         {
-            return SpriteMetadataUtil.SpritesheetPosByDirection[_entity.PositionComponent.Facing];
+            Rectangle rect = SpriteMetadataUtil.SpritesheetPosByDirection[_entity.PositionComponent.Facing];
+            rect.Y = (16 * _animationStep)+_animationStep;
+            
+            return rect;
+
+        }
+        public void Animate()
+        {
+            _animationDelay++;
+            if (_animationDelay > MAX_ANIMATION_DELAY - 1)
+            {
+                _animationDelay = 0;
+                _animationStep++;
+                if (_animationStep > MAX_ANIMATION_STEPS - 1)
+                {
+                    _animationStep = 0;
+                }
+            }
 
         }
         public Vector2 GetPosition()
         {
             return new Vector2(
-                _entity.PositionComponent.X * 2 * _scaling,
-                _entity.PositionComponent.Y * 2 * _scaling
+                _entity.PositionComponent.X * 2 * SCALING,
+                _entity.PositionComponent.Y * 2 * SCALING
             );
         }
         public Vector2 GetScale()

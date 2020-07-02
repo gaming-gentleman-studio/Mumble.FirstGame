@@ -161,7 +161,7 @@ namespace Mumble.FirstGame.MonogameShared
                 }
                 foreach (MoveActionResult result in results.Where(x => x is MoveActionResult))
                 {
-
+                    sprites[result.Entity].Animate();
                     if (result.OutOfBounds)
                     {
                         if (result.Entity != player)
@@ -191,7 +191,7 @@ namespace Mumble.FirstGame.MonogameShared
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Deferred,BlendState.AlphaBlend,SamplerState.PointClamp);
             
             foreach (IEntity entity in sprites.Keys)
             {

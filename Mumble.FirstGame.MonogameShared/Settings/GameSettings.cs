@@ -10,6 +10,6 @@ namespace Mumble.FirstGame.MonogameShared.Settings
     {
         public IPEndPoint Server => new IPEndPoint(IPAddress.Parse("127.0.0.1"),27000);
 
-        public ClientType ClientType => ClientType.Online;
+        public ClientType ClientType => ClientType.Solo;
     }
 }
