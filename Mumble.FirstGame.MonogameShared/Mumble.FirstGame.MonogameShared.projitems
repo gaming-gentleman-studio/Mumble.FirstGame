@@ -12,6 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ContentImages.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings\GameSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings\IGameSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\CursorMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\ISpriteMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\PlayerSpriteMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\SimpleBulletSpriteMetadata.cs" />
@@ -21,6 +22,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MouseHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MovementKeyHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\ListExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Vector2Extension.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Content\" />

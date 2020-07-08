@@ -11,5 +11,9 @@ namespace Mumble.FirstGame.MonogameShared.Settings
         IPEndPoint Server { get; }
 
         ClientType ClientType { get; }
+
+        TimeSpan TickRate { get; }
+
+        bool FullScreen { get; }
     }
 }

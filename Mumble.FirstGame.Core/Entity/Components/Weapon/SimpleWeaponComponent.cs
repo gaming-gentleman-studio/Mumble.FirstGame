@@ -22,9 +22,8 @@ namespace Mumble.FirstGame.Core.Entity.Components.Weapon
             DamageComponent = damageComponent;
         }
 
-        public bool AbleToFire(int elapsedTicks)
+        public bool AbleToFire()
         {
-            _cooldownLeft -= elapsedTicks;
             return !(_cooldownLeft > 0);
         }
 
@@ -35,6 +34,11 @@ namespace Mumble.FirstGame.Core.Entity.Components.Weapon
             SimpleBullet bullet = new SimpleBullet(sourceX, sourceY, DamageComponent.GetRawDamage(), direction, VelocityComponent.Speed);
             projectiles.Add(bullet);
             return projectiles;
+        }
+
+        public void ApplyCooldown(int elapsedTicks)
+        {
+            _cooldownLeft -= elapsedTicks;
         }
     }
 }

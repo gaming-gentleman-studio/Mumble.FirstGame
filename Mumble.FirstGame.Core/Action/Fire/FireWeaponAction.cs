@@ -7,6 +7,7 @@ using Mumble.FirstGame.Core.Entity.Projectile;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -33,7 +34,7 @@ namespace Mumble.FirstGame.Core.Action.Fire
         public List<IProjectileEntity> CalculateEffect(int elapsedTicks)
         {
             List<IProjectileEntity> projectiles = new List<IProjectileEntity>();
-            if (Entity.WeaponComponent.AbleToFire(elapsedTicks))
+            if (Entity.WeaponComponent.AbleToFire())
             {
                 projectiles = Entity.WeaponComponent.Fire(Entity.PositionComponent.X, Entity.PositionComponent.Y, Direction);
             }

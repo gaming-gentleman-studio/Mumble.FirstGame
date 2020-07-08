@@ -11,5 +11,9 @@ namespace Mumble.FirstGame.MonogameShared.Settings
         public IPEndPoint Server => new IPEndPoint(IPAddress.Parse("127.0.0.1"),27000);
 
         public ClientType ClientType => ClientType.Solo;
+
+        public TimeSpan TickRate => TimeSpan.FromMilliseconds(50);
+
+        public bool FullScreen => false;
     }
 }

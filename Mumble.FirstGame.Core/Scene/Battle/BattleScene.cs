@@ -42,8 +42,8 @@ namespace Mumble.FirstGame.Core.Scene.Battle
             {
                 resultingActions.AddRange(ApplyVelocity());
             }
-            
-            foreach(IOwnerIdentifier owner in actions.Keys)
+            ApplyWeaponCooldowns();
+            foreach (IOwnerIdentifier owner in actions.Keys)
             {
                 foreach (IAction action in actions[owner])
                 {
@@ -122,6 +122,14 @@ namespace Mumble.FirstGame.Core.Scene.Battle
             }
             
             return resultingActions;
+        }
+        private void ApplyWeaponCooldowns()
+        {
+            List<ICombatEntity> entities = EntityContainer.Entities.Where(x => x is ICombatEntity).Cast<ICombatEntity>().ToList();
+            foreach (ICombatEntity entity in entities)
+            {
+                entity.WeaponComponent.ApplyCooldown(_elapsedTicks);
+            }
         }
         private List<IAction> Update(IFireWeaponAction fireAction)
         {

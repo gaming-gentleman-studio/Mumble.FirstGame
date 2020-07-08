@@ -15,7 +15,6 @@ namespace Mumble.FirstGame.MonogameShared
     {
         public MoveAction HandleKeyPress(IMoveableCombatEntity entity)
         {
-
             if (GamePad.GetState(PlayerIndex.One).DPad.Down == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Down))
             {
                 return new MoveAction(entity,Direction.Down);

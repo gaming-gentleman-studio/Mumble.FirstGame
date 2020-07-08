@@ -1,10 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
 using Mumble.FirstGame.Core.Entity.Player;
 using Mumble.FirstGame.Core.Entity.Projectile;
 using Mumble.FirstGame.MonogameShared.SpriteMetadata;
+using Mumble.FirstGame.MonogameShared.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -36,7 +38,10 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         }
         public Rectangle GetSpritesheetRectange()
         {
-            Rectangle rect = SpriteMetadataUtil.SpritesheetPosByDirection[_entity.PositionComponent.Facing];
+            Vector2 vec = Mouse.GetState().Position.ToVector2();
+            Direction direction = vec.ToRelativeDirection(GetPosition());
+            Direction facing = Direction.ToNearest90Angle(direction);
+            Rectangle rect = SpriteMetadataUtil.SpritesheetPosByDirection[facing];
             rect.Y = (16 * _animationStep)+_animationStep;
             
             return rect;

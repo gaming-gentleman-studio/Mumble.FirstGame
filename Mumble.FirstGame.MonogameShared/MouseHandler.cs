@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Input;
 using Mumble.FirstGame.Core.Action.Fire;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
+using Mumble.FirstGame.MonogameShared.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,12 +14,9 @@ namespace Mumble.FirstGame.MonogameShared
     {
         public FireWeaponAction HandleMouseClick(IMoveableCombatEntity entity, Vector2 sourcePosition)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
-                Vector2 directionVector = Mouse.GetState().Position.ToVector2();
-                directionVector = new Vector2(directionVector.X - sourcePosition.X, directionVector.Y - sourcePosition.Y);
-                directionVector.Normalize();
-                Direction direction = new Direction(directionVector.X, directionVector.Y);
+                Direction direction = Mouse.GetState().Position.ToVector2().ToRelativeDirection(sourcePosition);
                 return new FireWeaponAction(entity, direction);
             }
             return null;

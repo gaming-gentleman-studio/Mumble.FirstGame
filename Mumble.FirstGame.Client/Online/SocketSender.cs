@@ -118,6 +118,10 @@ namespace Mumble.FirstGame.Client.Online
         }
         public List<IActionResult> Update(IntOwnerIdentifier identifier,List<IAction> actions,IEntityContainer entityContainer)
         {
+            if (!_socket.Connected)
+            {
+                BindSocket();
+            }
             entityContainer.HardDeleteEntities();
             List<IActionResult> retList = ClearResultBuffer();
             HashSet<IEntity> destroyed = new HashSet<IEntity>(retList.Where(x => x is EntityDestroyedActionResult).Select(x => ((EntityDestroyedActionResult)x).Entity));

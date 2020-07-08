@@ -77,7 +77,7 @@ namespace Mumble.FirstGame.Server
                     }
 
                     IAction action = _factoryContainer.ActionFactory.ToAction(message.Skip(2).ToArray(), identifier);
-                    Console.WriteLine("RECV: {0}: {1}, {2}", _sender.ToString(), len, action.GetType().ToString());
+                    //Console.WriteLine("RECV: {0}: {1}, {2}", _sender.ToString(), len, action.GetType().ToString());
                     if (!_actionBuffer.ContainsKey(identifier))
                     {
                         if (!_actionBuffer.TryAdd(identifier, new ConcurrentBag<IAction>()))
@@ -147,7 +147,7 @@ namespace Mumble.FirstGame.Server
                 foreach (IPEndPoint endpoint in _ownerMap.Keys)
                 {
                     socket.SendTo(data, endpoint);
-                    Console.WriteLine("SENT TO: {0}", endpoint.ToString());
+                    //Console.WriteLine("SENT TO: {0}", endpoint.ToString());
                 }
             }
             else if (socket.Connected)
@@ -155,7 +155,7 @@ namespace Mumble.FirstGame.Server
                 try
                 {
                     socket.Send(data);
-                    Console.WriteLine("SENT TO: {0}", socket.RemoteEndPoint.ToString());
+                    //Console.WriteLine("SENT TO: {0}", socket.RemoteEndPoint.ToString());
                 }
                 catch (Exception ex)
                 {
@@ -170,7 +170,7 @@ namespace Mumble.FirstGame.Server
             foreach (IActionResult result in results)
             {
                 data.AddRange(GetResultBytes(result));
-                Console.WriteLine("SENT: {0}, {1}", data.Count,result.GetType().ToString());
+                //Console.WriteLine("SENT: {0}, {1}", data.Count,result.GetType().ToString());
             }
             if (data.Count > 0)
             {

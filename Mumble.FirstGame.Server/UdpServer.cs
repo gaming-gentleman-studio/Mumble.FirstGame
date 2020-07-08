@@ -34,13 +34,21 @@ namespace Mumble.FirstGame.Server
         {
             _socket.BeginReceiveFrom(_state.Buffer, 0, _bufSize, SocketFlags.None, ref _sender, recv = (ar) =>
             {
-                State state = (State)ar.AsyncState;
-                int bytes = _socket.EndReceiveFrom(ar, ref _sender);
-                _socket.BeginReceiveFrom(state.Buffer, 0, _bufSize, SocketFlags.None, ref _sender, recv, state);
+                try
+                {
+                    State state = (State)ar.AsyncState;
+                    int bytes = _socket.EndReceiveFrom(ar, ref _sender);
+                    _socket.BeginReceiveFrom(state.Buffer, 0, _bufSize, SocketFlags.None, ref _sender, recv, state);
 
-                byte[] message = state.Buffer.Take(bytes).ToArray();
-                AddToActionBuffer(bytes, message);
-                SendNull(_socket,SocketScope.Shared);
+                    byte[] message = state.Buffer.Take(bytes).ToArray();
+                    AddToActionBuffer(bytes, message);
+                    SendNull(_socket, SocketScope.Shared);
+                }
+                catch (Exception ex)
+                {
+                    _socket.EndReceive(ar);
+                }
+
             }, _state);
         }
         public void StartUpdateTask(int numTicks)
