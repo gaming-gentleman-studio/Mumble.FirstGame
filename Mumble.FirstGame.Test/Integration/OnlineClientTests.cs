@@ -31,7 +31,7 @@ namespace Mumble.FirstGame.Test.Integration
         {
             var container = new BattleEntityContainer();
             var settings = new Settings();
-            var factoryContainer = new FactoryContainer(new ActionFactory(container), new ActionResultFactory(container), new EntityFactory());
+            var factoryContainer = new SerializationFactoryContainer(new ActionFactory(container), new ActionResultFactory(container), new EntityFactory());
             _client = new OnlineGameClient(container, settings, factoryContainer);
             _client.Register();
             var owner = new IntOwnerIdentifier(1);

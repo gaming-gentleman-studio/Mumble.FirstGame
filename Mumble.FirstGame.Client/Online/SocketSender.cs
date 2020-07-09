@@ -24,14 +24,14 @@ namespace Mumble.FirstGame.Client.Online
         private EndPoint _sender = new IPEndPoint(IPAddress.Any, 0);
         private AsyncCallback recv = null;
         
-        private IFactoryContainer _factoryContainer;
+        private ISerializationFactoryContainer _factoryContainer;
         private ConcurrentBag<IActionResult> _resultBuffer;
         protected IPEndPoint Endpoint;
         public class State
         {
             public byte[] Buffer = new byte[_bufSize];
         }
-        public SocketSender(IPEndPoint endpoint,  IFactoryContainer factoryContainer)
+        public SocketSender(IPEndPoint endpoint, ISerializationFactoryContainer factoryContainer)
         {
             
             _resultBuffer = new ConcurrentBag<IActionResult>();

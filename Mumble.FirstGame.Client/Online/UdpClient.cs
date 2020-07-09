@@ -12,7 +12,7 @@ namespace Mumble.FirstGame.Client.Online
 {
     public class UdpClient : SocketSender
     {
-        public UdpClient(IPEndPoint endpoint, IFactoryContainer factoryContainer) : base(endpoint, factoryContainer)
+        public UdpClient(IPEndPoint endpoint, ISerializationFactoryContainer factoryContainer) : base(endpoint, factoryContainer)
         {
             
         }

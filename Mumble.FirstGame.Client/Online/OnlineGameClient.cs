@@ -29,7 +29,7 @@ namespace Mumble.FirstGame.Client.Online
         private IEntityContainer _entityContainer;
         private IntOwnerIdentifier _identifier;
         
-        public OnlineGameClient(IEntityContainer container, IGameSettings settings, IFactoryContainer factoryContainer)
+        public OnlineGameClient(IEntityContainer container, IGameSettings settings, ISerializationFactoryContainer factoryContainer)
         {
             _tcpClient = new TcpClient(settings.Server, factoryContainer);
             _udpClient = new UdpClient(settings.Server, factoryContainer);

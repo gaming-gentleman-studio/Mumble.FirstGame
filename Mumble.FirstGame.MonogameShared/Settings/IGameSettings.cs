@@ -1,4 +1,5 @@
-﻿using Mumble.FirstGame.Client;
+﻿using Microsoft.Xna.Framework.Input;
+using Mumble.FirstGame.Client;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -15,5 +16,6 @@ namespace Mumble.FirstGame.MonogameShared.Settings
         TimeSpan TickRate { get; }
 
         bool FullScreen { get; }
+
     }
 }

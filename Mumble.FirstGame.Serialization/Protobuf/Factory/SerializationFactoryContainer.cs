@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Mumble.FirstGame.Serialization.Protobuf.Factory
 {
-    public class FactoryContainer : IFactoryContainer
+    public class SerializationFactoryContainer : ISerializationFactoryContainer
     {
 
         public IActionFactory ActionFactory { get; private set; }
@@ -12,7 +12,7 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
         public IActionResultFactory ActionResultFactory { get; private set; }
 
         public IEntityFactory EntityFactory { get; private set; }
-        public FactoryContainer(IActionFactory actionFactory, IActionResultFactory actionResultFactory, IEntityFactory entityFactory)
+        public SerializationFactoryContainer(IActionFactory actionFactory, IActionResultFactory actionResultFactory, IEntityFactory entityFactory)
         {
             ActionFactory = actionFactory;
             ActionResultFactory = actionResultFactory;

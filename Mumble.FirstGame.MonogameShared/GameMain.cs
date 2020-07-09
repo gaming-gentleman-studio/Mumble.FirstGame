@@ -79,7 +79,7 @@ namespace Mumble.FirstGame.MonogameShared
             provider.AddService<IActionResultFactory>(new ActionResultFactory(provider.GetService<IEntityContainer>()));
             provider.AddService<IActionFactory>(new ActionFactory(provider.GetService<IEntityContainer>()));
             provider.AddService<IEntityFactory>(new EntityFactory());
-            provider.AddService<IFactoryContainer>(new FactoryContainer(provider.GetService<IActionFactory>(), provider.GetService<IActionResultFactory>(), provider.GetService<IEntityFactory>()));
+            provider.AddService<ISerializationFactoryContainer>(new SerializationFactoryContainer(provider.GetService<IActionFactory>(), provider.GetService<IActionResultFactory>(), provider.GetService<IEntityFactory>()));
 
             settings = provider.GetService<IGameSettings>();
             
@@ -92,7 +92,7 @@ namespace Mumble.FirstGame.MonogameShared
             {
                 //We need an empty scene when online - server should tell us how to fill it in, not scene factory
                 scene = new BattleScene(provider.GetService<IEntityContainer>(), new List<IActionAdapter>());
-                provider.AddService<IGameClient>(new OnlineGameClient(provider.GetService<IEntityContainer>(), settings, provider.GetService<IFactoryContainer>()));
+                provider.AddService<IGameClient>(new OnlineGameClient(provider.GetService<IEntityContainer>(), settings, provider.GetService<ISerializationFactoryContainer>()));
             }
             client = provider.GetService<IGameClient>();
         }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Mumble.FirstGame.Serialization.Protobuf.Factory
 {
-    public interface IFactoryContainer
+    public interface ISerializationFactoryContainer
     {
         IActionFactory ActionFactory { get; }
         IActionResultFactory ActionResultFactory { get; }
