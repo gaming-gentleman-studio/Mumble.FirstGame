@@ -17,6 +17,7 @@ using Mumble.FirstGame.Core.Entity.Projectile;
 using Mumble.FirstGame.Core.Scene;
 using Mumble.FirstGame.Core.Scene.Battle;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
+using Mumble.FirstGame.Core.Scene.Factory;
 using Mumble.FirstGame.MonogameShared.Settings;
 using Mumble.FirstGame.MonogameShared.SpriteMetadata;
 using Mumble.FirstGame.MonogameShared.Utils;
@@ -51,6 +52,7 @@ namespace Mumble.FirstGame.MonogameShared
         MouseHandler mouseHandler;
         GameServiceContainer provider;
         IGameSettings settings;
+        IScene scene;
         public GameMain()
         {   
             graphics = new GraphicsDeviceManager(this);
@@ -59,7 +61,7 @@ namespace Mumble.FirstGame.MonogameShared
             //Should line up with server tick rate
             
             RegisterServices();
-            settings = provider.GetService<IGameSettings>();
+            
             TargetElapsedTime = settings.TickRate;
             graphics.IsFullScreen = settings.FullScreen;
             IsFixedTimeStep = true;
@@ -70,12 +72,29 @@ namespace Mumble.FirstGame.MonogameShared
 
             provider = new GameServiceContainer();
             provider.AddService<IGameSettings>(new GameSettings());
+            
             provider.AddService<IEntityContainer>(new BattleEntityContainer());
-            provider.AddService<IScene>(new BattleScene(provider.GetService<IEntityContainer>(),new List<IActionAdapter>()));
+            provider.AddService<ISceneFactory>(new BattleSceneFactory());
+            
             provider.AddService<IActionResultFactory>(new ActionResultFactory(provider.GetService<IEntityContainer>()));
             provider.AddService<IActionFactory>(new ActionFactory(provider.GetService<IEntityContainer>()));
             provider.AddService<IEntityFactory>(new EntityFactory());
             provider.AddService<IFactoryContainer>(new FactoryContainer(provider.GetService<IActionFactory>(), provider.GetService<IActionResultFactory>(), provider.GetService<IEntityFactory>()));
+
+            settings = provider.GetService<IGameSettings>();
+            
+            if (settings.ClientType == ClientType.Solo)
+            {
+                scene = provider.GetService<ISceneFactory>().Create(provider.GetService<IEntityContainer>(), new List<IActionAdapter>());
+                provider.AddService<IGameClient>(new SoloGameClient(scene));
+            }
+            else if (settings.ClientType == ClientType.Online)
+            {
+                //We need an empty scene when online - server should tell us how to fill it in, not scene factory
+                scene = new BattleScene(provider.GetService<IEntityContainer>(), new List<IActionAdapter>());
+                provider.AddService<IGameClient>(new OnlineGameClient(provider.GetService<IEntityContainer>(), settings, provider.GetService<IFactoryContainer>()));
+            }
+            client = provider.GetService<IGameClient>();
         }
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
@@ -87,24 +106,17 @@ namespace Mumble.FirstGame.MonogameShared
         {
             keyHandler = new MovementKeyHandler();
             mouseHandler = new MouseHandler();
-            //solo
-            if (settings.ClientType == ClientType.Solo)
-            {
-                client = new SoloGameClient(provider.GetService<IScene>());
-            }
-            else if (settings.ClientType == ClientType.Online)
-            {
-                client = new OnlineGameClient(provider.GetService<IEntityContainer>(), settings, provider.GetService<IFactoryContainer>());
-            }
+
             IOwnerIdentifier owner = client.Register();
             List<IActionResult> results = client.Init(owner);
+
+            //TODO - this is a hacky way to get the player entity
             EntitiesCreatedActionResult createdResult = (EntitiesCreatedActionResult)results.Where(x => x is EntitiesCreatedActionResult).FirstOrDefault();
             player = (Player)createdResult.Entities.Where(x => x.OwnerIdentifier.Equals(owner)).FirstOrDefault();
             EntitySprites[player] = SpriteMetadataUtil.CreateSpriteMetadata(player);
 
             InitializeUISprites();    
             ApplyResults(results);
-            // TODO: Add your initialization logic here
             base.Initialize();
         }
         private void InitializeUISprites()
@@ -122,7 +134,6 @@ namespace Mumble.FirstGame.MonogameShared
             contentImages = new ContentImages();
             contentImages.LoadContent(Content);
 
-            //TODO: use this.Content to load your game content here 
         }
 
         /// <summary>
@@ -143,16 +154,13 @@ namespace Mumble.FirstGame.MonogameShared
 
 #endif
             Mouse.GetState().Position.ToVector2().Normalize();
-            //TODO - move all this stuff into separate class
-            // Really need to clean this up lol, will do later
+
             List<IActionResult> results = new List<IActionResult>();
             List<IAction> actions = new List<IAction>();
+
             actions.AddIfNotNull(keyHandler.HandleKeyPress(player));
             actions.AddIfNotNull(mouseHandler.HandleMouseClick(player, EntitySprites[player].GetPosition()));
-            if (actions.Count > 0)
-            {
-                Debug.WriteLine("Tried to move {0}", actions.Where(x => x is MoveAction && ((MoveAction)x).Entity is Player).Count());
-            }
+
             results = client.Update(actions);
             ApplyResults(results);
             //DebugUtils.PrintActions(actions);
@@ -162,8 +170,7 @@ namespace Mumble.FirstGame.MonogameShared
         {
             if (results.Count > 0)
             {
-                Debug.WriteLine("Moved {0}",results.Where(x => x is MoveActionResult && ((MoveActionResult)x).Entity is Player).Count());
-                
+                //TODO - make a result handler class probably
                 foreach (EntitiesCreatedActionResult result in results.Where(x => x is EntitiesCreatedActionResult))
                 {
                     foreach (IEntity entity in result.Entities)

@@ -24,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Action\NullAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\ISpawnEntityAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\SpawnPlayerAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\SpawnSlimeAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\AI\ICombatAIComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\AI\SimpleAttackAIComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Damage\DamageComponent.cs" />
@@ -54,6 +55,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\SceneBoundary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\EntityContainer\BattleEntityContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\EntityContainer\IEntityContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scene\Factory\BattleSceneFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scene\Factory\ISceneFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\IActionAdapter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\IScene.cs" />
   </ItemGroup>

@@ -48,7 +48,7 @@ namespace Mumble.FirstGame.Core.Entity.Enemy
             private set;
         }
 
-        public Slime(int damage, int health, int x, int y)
+        public Slime(int damage, int health, float x, float y)
         {
             WeaponComponent = new SimpleWeaponComponent(new VelocityComponent(Direction.None, 1),new DamageComponent(damage));
             HealthComponent = new HealthComponent(health);
