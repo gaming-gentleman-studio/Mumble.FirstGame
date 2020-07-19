@@ -4,6 +4,7 @@ using Mumble.FirstGame.Core.Entity.Components.Position;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
 using Mumble.FirstGame.Core.Entity.Projectile;
 using Mumble.FirstGame.Core.Scene.Battle;
+using Mumble.FirstGame.Core.System.Collision;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -40,13 +41,16 @@ namespace Mumble.FirstGame.Core.Action.Movement
             return true;
         }
 
-        public void CalculateEffect(SceneBoundary boundary)
+        public void CalculateEffect(SceneBoundary boundary, ICollisionSystem collisionSystem)
         {
             IPositionComponent newPosition = Entity.PositionComponent.GetNewCoords(Velocity);
             if (boundary.IsInBounds(newPosition))
             {
-                Entity.PositionComponent.Move(newPosition);
-                Results.Add(new MoveActionResult(Entity, newPosition.X, newPosition.Y));
+                if (!collisionSystem.HasCollision(newPosition,Entity.PositionComponent))
+                {
+                    Entity.PositionComponent.Move(newPosition);
+                    Results.Add(new MoveActionResult(Entity, newPosition.X, newPosition.Y));
+                }
             }
             else
             {

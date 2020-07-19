@@ -8,6 +8,7 @@ using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Entity.Projectile;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
+using Mumble.FirstGame.Core.System.Collision;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,17 +21,19 @@ namespace Mumble.FirstGame.Core.Scene.Battle
     {
         public IEntityContainer EntityContainer { get; private set; }
         private IEnumerable<IActionAdapter> _actionAdapters;
+        private ICollisionSystem _collisionSystem;
         public SceneBoundary Boundary { get; private set; }
 
         private int _elapsedTicks;
 
         private int _entityTurn = 0;
         
-        public BattleScene(IEntityContainer container,IEnumerable<IActionAdapter> actionAdapters)
+        public BattleScene(IEntityContainer container,IEnumerable<IActionAdapter> actionAdapters, ICollisionSystem collisionSystem)
         {
             EntityContainer = container;
             Boundary = new SceneBoundary(100, 100);
             _actionAdapters = actionAdapters;
+            _collisionSystem = collisionSystem;
         }
         public List<IActionResult> Update(Dictionary<IOwnerIdentifier, List<IAction>> actions, int elapsedTicks)
         {
@@ -117,7 +120,7 @@ namespace Mumble.FirstGame.Core.Scene.Battle
             foreach( IProjectileEntity projectile in EntityContainer.Projectiles)
             {
                 MoveAction move = new MoveAction(projectile, projectile.VelocityComponent);
-                move.CalculateEffect(Boundary);
+                move.CalculateEffect(Boundary,_collisionSystem);
                 resultingActions.Add(move);
             }
             
@@ -138,7 +141,7 @@ namespace Mumble.FirstGame.Core.Scene.Battle
         }
         private List<IAction> Update(IMoveAction moveAction)
         {
-            moveAction.CalculateEffect(Boundary);
+            moveAction.CalculateEffect(Boundary, _collisionSystem);
 
             //TODO - enemies may also move
             return new List<IAction>() { moveAction };

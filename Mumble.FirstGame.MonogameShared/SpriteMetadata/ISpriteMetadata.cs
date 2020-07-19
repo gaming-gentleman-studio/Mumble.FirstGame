@@ -9,7 +9,7 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
     public interface ISpriteMetadata
     {
         Texture2D GetImage(ContentImages container);
-        void Animate();
+        void AnimateMovement();
         float GetRotation();
         Rectangle GetSpritesheetRectange();
         Vector2 GetPosition();

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
+using Mumble.FirstGame.Core.Entity.Enemy;
 using Mumble.FirstGame.Core.Entity.Player;
 using Mumble.FirstGame.Core.Entity.Projectile;
 using System;
@@ -29,6 +30,10 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
             else if (entity is SimpleBullet)
             {
                 return new SimpleBulletSpriteMetadata((SimpleBullet)entity);
+            }
+            else if (entity is Slime)
+            {
+                return new SlimeSpriteMetadata((Slime)entity);
             }
             else
             {

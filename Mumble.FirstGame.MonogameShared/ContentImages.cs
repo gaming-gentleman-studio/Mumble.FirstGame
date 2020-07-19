@@ -15,12 +15,14 @@ namespace Mumble.FirstGame.MonogameShared
         public Texture2D Bullet { get; private set; }
         public Texture2D Cursor { get; private set; }
 
+        public Texture2D Slime { get; private set; }
 
         public void LoadContent(ContentManager Content)
         {
             ImgTheDude = Content.Load<Texture2D>("TheDude");
             Bullet = Content.Load<Texture2D>("Bullet");
             Cursor = Content.Load<Texture2D>("Cursor");
+            Slime = Content.Load<Texture2D>("Enemy1");
         }
 
     }

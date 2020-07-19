@@ -9,7 +9,7 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
 {
     public class CursorMetadata : ISpriteMetadata
     {
-        public void Animate()
+        public void AnimateMovement()
         {
             return;
         }

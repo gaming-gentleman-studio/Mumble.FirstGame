@@ -59,7 +59,26 @@ namespace Mumble.FirstGame.Core.Entity.Components.Velocity
         public static Direction Right => new Direction(1, 0);
         public static Direction None => new Direction(0, 0);
 
+        public static Direction GetRandom90Direction()
+        {
+            Random rand = new Random();
+            int randInt = rand.Next(0, 3);
+            switch (randInt)
+            {
+                case 0:
+                    return Direction.Up;
+                case 1:
+                    return Direction.Down;
+                case 2:
+                    return Direction.Left;
+                case 3:
+                    return Direction.Right;
+                default:
+                    return Direction.Up;
+            }
 
+
+        }
         public static Direction ToNearest90Angle(Direction original) => ToNearestAngle(original, 4);
         private static Direction ToNearestAngle(Direction original, int numOfPieces)
         {

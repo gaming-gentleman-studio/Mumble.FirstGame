@@ -48,7 +48,7 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
             return Vector2.Zero;
         }
 
-        public void Animate()
+        public void AnimateMovement()
         {
             return;
         }

@@ -3,9 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
-using Mumble.FirstGame.Core.Entity.Player;
-using Mumble.FirstGame.Core.Entity.Projectile;
-using Mumble.FirstGame.MonogameShared.SpriteMetadata;
+using Mumble.FirstGame.Core.Entity.Enemy;
 using Mumble.FirstGame.MonogameShared.Utils;
 using System;
 using System.Collections.Generic;
@@ -13,7 +11,7 @@ using System.Text;
 
 namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
 {
-    public class PlayerSpriteMetadata : ISpriteMetadata
+    public class SlimeSpriteMetadata : ISpriteMetadata
     {
 
         private IEntity _entity;
@@ -23,13 +21,17 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         private const int MAX_ANIMATION_DELAY = 2;
         private const int MAX_ANIMATION_STEPS = 3;
 
-        public PlayerSpriteMetadata(Player entity)
+        private Direction _facing = Direction.Down;
+        private int _facing_change_step = 0;
+        private const int FACING_CHANGE_FRAMES = 15;
+
+        public SlimeSpriteMetadata(Slime entity)
         {
             _entity = entity;
         }
         public Texture2D GetImage(ContentImages container)
         {
-            return container.ImgTheDude;
+            return container.Slime;
         }
         public float GetRotation()
         {
@@ -38,12 +40,17 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         }
         public Rectangle GetSpritesheetRectange()
         {
-            Vector2 vec = Mouse.GetState().Position.ToVector2();
-            Direction direction = vec.ToRelativeDirection(GetPosition());
-            Direction facing = Direction.ToNearest90Angle(direction);
-            Rectangle rect = SpriteMetadataUtil.SpritesheetPosByDirection[facing];
-            rect.Y = (16 * _animationStep)+_animationStep;
+            _facing_change_step++;
+            if (_facing_change_step >= FACING_CHANGE_FRAMES)
+            {
+                Direction direction = Direction.GetRandom90Direction();
+                _facing = Direction.ToNearest90Angle(direction);
+                _facing_change_step = 0;
+            }
             
+            Rectangle rect = SpriteMetadataUtil.SpritesheetPosByDirection[_facing];
+            rect.Y = (16 * _animationStep) + _animationStep;
+
             return rect;
 
         }
@@ -71,7 +78,7 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         public Vector2 GetScale()
         {
             return new Vector2(2, 2);
-            
+
         }
         public Vector2 GetOrigin()
         {

@@ -59,5 +59,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Scene\Factory\ISceneFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\IActionAdapter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\IScene.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Collision\CollisionSystem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\Collision\ICollisionSystem.cs" />
   </ItemGroup>
 </Project>

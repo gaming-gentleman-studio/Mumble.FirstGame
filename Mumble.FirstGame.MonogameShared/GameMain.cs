@@ -18,6 +18,7 @@ using Mumble.FirstGame.Core.Scene;
 using Mumble.FirstGame.Core.Scene.Battle;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
 using Mumble.FirstGame.Core.Scene.Factory;
+using Mumble.FirstGame.Core.System.Collision;
 using Mumble.FirstGame.MonogameShared.Settings;
 using Mumble.FirstGame.MonogameShared.SpriteMetadata;
 using Mumble.FirstGame.MonogameShared.Utils;
@@ -75,6 +76,7 @@ namespace Mumble.FirstGame.MonogameShared
             
             provider.AddService<IEntityContainer>(new BattleEntityContainer());
             provider.AddService<ISceneFactory>(new BattleSceneFactory());
+            provider.AddService<ICollisionSystem>(new CollisionSystem(provider.GetService<IEntityContainer>()));
             
             provider.AddService<IActionResultFactory>(new ActionResultFactory(provider.GetService<IEntityContainer>()));
             provider.AddService<IActionFactory>(new ActionFactory(provider.GetService<IEntityContainer>()));
@@ -85,13 +87,13 @@ namespace Mumble.FirstGame.MonogameShared
             
             if (settings.ClientType == ClientType.Solo)
             {
-                scene = provider.GetService<ISceneFactory>().Create(provider.GetService<IEntityContainer>(), new List<IActionAdapter>());
+                scene = provider.GetService<ISceneFactory>().Create(provider.GetService<IEntityContainer>(), new List<IActionAdapter>(),provider.GetService<ICollisionSystem>());
                 provider.AddService<IGameClient>(new SoloGameClient(scene));
             }
             else if (settings.ClientType == ClientType.Online)
             {
                 //We need an empty scene when online - server should tell us how to fill it in, not scene factory
-                scene = new BattleScene(provider.GetService<IEntityContainer>(), new List<IActionAdapter>());
+                scene = new BattleScene(provider.GetService<IEntityContainer>(), new List<IActionAdapter>(), provider.GetService<ICollisionSystem>());
                 provider.AddService<IGameClient>(new OnlineGameClient(provider.GetService<IEntityContainer>(), settings, provider.GetService<ISerializationFactoryContainer>()));
             }
             client = provider.GetService<IGameClient>();
@@ -187,7 +189,7 @@ namespace Mumble.FirstGame.MonogameShared
                     {
                         EntitySprites[result.Entity] = SpriteMetadataUtil.CreateSpriteMetadata(result.Entity);
                     }
-                    EntitySprites[result.Entity].Animate();
+                    EntitySprites[result.Entity].AnimateMovement();
                     if (result.OutOfBounds)
                     {
                         if (result.Entity != player)
