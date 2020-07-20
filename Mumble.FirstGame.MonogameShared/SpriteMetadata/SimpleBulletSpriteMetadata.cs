@@ -29,9 +29,13 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         public override Vector2 GetPosition()
         {
             return new Vector2(
-                _entity.PositionComponent.X * 2 * SCALING + 16,
-                _entity.PositionComponent.Y * 2 * SCALING + 16
+                _entity.PositionComponent.X * 2 * SCALING,
+                _entity.PositionComponent.Y * 2 * SCALING
             );
+        }
+        public override Vector2 GetOrigin()
+        {
+            return new Vector2(8, 8);
         }
     }
 }

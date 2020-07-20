@@ -37,7 +37,7 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         }
         public virtual Vector2 GetOrigin()
         {
-            return Vector2.Zero;
+            return new Vector2(8, 8);
         }
     }
 }
