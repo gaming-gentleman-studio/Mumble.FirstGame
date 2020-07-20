@@ -52,9 +52,9 @@ namespace Mumble.FirstGame.Core.Entity.Enemy
         {
             WeaponComponent = new SimpleWeaponComponent(new VelocityComponent(Direction.None, 1),new DamageComponent(damage));
             HealthComponent = new HealthComponent(health);
-            CombatAIComponent = new SimpleAttackAIComponent();
+            CombatAIComponent = new SimpleFollowPlayerAIComponent();
             PositionComponent = new PositionComponent(x, y);
-            VelocityComponent = new VelocityComponent(Direction.None, 1);
+            VelocityComponent = new VelocityComponent(Direction.None, 5);
             OwnerIdentifier = IntOwnerIdentifier.NonPlayerOwned;
 
         }

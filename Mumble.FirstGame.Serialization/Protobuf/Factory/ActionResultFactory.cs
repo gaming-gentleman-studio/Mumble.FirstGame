@@ -148,7 +148,7 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
                         EntityDestroyedActionResultDef destroyedDef = EntityDestroyedActionResultDef.Parser.ParseFrom(serializedResult);
                         result = new EntityDestroyedActionResult(_entityContainer.GetEntity(destroyedDef.Id,true));
                     }
-                    catch (Exception ex)
+                    catch
                     {
                         //Debug.WriteLine("Failed to parse entity destroyed result: "+ex.Message);
                     }

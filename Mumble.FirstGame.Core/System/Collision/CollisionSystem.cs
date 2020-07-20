@@ -14,7 +14,6 @@ namespace Mumble.FirstGame.Core.System.Collision
         private IEntityContainer _entityContainer;
         private List<IEntity> _entities;
         private Dictionary<OccupiedSpace,IEntity> _spaces;
-        private Dictionary<IEntity, OccupiedSpace> _entitySpaces;
         private Dictionary<IPositionComponent, IEntity> _positions;
 
         public CollisionSystem(IEntityContainer entityContainer)

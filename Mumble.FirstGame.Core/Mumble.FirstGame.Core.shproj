@@ -14,7 +14,6 @@
     <Compile Include="Action\IAction.cs" />
     <Compile Include="Action\NullAction.cs" />
     <Compile Include="Entity\Components\AI\ICombatAIComponent.cs" />
-    <Compile Include="Entity\Components\AI\SimpleAttackAIComponent.cs" />
     <Compile Include="Entity\Components\Damage\DamageComponent.cs" />
     <Compile Include="Entity\Components\Damage\IDamageComponent.cs" />
     <Compile Include="Entity\Components\Health\HealthComponent.cs" />

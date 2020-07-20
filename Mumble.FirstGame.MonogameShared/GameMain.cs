@@ -47,7 +47,6 @@ namespace Mumble.FirstGame.MonogameShared
         Dictionary<IEntity, AbstractSpriteMetadata> EntitySprites = new Dictionary<IEntity, AbstractSpriteMetadata>();
         List<AbstractSpriteMetadata> UISprites = new List<AbstractSpriteMetadata>();
         Player player;
-        int scaling = 5;
         ContentImages contentImages;
         MovementKeyHandler keyHandler;
         MouseHandler mouseHandler;

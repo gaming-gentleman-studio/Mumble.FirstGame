@@ -44,40 +44,14 @@ namespace Mumble.FirstGame.Core.Scene.Battle
             for(int i = 0; i<elapsedTicks; i++)
             {
                 resultingActions.AddRange(ApplyVelocity());
+                resultingActions.AddRange(ApplyAI());
             }
             ApplyWeaponCooldowns();
             foreach (IOwnerIdentifier owner in actions.Keys)
             {
                 foreach (IAction action in actions[owner])
                 {
-                    foreach(IActionAdapter adapter in _actionAdapters)
-                    {
-                        if (adapter.TryHandleAction(action, owner))
-                        {
-                            resultingActions.Add(action);
-                        }
-                        
-                    }
-                    if (action is IMoveAction)
-                    {
-                        IMoveAction moveAction = (IMoveAction)action;
-                        resultingActions.AddRange(Update(moveAction));
-                    }
-                    else if (action is IAttackAction)
-                    {
-                        IAttackAction combatAction = (IAttackAction)action;
-                        resultingActions.AddRange(Update(combatAction));
-                    }
-                    else if (action is IFireWeaponAction)
-                    {
-                        IFireWeaponAction fireAction = (IFireWeaponAction)action;
-                        resultingActions.AddRange(Update(fireAction));
-                    }
-                    else if (action is ISpawnEntityAction)
-                    {
-                        ISpawnEntityAction spawnAction = (ISpawnEntityAction)action;
-                        resultingActions.AddRange(Update(spawnAction));
-                    }
+                    DispatchAction(action, owner, resultingActions);
                 }
             }
 
@@ -126,6 +100,17 @@ namespace Mumble.FirstGame.Core.Scene.Battle
             
             return resultingActions;
         }
+        private List<IAction> ApplyAI()
+        {
+            List<IAction> resultingActions = new List<IAction>();
+            foreach (ICombatAIEntity enemy in EntityContainer.EnemyTeam)
+            {
+                //PlayerTeam.ToList inneficient?
+                IAction enemyAction = enemy.CombatAIComponent.GenerateAction(enemy, EntityContainer.PlayerTeam.ToList<ICombatEntity>());
+                resultingActions = DispatchAction(enemyAction, IntOwnerIdentifier.NonPlayerOwned, resultingActions);
+            }
+            return resultingActions;
+        }
         private void ApplyWeaponCooldowns()
         {
             List<ICombatEntity> entities = EntityContainer.Entities.Where(x => x is ICombatEntity).Cast<ICombatEntity>().ToList();
@@ -133,6 +118,39 @@ namespace Mumble.FirstGame.Core.Scene.Battle
             {
                 entity.WeaponComponent.ApplyCooldown(_elapsedTicks);
             }
+        }
+
+        private List<IAction> DispatchAction(IAction action,IOwnerIdentifier owner,List<IAction> resultingActions)
+        {
+            foreach (IActionAdapter adapter in _actionAdapters)
+            {
+                if (adapter.TryHandleAction(action, owner))
+                {
+                    resultingActions.Add(action);
+                }
+
+            }
+            if (action is IMoveAction)
+            {
+                IMoveAction moveAction = (IMoveAction)action;
+                resultingActions.AddRange(Update(moveAction));
+            }
+            else if (action is IAttackAction)
+            {
+                IAttackAction combatAction = (IAttackAction)action;
+                resultingActions.AddRange(Update(combatAction));
+            }
+            else if (action is IFireWeaponAction)
+            {
+                IFireWeaponAction fireAction = (IFireWeaponAction)action;
+                resultingActions.AddRange(Update(fireAction));
+            }
+            else if (action is ISpawnEntityAction)
+            {
+                ISpawnEntityAction spawnAction = (ISpawnEntityAction)action;
+                resultingActions.AddRange(Update(spawnAction));
+            }
+            return resultingActions;
         }
         private List<IAction> Update(IFireWeaponAction fireAction)
         {
@@ -148,26 +166,10 @@ namespace Mumble.FirstGame.Core.Scene.Battle
         }
         private List<IAction> Update(IAttackAction combatAction)
         {
-            List<IAction> results = new List<IAction>();
-            results.Add(combatAction);
+            List<IAction> resultingActions = new List<IAction>();
+            resultingActions.Add(combatAction);
             combatAction.CalculateEffect();
-            if (combatAction.EndsEntityTurn())
-            {
-                _entityTurn++;
-                if (isEnemyTurn())
-                {
-                    foreach(ICombatAIEntity enemy in EntityContainer.EnemyTeam)
-                    {
-                        //PlayerTeam.ToList inneficient?
-                        IAttackAction enemyAction = enemy.CombatAIComponent.GenerateCombatAction(enemy, EntityContainer.PlayerTeam.ToList<ICombatEntity>());
-                        enemyAction.CalculateEffect();
-                        results.Add(enemyAction);
-                    }
-                    _entityTurn = 0;
-                }
-                
-            }
-            return results;
+            return resultingActions;
         }
         private List<IAction> Update(ISpawnEntityAction spawnAction)
         {
