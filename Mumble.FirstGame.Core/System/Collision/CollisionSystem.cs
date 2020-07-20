@@ -1,5 +1,6 @@
 ﻿using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Components.Position;
+using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace Mumble.FirstGame.Core.System.Collision
         private IEntityContainer _entityContainer;
         private List<IEntity> _entities;
         private Dictionary<OccupiedSpace,IEntity> _spaces;
+        private Dictionary<IEntity, OccupiedSpace> _entitySpaces;
         private Dictionary<IPositionComponent, IEntity> _positions;
 
         public CollisionSystem(IEntityContainer entityContainer)
@@ -26,19 +28,36 @@ namespace Mumble.FirstGame.Core.System.Collision
         {
             return _positions[position];
         }
-
-        public bool HasCollision(IPositionComponent position,IPositionComponent selfPosition)
+        public bool HasCollision(IPositionComponent position, IPositionComponent selfPosition)
         {
-            //Keep in sync
-            if (_entityContainer.Entities.Count != _entities.Count)
-            {
-                BuildSpace(_entityContainer.Entities);
-            }
-
+            //Keep in sync - TODO - evaluate performance?
+            BuildSpace(_entityContainer.Entities);
             OccupiedSpace spaceToCheck = new OccupiedSpace(position);
             foreach (OccupiedSpace space in _spaces.Keys)
             {
                 if (_spaces[space].PositionComponent == selfPosition)
+                {
+                    continue;
+                }
+                if (space.HasCollision(spaceToCheck))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public bool HasCollision(IPositionComponent position,IPositionComponent selfPosition, IOwnerIdentifier ownerIdentifier)
+        {
+            //Keep in sync
+            BuildSpace(_entityContainer.Entities);
+            OccupiedSpace spaceToCheck = new OccupiedSpace(position);
+            foreach (OccupiedSpace space in _spaces.Keys)
+            {
+                if (_spaces[space].PositionComponent == selfPosition)
+                {
+                    continue;
+                }
+                if (_spaces[space].OwnerIdentifier == ownerIdentifier)
                 {
                     continue;
                 }

@@ -21,7 +21,7 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
                     IntOwnerIdentifier identifier = new IntOwnerIdentifier(serializedEntity.Owner);
                     return new Player(serializedEntity.Name, serializedEntity.X, serializedEntity.Y,identifier);
                 case EntityTypeLookup.SimpleBullet:
-                    return new SimpleBullet(serializedEntity.X, serializedEntity.Y, new Direction(serializedEntity.Direction.Radians));
+                    return new SimpleBullet(serializedEntity.X, serializedEntity.Y, new Direction(serializedEntity.Direction.Radians),new IntOwnerIdentifier(serializedEntity.Owner));
                 default:
                     break;
             }

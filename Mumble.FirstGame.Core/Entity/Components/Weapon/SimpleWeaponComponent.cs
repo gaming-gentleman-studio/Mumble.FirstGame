@@ -1,5 +1,6 @@
 ﻿using Mumble.FirstGame.Core.Entity.Components.Damage;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
+using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Entity.Projectile;
 using System;
 using System.Collections.Generic;
@@ -27,11 +28,11 @@ namespace Mumble.FirstGame.Core.Entity.Components.Weapon
             return !(_cooldownLeft > 0);
         }
 
-        public List<IProjectileEntity> Fire(float sourceX, float sourceY, Direction direction)
+        public List<IProjectileEntity> Fire(float sourceX, float sourceY, Direction direction,IOwnerIdentifier ownerIdentifier)
         {
             _cooldownLeft = _cooldown;
             List<IProjectileEntity> projectiles = new List<IProjectileEntity>();
-            SimpleBullet bullet = new SimpleBullet(sourceX, sourceY, DamageComponent.GetRawDamage(), direction, VelocityComponent.Speed);
+            SimpleBullet bullet = new SimpleBullet(sourceX, sourceY, DamageComponent.GetRawDamage(), direction, VelocityComponent.Speed, ownerIdentifier);
             projectiles.Add(bullet);
             return projectiles;
         }

@@ -21,6 +21,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Action\IAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Movement\IMoveAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Movement\MoveAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Action\Movement\MoveProjectileAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\NullAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\ISpawnEntityAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\SpawnPlayerAction.cs" />

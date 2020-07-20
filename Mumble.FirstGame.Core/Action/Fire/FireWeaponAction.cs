@@ -36,7 +36,7 @@ namespace Mumble.FirstGame.Core.Action.Fire
             List<IProjectileEntity> projectiles = new List<IProjectileEntity>();
             if (Entity.WeaponComponent.AbleToFire())
             {
-                projectiles = Entity.WeaponComponent.Fire(Entity.PositionComponent.X, Entity.PositionComponent.Y, Direction);
+                projectiles = Entity.WeaponComponent.Fire(Entity.PositionComponent.X, Entity.PositionComponent.Y, Direction,Entity.OwnerIdentifier);
             }
             Results.Add(new EntitiesCreatedActionResult(projectiles.ToList<IEntity>()));
             return projectiles;

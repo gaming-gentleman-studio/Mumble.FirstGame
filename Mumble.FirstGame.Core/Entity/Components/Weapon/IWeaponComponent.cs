@@ -1,5 +1,6 @@
 ﻿using Mumble.FirstGame.Core.Entity.Components.Damage;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
+using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Entity.Projectile;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,6 @@ namespace Mumble.FirstGame.Core.Entity.Components.Weapon
         bool AbleToFire();
 
         void ApplyCooldown(int elapsedTicks);
-        List<IProjectileEntity> Fire(float sourceX, float sourceY, Direction direction);
+        List<IProjectileEntity> Fire(float sourceX, float sourceY, Direction direction, IOwnerIdentifier ownerIdentifier);
     }
 }

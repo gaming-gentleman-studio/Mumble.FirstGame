@@ -34,19 +34,19 @@ namespace Mumble.FirstGame.Core.Entity.Projectile
             private set;
         }
 
-        public SimpleBullet(float x, float y, int damage, Direction direction, float speed)
+        public SimpleBullet(float x, float y, int damage, Direction direction, float speed, IOwnerIdentifier ownerIdentifier)
         {
             PositionComponent = new PositionComponent(x,y);
             DamageComponent = new DamageComponent(damage);
             VelocityComponent = new VelocityComponent(direction, speed);
-            OwnerIdentifier = IntOwnerIdentifier.NonPlayerOwned;
+            OwnerIdentifier = ownerIdentifier;
         }
-        public SimpleBullet(float x, float y, Direction direction)
+        public SimpleBullet(float x, float y, Direction direction, IOwnerIdentifier ownerIdentifier)
         {
             PositionComponent = new PositionComponent(x, y);
             DamageComponent = null;
             VelocityComponent = new VelocityComponent(direction, 0f);
-            OwnerIdentifier = IntOwnerIdentifier.NonPlayerOwned;
+            OwnerIdentifier = ownerIdentifier;
         }
         public string GetName()
         {

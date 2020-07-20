@@ -117,9 +117,9 @@ namespace Mumble.FirstGame.Core.Scene.Battle
         private List<IAction> ApplyVelocity()
         {
             List<IAction> resultingActions = new List<IAction>();
-            foreach( IProjectileEntity projectile in EntityContainer.Projectiles)
+            foreach(IProjectileEntity projectile in EntityContainer.Projectiles)
             {
-                MoveAction move = new MoveAction(projectile, projectile.VelocityComponent);
+                MoveProjectileAction move = new MoveProjectileAction(projectile, projectile.VelocityComponent);
                 move.CalculateEffect(Boundary,_collisionSystem);
                 resultingActions.Add(move);
             }
