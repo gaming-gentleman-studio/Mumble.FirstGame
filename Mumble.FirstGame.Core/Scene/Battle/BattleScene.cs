@@ -140,10 +140,10 @@ namespace Mumble.FirstGame.Core.Scene.Battle
                 IAttackAction combatAction = (IAttackAction)action;
                 resultingActions.AddRange(Update(combatAction));
             }
-            else if (action is IFireWeaponAction)
+            else if (action is IUseWeaponAction)
             {
-                IFireWeaponAction fireAction = (IFireWeaponAction)action;
-                resultingActions.AddRange(Update(fireAction));
+                IUseWeaponAction fireAction = (IUseWeaponAction)action;
+                resultingActions.AddRange(Update(fireAction,owner));
             }
             else if (action is ISpawnEntityAction)
             {
@@ -152,10 +152,16 @@ namespace Mumble.FirstGame.Core.Scene.Battle
             }
             return resultingActions;
         }
-        private List<IAction> Update(IFireWeaponAction fireAction)
+        private List<IAction> Update(IUseWeaponAction fireAction, IOwnerIdentifier owner)
         {
-            EntityContainer.AddEntities(new HashSet<IEntity>(fireAction.CalculateEffect(_elapsedTicks)));
-            return new List<IAction>() { fireAction };
+            List<IAction> actions = fireAction.CalculateEffect(_elapsedTicks);
+            List<IAction> resultingActions = new List<IAction>();
+            foreach(IAction action in actions)
+            {
+                resultingActions = DispatchAction(action, owner, resultingActions);
+            }
+            resultingActions.Add(fireAction);
+            return resultingActions;
         }
         private List<IAction> Update(IMoveAction moveAction)
         {

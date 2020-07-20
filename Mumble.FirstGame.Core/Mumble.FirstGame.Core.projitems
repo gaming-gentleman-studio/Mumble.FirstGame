@@ -16,8 +16,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)ActionResult\MoveActionResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Attack\AttackAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Attack\IAttackAction.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Action\Fire\FireWeaponAction.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Action\Fire\IFireWeaponAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Action\Fire\UseWeaponAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Action\Fire\IUseWeaponAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\IAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Movement\IMoveAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Movement\MoveAction.cs" />
@@ -25,6 +25,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Action\NullAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\ISpawnEntityAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\SpawnPlayerAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\SpawnSimpleBulletAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\SpawnSlimeAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\AI\ICombatAIComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\AI\SimpleFollowPlayerAIComponent.cs" />
@@ -38,7 +39,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Velocity\Direction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Velocity\IVelocityComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Velocity\VelocityComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Weapon\IMeleeWeaponComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Weapon\IRangedWeaponComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Weapon\IWeaponComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Weapon\SimpleMeleeWeaponComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Weapon\SimpleWeaponComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Enemy\Slime.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\ICombatAIEntity.cs" />

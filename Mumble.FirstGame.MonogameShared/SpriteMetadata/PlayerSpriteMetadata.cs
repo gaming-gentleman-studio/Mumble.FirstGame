@@ -22,6 +22,7 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         private int _animationDelay = 0;
         private const int MAX_ANIMATION_DELAY = 2;
         private const int MAX_ANIMATION_STEPS = 3;
+        private int _damage_flash_count = 0;
 
         public PlayerSpriteMetadata(Player entity)
         {
@@ -67,6 +68,24 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         {
             return new Vector2(2, 2);
             
+        }
+        public override void AnimateDamage()
+        {
+            _damage_flash_count = 3;
+        }
+        public override Color GetColor()
+        {
+            if (_damage_flash_count < 1)
+            {
+                return base.GetColor();
+            }
+            else
+            {
+                _damage_flash_count--;
+                return Color.Red;
+
+            }
+
         }
     }
 }

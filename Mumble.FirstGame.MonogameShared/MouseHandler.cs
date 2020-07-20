@@ -12,12 +12,12 @@ namespace Mumble.FirstGame.MonogameShared
 {
     public class MouseHandler
     {
-        public FireWeaponAction HandleMouseClick(IMoveableCombatEntity entity, Vector2 sourcePosition)
+        public UseWeaponAction HandleMouseClick(IMoveableCombatEntity entity, Vector2 sourcePosition)
         {
             if (Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
                 Direction direction = Mouse.GetState().Position.ToVector2().ToRelativeDirection(sourcePosition);
-                return new FireWeaponAction(entity, direction);
+                return new UseWeaponAction(entity, direction);
             }
             return null;
         }

@@ -26,7 +26,7 @@ namespace Mumble.FirstGame.Serialization.Protobuf
         {
             { typeof(MoveAction), Move },
             { typeof(MoveActionResult), Move },
-            { typeof(FireWeaponAction), Fire },
+            { typeof(UseWeaponAction), Fire },
             { typeof(EntitiesCreatedActionResult), EntitiesCreated },
             { typeof(SpawnPlayerAction), EntitiesCreated },
             { typeof(EntityDestroyedActionResult), EntityDestroyed },

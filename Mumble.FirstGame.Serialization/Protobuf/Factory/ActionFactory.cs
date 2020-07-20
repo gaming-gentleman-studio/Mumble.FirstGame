@@ -50,7 +50,7 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
                     try
                     {
                         FireActionDef fireDef = FireActionDef.Parser.ParseFrom(serializedAction);
-                        action = new FireWeaponAction((ICombatEntity)_entityContainer.GetEntity(fireDef.Id), new Direction(fireDef.Direction.Radians));
+                        action = new UseWeaponAction((ICombatEntity)_entityContainer.GetEntity(fireDef.Id), new Direction(fireDef.Direction.Radians));
                     }
                     catch
                     {
@@ -108,9 +108,9 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
                     }
                 };
             }
-            else if (action is IFireWeaponAction)
+            else if (action is IUseWeaponAction)
             {
-                IFireWeaponAction fire = (IFireWeaponAction)action;
+                IUseWeaponAction fire = (IUseWeaponAction)action;
                 return new FireActionDef
                 {
                     Id = _entityContainer.GetEntityId(fire.Entity),

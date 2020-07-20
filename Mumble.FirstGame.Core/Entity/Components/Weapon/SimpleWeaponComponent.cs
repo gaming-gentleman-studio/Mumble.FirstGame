@@ -1,4 +1,8 @@
-﻿using Mumble.FirstGame.Core.Entity.Components.Damage;
+﻿using Mumble.FirstGame.Core.Action;
+using Mumble.FirstGame.Core.Action.Spawn;
+using Mumble.FirstGame.Core.ActionResult;
+using Mumble.FirstGame.Core.Entity.Components.Damage;
+using Mumble.FirstGame.Core.Entity.Components.Position;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
 using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Entity.Projectile;
@@ -8,7 +12,7 @@ using System.Text;
 
 namespace Mumble.FirstGame.Core.Entity.Components.Weapon
 {
-    public class SimpleWeaponComponent : IWeaponComponent
+    public class SimpleWeaponComponent : IRangedWeaponComponent
     {
         public IVelocityComponent VelocityComponent { get; private set; }
 
@@ -23,18 +27,16 @@ namespace Mumble.FirstGame.Core.Entity.Components.Weapon
             DamageComponent = damageComponent;
         }
 
-        public bool AbleToFire()
+        public bool AbleToAttack()
         {
             return !(_cooldownLeft > 0);
         }
 
-        public List<IProjectileEntity> Fire(float sourceX, float sourceY, Direction direction,IOwnerIdentifier ownerIdentifier)
+        public IAction Attack(float sourceX, float sourceY, Direction direction,IOwnerIdentifier ownerIdentifier)
         {
             _cooldownLeft = _cooldown;
-            List<IProjectileEntity> projectiles = new List<IProjectileEntity>();
-            SimpleBullet bullet = new SimpleBullet(sourceX, sourceY, DamageComponent.GetRawDamage(), direction, VelocityComponent.Speed, ownerIdentifier);
-            projectiles.Add(bullet);
-            return projectiles;
+            SpawnSimpleBulletAction spawn = new SpawnSimpleBulletAction(sourceX,sourceY, DamageComponent.GetRawDamage(), VelocityComponent.Speed, direction,ownerIdentifier);
+            return spawn;
         }
 
         public void ApplyCooldown(int elapsedTicks)
