@@ -16,8 +16,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)ActionResult\MoveActionResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Attack\AttackAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Attack\IAttackAction.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Action\Fire\UseWeaponAction.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Action\Fire\IUseWeaponAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Action\Fire\FireWeaponAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Action\Fire\IFireWeaponAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\IAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Movement\IMoveAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Movement\MoveAction.cs" />

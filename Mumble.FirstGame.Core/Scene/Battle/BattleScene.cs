@@ -140,9 +140,9 @@ namespace Mumble.FirstGame.Core.Scene.Battle
                 IAttackAction combatAction = (IAttackAction)action;
                 resultingActions.AddRange(Update(combatAction));
             }
-            else if (action is IUseWeaponAction)
+            else if (action is IFireWeaponAction)
             {
-                IUseWeaponAction fireAction = (IUseWeaponAction)action;
+                IFireWeaponAction fireAction = (IFireWeaponAction)action;
                 resultingActions.AddRange(Update(fireAction,owner));
             }
             else if (action is ISpawnEntityAction)
@@ -152,7 +152,7 @@ namespace Mumble.FirstGame.Core.Scene.Battle
             }
             return resultingActions;
         }
-        private List<IAction> Update(IUseWeaponAction fireAction, IOwnerIdentifier owner)
+        private List<IAction> Update(IFireWeaponAction fireAction, IOwnerIdentifier owner)
         {
             List<IAction> actions = fireAction.CalculateEffect(_elapsedTicks);
             List<IAction> resultingActions = new List<IAction>();

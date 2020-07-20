@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using Mumble.FirstGame.Core.Action;
 using Mumble.FirstGame.Core.ActionResult;
+using Mumble.FirstGame.Core.Entity.Components.Weapon;
 
 namespace Mumble.FirstGame.Core.Action.Attack
 {
@@ -24,15 +25,13 @@ namespace Mumble.FirstGame.Core.Action.Attack
 
         public void CalculateEffect()
         {
-            _target.HealthComponent.Hit(
-                _source.WeaponComponent.DamageComponent.GetRawDamage());
-           if (!_target.HealthComponent.IsAlive())
+            if (_source.WeaponComponent.AbleToAttack())
             {
-                Results.Add(new EntityDestroyedActionResult(_target));
-            }
-            else
-            {
-                Results.Add(new DamageActionResult(_target, _target.WeaponComponent.DamageComponent.GetRawDamage()));
+                if (_source.WeaponComponent is IMeleeWeaponComponent)
+                {
+                    IMeleeWeaponComponent weapon = (IMeleeWeaponComponent)_source.WeaponComponent;
+                    Results.Add(weapon.Attack(_target));
+                }
             }
         }
 

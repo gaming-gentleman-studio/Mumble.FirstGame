@@ -1,5 +1,6 @@
 ﻿using Mumble.FirstGame.Core.Action;
 using Mumble.FirstGame.Core.Action.Attack;
+using Mumble.FirstGame.Core.Action.Fire;
 using Mumble.FirstGame.Core.Action.Movement;
 using Mumble.FirstGame.Core.Entity.Components.Position;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;

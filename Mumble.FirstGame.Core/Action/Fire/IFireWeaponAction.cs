@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Mumble.FirstGame.Core.Action.Fire
 {
-    public interface IUseWeaponAction : IAction
+    public interface IFireWeaponAction : IAction
     {
         List<IAction> CalculateEffect(int elapsedTicks);
 

@@ -44,7 +44,7 @@ namespace Mumble.FirstGame.Test.Integration
         public void Test1()
         {
             MoveAction move = new MoveAction(_player, Direction.Right);
-            UseWeaponAction fire = new UseWeaponAction(_player, Direction.Up);
+            FireWeaponAction fire = new FireWeaponAction(_player, Direction.Up);
             List<IAction> actions = new List<IAction>()
             {
                 fire,

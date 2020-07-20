@@ -14,10 +14,11 @@ using System.Text;
 
 namespace Mumble.FirstGame.Core.Action.Fire
 {
-    public class UseWeaponAction : IUseWeaponAction
+    public class FireWeaponAction : IFireWeaponAction
     {
         public Direction Direction { get; private set; }
         public ICombatEntity Entity { get; private set; }
+
 
         public List<IActionResult> Results
         {
@@ -26,7 +27,7 @@ namespace Mumble.FirstGame.Core.Action.Fire
         }
 
         
-        public UseWeaponAction(ICombatEntity sourceEntity, Direction direction)
+        public FireWeaponAction(ICombatEntity sourceEntity, Direction direction)
         {
             Entity = sourceEntity;
             Direction = direction;
