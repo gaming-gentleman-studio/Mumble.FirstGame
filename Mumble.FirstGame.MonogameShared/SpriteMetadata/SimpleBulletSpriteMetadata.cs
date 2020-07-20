@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
 {
-    class SimpleBulletSpriteMetadata : ISpriteMetadata
+    class SimpleBulletSpriteMetadata : AbstractSpriteMetadata
     {
         private IProjectileEntity _entity;
         private const int SCALING = 5;
@@ -17,40 +17,21 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         {
             _entity = entity;
         }
-        public Texture2D GetImage(ContentImages container)
+        public override Texture2D GetImage(ContentImages container)
         {
             return container.Bullet;
         }
-        public float GetRotation()
+        public override float GetRotation()
         {
             return _entity.VelocityComponent.Direction.Radians;
 
         }
-        public Rectangle GetSpritesheetRectange()
-        {
-            return new Rectangle(0, 0, 16, 16);
-
-        }
-        public Vector2 GetPosition()
+        public override Vector2 GetPosition()
         {
             return new Vector2(
                 _entity.PositionComponent.X * 2 * SCALING + 16,
                 _entity.PositionComponent.Y * 2 * SCALING + 16
             );
-        }
-        public Vector2 GetScale()
-        {
-            return new Vector2(1, 1);
-
-        }
-        public Vector2 GetOrigin()
-        {
-            return Vector2.Zero;
-        }
-
-        public void AnimateMovement()
-        {
-            return;
         }
     }
 }

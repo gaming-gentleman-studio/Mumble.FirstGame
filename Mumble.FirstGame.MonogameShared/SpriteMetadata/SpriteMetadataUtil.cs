@@ -21,7 +21,7 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
             {Direction.Left, new Rectangle(48,0,16,16) }
         };
 
-        public static ISpriteMetadata CreateSpriteMetadata(IEntity entity)
+        public static AbstractSpriteMetadata CreateSpriteMetadata(IEntity entity)
         {
             if (entity is Player)
             {

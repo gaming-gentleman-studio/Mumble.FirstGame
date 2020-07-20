@@ -13,7 +13,7 @@ using System.Text;
 
 namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
 {
-    public class PlayerSpriteMetadata : ISpriteMetadata
+    public class PlayerSpriteMetadata : AbstractSpriteMetadata
     {
 
         private IEntity _entity;
@@ -27,16 +27,11 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         {
             _entity = entity;
         }
-        public Texture2D GetImage(ContentImages container)
+        public override Texture2D GetImage(ContentImages container)
         {
             return container.ImgTheDude;
         }
-        public float GetRotation()
-        {
-            return 0;
-
-        }
-        public Rectangle GetSpritesheetRectange()
+        public override Rectangle GetSpritesheetRectange()
         {
             Vector2 vec = Mouse.GetState().Position.ToVector2();
             Direction direction = vec.ToRelativeDirection(GetPosition());
@@ -47,7 +42,7 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
             return rect;
 
         }
-        public void AnimateMovement()
+        public override void AnimateMovement()
         {
             _animationDelay++;
             if (_animationDelay > MAX_ANIMATION_DELAY - 1)
@@ -61,21 +56,17 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
             }
 
         }
-        public Vector2 GetPosition()
+        public override Vector2 GetPosition()
         {
             return new Vector2(
                 _entity.PositionComponent.X * 2 * SCALING,
                 _entity.PositionComponent.Y * 2 * SCALING
             );
         }
-        public Vector2 GetScale()
+        public override Vector2 GetScale()
         {
             return new Vector2(2, 2);
             
-        }
-        public Vector2 GetOrigin()
-        {
-            return Vector2.Zero;
         }
     }
 }

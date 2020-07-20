@@ -9,8 +9,12 @@ namespace Mumble.FirstGame.Core.System.Collision
 {
     public interface ICollisionSystem
     {
-        bool HasCollision(IPositionComponent position, IPositionComponent selfPosition, IOwnerIdentifier ownerIdentifier);
-        bool HasCollision(IPositionComponent position, IPositionComponent selfPosition);
+        CollisionResult HasCollision(IPositionComponent position, IPositionComponent selfPosition, IOwnerIdentifier ownerIdentifier);
         IEntity GetEntityByPosition(IPositionComponent position);
+    }
+    public class CollisionResult
+    {
+        public bool HasCollision;
+        public IEntity CollidedEntity = null;
     }
 }

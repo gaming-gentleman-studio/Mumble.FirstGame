@@ -11,7 +11,7 @@ using System.Text;
 
 namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
 {
-    public class SlimeSpriteMetadata : ISpriteMetadata
+    public class SlimeSpriteMetadata : AbstractSpriteMetadata
     {
 
         private IEntity _entity;
@@ -25,20 +25,17 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         private int _facing_change_step = 0;
         private const int FACING_CHANGE_FRAMES = 15;
 
+        private int _damage_flash_count = 0;
+
         public SlimeSpriteMetadata(Slime entity)
         {
             _entity = entity;
         }
-        public Texture2D GetImage(ContentImages container)
+        public override Texture2D GetImage(ContentImages container)
         {
             return container.Slime;
         }
-        public float GetRotation()
-        {
-            return 0;
-
-        }
-        public Rectangle GetSpritesheetRectange()
+        public override Rectangle GetSpritesheetRectange()
         {
             _facing_change_step++;
             if (_facing_change_step >= FACING_CHANGE_FRAMES)
@@ -54,7 +51,7 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
             return rect;
 
         }
-        public void AnimateMovement()
+        public override void AnimateMovement()
         {
             _animationDelay++;
             if (_animationDelay > MAX_ANIMATION_DELAY - 1)
@@ -68,21 +65,37 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
             }
 
         }
-        public Vector2 GetPosition()
+        public override void AnimateDamage()
+        {
+            _damage_flash_count = 3;
+        }
+        public override Color GetColor()
+        {
+            if (_damage_flash_count < 1)
+            {
+                return base.GetColor();
+            }
+            else
+            {
+                _damage_flash_count--;
+                return Color.Red;
+                
+            }
+            
+        }
+        public override Vector2 GetPosition()
         {
             return new Vector2(
                 _entity.PositionComponent.X * 2 * SCALING,
                 _entity.PositionComponent.Y * 2 * SCALING
             );
         }
-        public Vector2 GetScale()
+        public override Vector2 GetScale()
         {
             return new Vector2(2, 2);
 
         }
-        public Vector2 GetOrigin()
-        {
-            return Vector2.Zero;
-        }
+
+
     }
 }

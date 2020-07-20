@@ -8,9 +8,9 @@ namespace Mumble.FirstGame.Core.ActionResult
 {
     public class DamageActionResult : IActionResult
     {
-        public readonly IEntity Entity;
+        public readonly ICombatEntity Entity;
         public readonly int DamageTaken;
-        public DamageActionResult(IEntity target, int damageTaken)
+        public DamageActionResult(ICombatEntity target, int damageTaken)
         {
             Entity = target;
             DamageTaken = damageTaken;

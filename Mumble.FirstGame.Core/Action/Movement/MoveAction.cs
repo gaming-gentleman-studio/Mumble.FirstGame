@@ -46,7 +46,7 @@ namespace Mumble.FirstGame.Core.Action.Movement
             IPositionComponent newPosition = Entity.PositionComponent.GetNewCoords(Velocity);
             if (boundary.IsInBounds(newPosition))
             {
-                if (!collisionSystem.HasCollision(newPosition,Entity.PositionComponent,Entity.OwnerIdentifier))
+                if (!collisionSystem.HasCollision(newPosition,Entity.PositionComponent,Entity.OwnerIdentifier).HasCollision)
                 {
                     Entity.PositionComponent.Move(newPosition);
                     Results.Add(new MoveActionResult(Entity, newPosition.X, newPosition.Y));

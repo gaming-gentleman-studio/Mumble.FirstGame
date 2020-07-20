@@ -44,8 +44,8 @@ namespace Mumble.FirstGame.MonogameShared
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         IGameClient client;
-        Dictionary<IEntity, ISpriteMetadata> EntitySprites = new Dictionary<IEntity, ISpriteMetadata>();
-        List<ISpriteMetadata> UISprites = new List<ISpriteMetadata>();
+        Dictionary<IEntity, AbstractSpriteMetadata> EntitySprites = new Dictionary<IEntity, AbstractSpriteMetadata>();
+        List<AbstractSpriteMetadata> UISprites = new List<AbstractSpriteMetadata>();
         Player player;
         int scaling = 5;
         ContentImages contentImages;
@@ -210,6 +210,10 @@ namespace Mumble.FirstGame.MonogameShared
                 {
                     EntitySprites.Remove(result.Entity);
                 }
+                foreach (DamageActionResult result in results.Where(x => x is DamageActionResult))
+                {
+                    EntitySprites[result.Entity].AnimateDamage();
+                }
             }
         }
         /// <summary>
@@ -223,12 +227,12 @@ namespace Mumble.FirstGame.MonogameShared
             
             foreach (IEntity entity in EntitySprites.Keys)
             {
-                ISpriteMetadata sprite = EntitySprites[entity];
-                spriteBatch.Draw(sprite.GetImage(contentImages), sprite.GetPosition(), sprite.GetSpritesheetRectange(), Color.DarkGray, sprite.GetRotation(), sprite.GetOrigin(), sprite.GetScale(), SpriteEffects.None, 0f);
+                AbstractSpriteMetadata sprite = EntitySprites[entity];
+                spriteBatch.Draw(sprite.GetImage(contentImages), sprite.GetPosition(), sprite.GetSpritesheetRectange(), sprite.GetColor(), sprite.GetRotation(), sprite.GetOrigin(), sprite.GetScale(), SpriteEffects.None, 0f);
             }
-            foreach (ISpriteMetadata sprite in UISprites)
+            foreach (AbstractSpriteMetadata sprite in UISprites)
             {
-                spriteBatch.Draw(sprite.GetImage(contentImages), sprite.GetPosition(), sprite.GetSpritesheetRectange(), Color.DarkGray, sprite.GetRotation(), sprite.GetOrigin(), sprite.GetScale(), SpriteEffects.None, 0f);
+                spriteBatch.Draw(sprite.GetImage(contentImages), sprite.GetPosition(), sprite.GetSpritesheetRectange(), sprite.GetColor(), sprite.GetRotation(), sprite.GetOrigin(), sprite.GetScale(), SpriteEffects.None, 0f);
             }
             spriteBatch.End();
 

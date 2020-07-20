@@ -28,25 +28,7 @@ namespace Mumble.FirstGame.Core.System.Collision
         {
             return _positions[position];
         }
-        public bool HasCollision(IPositionComponent position, IPositionComponent selfPosition)
-        {
-            //Keep in sync - TODO - evaluate performance?
-            BuildSpace(_entityContainer.Entities);
-            OccupiedSpace spaceToCheck = new OccupiedSpace(position);
-            foreach (OccupiedSpace space in _spaces.Keys)
-            {
-                if (_spaces[space].PositionComponent == selfPosition)
-                {
-                    continue;
-                }
-                if (space.HasCollision(spaceToCheck))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-        public bool HasCollision(IPositionComponent position,IPositionComponent selfPosition, IOwnerIdentifier ownerIdentifier)
+        public CollisionResult HasCollision(IPositionComponent position,IPositionComponent selfPosition, IOwnerIdentifier ownerIdentifier)
         {
             //Keep in sync
             BuildSpace(_entityContainer.Entities);
@@ -63,10 +45,17 @@ namespace Mumble.FirstGame.Core.System.Collision
                 }
                 if (space.HasCollision(spaceToCheck))
                 {
-                    return true;
+                    return new CollisionResult()
+                    {
+                        HasCollision = true,
+                        CollidedEntity = _spaces[space]
+                    };
                 }
             }
-            return false;
+            return new CollisionResult()
+            {
+                HasCollision = false
+            };
         }
         private void BuildSpace(List<IEntity> entities)
         {
@@ -111,4 +100,5 @@ namespace Mumble.FirstGame.Core.System.Collision
             }
         }
     }
+
 }

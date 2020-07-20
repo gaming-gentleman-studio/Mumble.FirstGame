@@ -45,7 +45,8 @@ namespace Mumble.FirstGame.Core.Action.Movement
             IPositionComponent newPosition = Entity.PositionComponent.GetNewCoords(Velocity);
             if (boundary.IsInBounds(newPosition))
             {
-                if (!collisionSystem.HasCollision(newPosition, Entity.PositionComponent,Entity.OwnerIdentifier))
+                CollisionResult result = collisionSystem.HasCollision(newPosition, Entity.PositionComponent, Entity.OwnerIdentifier);
+                if (!result.HasCollision)
                 {
                     Entity.PositionComponent.Move(newPosition);
                     Results.Add(new MoveActionResult(Entity, newPosition.X, newPosition.Y));
@@ -53,6 +54,21 @@ namespace Mumble.FirstGame.Core.Action.Movement
                 else
                 {
                     Results.Add(new EntityDestroyedActionResult(Entity));
+                    if (result.CollidedEntity is ICombatEntity)
+                    {
+                        ICombatEntity victimEntity = (ICombatEntity)result.CollidedEntity;
+                        int damage = ((IProjectileEntity)Entity).DamageComponent.GetRawDamage();
+                        victimEntity.HealthComponent.Hit(damage);
+                        if (victimEntity.HealthComponent.GetCurrentHealth() <= 0)
+                        {
+                            Results.Add(new EntityDestroyedActionResult(victimEntity));
+                        }
+                        else
+                        {
+                            Results.Add(new DamageActionResult(victimEntity, damage));
+                        }  
+                    }
+
                 }
             }
             else
