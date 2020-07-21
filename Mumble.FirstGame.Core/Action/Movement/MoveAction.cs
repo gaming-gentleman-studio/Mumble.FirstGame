@@ -23,6 +23,7 @@ namespace Mumble.FirstGame.Core.Action.Movement
         {
             Entity = entity;
             Velocity = new VelocityComponent(direction, Entity.VelocityComponent.Speed);
+            
             Results = new List<IActionResult>();
             
         }

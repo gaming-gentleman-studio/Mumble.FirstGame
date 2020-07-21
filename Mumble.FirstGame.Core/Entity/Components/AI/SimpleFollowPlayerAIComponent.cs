@@ -20,13 +20,14 @@ namespace Mumble.FirstGame.Core.Entity.Components.AI
             IPositionComponent sourcePosition = source.PositionComponent;
             float a = playerPosition.X - sourcePosition.X;
             float b = playerPosition.Y - sourcePosition.Y;
-            if (Math.Sqrt((a*a) + (b*b)) < _damageDistance)
+            double c = Math.Sqrt((a * a) + (b * b));
+            if (c < _damageDistance)
             {
                 return new AttackAction(source, players[0]);
             }
             else
             {
-                Direction direction = new Direction(playerPosition.X - sourcePosition.X, playerPosition.Y - sourcePosition.Y);
+                Direction direction = new Direction(a, b);
                 return new MoveAction(source, direction);
             }
 

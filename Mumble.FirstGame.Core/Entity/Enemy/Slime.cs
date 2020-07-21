@@ -54,7 +54,7 @@ namespace Mumble.FirstGame.Core.Entity.Enemy
             HealthComponent = new HealthComponent(health);
             CombatAIComponent = new SimpleFollowPlayerAIComponent();
             PositionComponent = new PositionComponent(x, y);
-            VelocityComponent = new VelocityComponent(Direction.None, 5);
+            VelocityComponent = new VelocityComponent(Direction.None, 0.5f);
             OwnerIdentifier = IntOwnerIdentifier.NonPlayerOwned;
 
         }

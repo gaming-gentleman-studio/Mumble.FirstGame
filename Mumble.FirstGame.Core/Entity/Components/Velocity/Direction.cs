@@ -35,7 +35,7 @@ namespace Mumble.FirstGame.Core.Entity.Components.Velocity
         {
             x = (float) Math.Round((decimal)x, 3, MidpointRounding.AwayFromZero);
             y = (float)Math.Round((decimal)y, 3, MidpointRounding.AwayFromZero);
-            float len = Math.Abs(x * x + y * y);
+            float len = (float) Math.Sqrt(Math.Abs(x * x + y * y));
             float normalizedX = x / len;
             float normalizedY = y / len;
             return new Tuple<float, float>(normalizedX, normalizedY);
