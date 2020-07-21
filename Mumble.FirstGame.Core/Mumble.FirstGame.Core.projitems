@@ -57,13 +57,17 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Projectile\IProjectileEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Projectile\SimpleBullet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\BattleScene.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\Instances\BattleSceneInstance1.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\Instances\ISceneInstance.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\SceneBoundary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\EntityContainer\BattleEntityContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\EntityContainer\IEntityContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\Factory\BattleSceneFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\Factory\ISceneFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\IActionAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scene\IActionResultAdapter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\IScene.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scene\Trigger\ITrigger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Collision\CollisionSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Collision\ICollisionSystem.cs" />
   </ItemGroup>

@@ -21,6 +21,8 @@ namespace Mumble.FirstGame.Core.Scene.Battle
     {
         public IEntityContainer EntityContainer { get; private set; }
         private IEnumerable<IActionAdapter> _actionAdapters;
+        private IEnumerable<IActionResultAdapter> _actionResultAdapters;
+        private List<IAction> _actionsFromActionResultAdapters;
         private ICollisionSystem _collisionSystem;
         public SceneBoundary Boundary { get; private set; }
 
@@ -28,11 +30,13 @@ namespace Mumble.FirstGame.Core.Scene.Battle
 
         private int _entityTurn = 0;
         
-        public BattleScene(IEntityContainer container,IEnumerable<IActionAdapter> actionAdapters, ICollisionSystem collisionSystem)
+        public BattleScene(IEntityContainer container,IEnumerable<IActionAdapter> actionAdapters, IEnumerable<IActionResultAdapter> actionResultAdapters, ICollisionSystem collisionSystem)
         {
             EntityContainer = container;
             Boundary = new SceneBoundary(100, 100);
             _actionAdapters = actionAdapters;
+            _actionResultAdapters = actionResultAdapters;
+            _actionsFromActionResultAdapters = new List<IAction>();
             _collisionSystem = collisionSystem;
         }
         public List<IActionResult> Update(Dictionary<IOwnerIdentifier, List<IAction>> actions, int elapsedTicks)
@@ -47,6 +51,11 @@ namespace Mumble.FirstGame.Core.Scene.Battle
                 resultingActions.AddRange(ApplyAI());
             }
             ApplyWeaponCooldowns();
+            foreach (IAction action in _actionsFromActionResultAdapters)
+            {
+                DispatchAction(action, IntOwnerIdentifier.NonPlayerOwned, resultingActions);
+            }
+            _actionsFromActionResultAdapters = new List<IAction>();
             foreach (IOwnerIdentifier owner in actions.Keys)
             {
                 foreach (IAction action in actions[owner])
@@ -64,8 +73,23 @@ namespace Mumble.FirstGame.Core.Scene.Battle
                 results.AddRange(action.Results);
                 
             }
+
             EntityContainer.RemoveEntities(entitiesToRemove);
+            ResultProcessing(results);
             return results;
+        }
+        private void ResultProcessing(List<IActionResult> results)
+        {
+            foreach (IActionResult result in results)
+            {
+                foreach (IActionResultAdapter adapter in _actionResultAdapters)
+                {
+                    if (adapter.CanHandleActionResult(result))
+                    {
+                        _actionsFromActionResultAdapters.AddRange(adapter.HandleActionResult(result));
+                    }
+                }
+            }
         }
         private void SingleEntityCleanup(IAction action, HashSet<IEntity> entitiesToRemove)
         {

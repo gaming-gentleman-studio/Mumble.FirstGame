@@ -92,7 +92,7 @@ namespace Mumble.FirstGame.MonogameShared
             else if (settings.ClientType == ClientType.Online)
             {
                 //We need an empty scene when online - server should tell us how to fill it in, not scene factory
-                scene = new BattleScene(provider.GetService<IEntityContainer>(), new List<IActionAdapter>(), provider.GetService<ICollisionSystem>());
+                scene = new BattleScene(provider.GetService<IEntityContainer>(), new List<IActionAdapter>(),new List<IActionResultAdapter>(), provider.GetService<ICollisionSystem>());
                 provider.AddService<IGameClient>(new OnlineGameClient(provider.GetService<IEntityContainer>(), settings, provider.GetService<ISerializationFactoryContainer>()));
             }
             client = provider.GetService<IGameClient>();
