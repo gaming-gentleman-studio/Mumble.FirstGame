@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Mumble.FirstGame.Core.Entity.Components.Velocity
 {
-    public struct Direction : IEquatable<Direction>
+    public struct Direction
     {
         public readonly float X;
         public readonly float Y;
@@ -104,9 +104,13 @@ namespace Mumble.FirstGame.Core.Entity.Components.Velocity
         {
             return InternalEquals(obj);
         }
-        public bool Equals(Direction other)
+        public static bool operator == (Direction source, Direction other)
         {
-            return InternalEquals(other);
+            return source.Equals(other);
+        }
+        public static bool operator != (Direction source, Direction other)
+        {
+            return !source.Equals(other);
         }
     }
 }
