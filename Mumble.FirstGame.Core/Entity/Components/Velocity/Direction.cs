@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Mumble.FirstGame.Core.Entity.Components.Velocity
 {
-    public struct Direction
+    public struct Direction : IEquatable<Direction>
     {
         public readonly float X;
         public readonly float Y;
@@ -44,15 +44,7 @@ namespace Mumble.FirstGame.Core.Entity.Components.Velocity
         {
             return Radians.GetHashCode();
         }
-        public override bool Equals(object obj)
-        {
-            if (!(obj is Direction))
-            {
-                return false;
-            }
-            Direction other = (Direction)obj;
-            return Radians.Equals(other.Radians);
-        }
+
         public static Direction Up => new Direction(0, -1);
         public static Direction Down => new Direction(0, 1);
         public static Direction Left => new Direction(-1f, 0f);
@@ -94,6 +86,27 @@ namespace Mumble.FirstGame.Core.Entity.Components.Velocity
             {
                 return new Direction(pieceSize * part);
             }
+        }
+        private bool InternalEquals(object obj)
+        {
+            if (!(obj is Direction))
+            {
+                return false;
+            }
+            Direction other = (Direction)obj;
+            if (float.IsNaN(Radians) && float.IsNaN(other.Radians))
+            {
+                return true;
+            }
+            return Radians.Equals(other.Radians);
+        }
+        public override bool Equals(object obj)
+        {
+            return InternalEquals(obj);
+        }
+        public bool Equals(Direction other)
+        {
+            return InternalEquals(other);
         }
     }
 }

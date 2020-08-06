@@ -63,7 +63,7 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         }
         public override void AnimateMovement(MoveActionResult result)
         {
-            if (!float.IsNaN(result.Direction.Radians))
+            if (result.Direction.Equals(Direction.None))
             {
                 _facing = Direction.ToNearest90Angle(result.Direction);
             }
