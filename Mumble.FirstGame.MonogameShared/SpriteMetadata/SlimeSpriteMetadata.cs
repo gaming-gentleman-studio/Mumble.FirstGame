@@ -26,8 +26,6 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         private const int ATTACK_ANIMATION_ROW = 3;
         private const int ATTACK_ANIMATION_FRAME_DELAY = 7;
         private Direction _facing = Direction.Down;
-        private int _facing_change_step = 0;
-        private const int FACING_CHANGE_FRAMES = 15;
         private bool isAttacking = false;
         private int _damage_flash_count = 0;
 
@@ -41,11 +39,6 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         }
         public override Rectangle GetSpritesheetRectange()
         {
-            _facing_change_step++;
-            if (_facing_change_step >= FACING_CHANGE_FRAMES)
-            {
-                _facing_change_step = 0;
-            }
             
             Rectangle rect = SpriteMetadataUtil.SpritesheetPosByDirection[_facing];
             if (isAttacking)
