@@ -188,7 +188,7 @@ namespace Mumble.FirstGame.MonogameShared
                     {
                         EntitySprites[result.Entity] = SpriteMetadataUtil.CreateSpriteMetadata(result.Entity);
                     }
-                    EntitySprites[result.Entity].AnimateMovement();
+                    EntitySprites[result.Entity].AnimateMovement(result);
                     if (result.OutOfBounds)
                     {
                         if (result.Entity != player)
@@ -212,6 +212,10 @@ namespace Mumble.FirstGame.MonogameShared
                 foreach (DamageActionResult result in results.Where(x => x is DamageActionResult))
                 {
                     EntitySprites[result.Entity].AnimateDamage();
+                }
+                foreach(AttackActionResult result in results.Where(x => x is AttackActionResult))
+                {
+                    EntitySprites[result.Source].AnimateAttack();
                 }
             }
         }

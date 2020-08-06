@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
 using Mumble.FirstGame.Core.Entity.Enemy;
@@ -19,12 +20,15 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         private int _animationStep = 0;
         private int _animationDelay = 0;
         private const int MAX_ANIMATION_DELAY = 2;
-        private const int MAX_ANIMATION_STEPS = 3;
+        private const int MAX_ANIMATION_STEPS = 2;
 
+        private int _attackAnimationFrameDelayCnt = 0;
+        private const int ATTACK_ANIMATION_ROW = 3;
+        private const int ATTACK_ANIMATION_FRAME_DELAY = 7;
         private Direction _facing = Direction.Down;
         private int _facing_change_step = 0;
         private const int FACING_CHANGE_FRAMES = 15;
-
+        private bool isAttacking = false;
         private int _damage_flash_count = 0;
 
         public SlimeSpriteMetadata(Slime entity)
@@ -40,25 +44,42 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
             _facing_change_step++;
             if (_facing_change_step >= FACING_CHANGE_FRAMES)
             {
-                Direction direction = Direction.GetRandom90Direction();
-                _facing = Direction.ToNearest90Angle(direction);
                 _facing_change_step = 0;
             }
             
             Rectangle rect = SpriteMetadataUtil.SpritesheetPosByDirection[_facing];
-            rect.Y = (16 * _animationStep) + _animationStep;
+            if (isAttacking)
+            {
+                _attackAnimationFrameDelayCnt++;
+                if (_attackAnimationFrameDelayCnt >= ATTACK_ANIMATION_FRAME_DELAY)
+                {
+                    _attackAnimationFrameDelayCnt = 0;
+                    isAttacking = false;
+                }
+                rect.Y = (16 * ATTACK_ANIMATION_ROW) + ATTACK_ANIMATION_ROW;
+
+            }
+            else
+            {
+                rect.Y = (16 * _animationStep) + _animationStep;
+            }
+            
 
             return rect;
 
         }
-        public override void AnimateMovement()
+        public override void AnimateMovement(MoveActionResult result)
         {
+            if (!float.IsNaN(result.Direction.Radians))
+            {
+                _facing = Direction.ToNearest90Angle(result.Direction);
+            }
             _animationDelay++;
-            if (_animationDelay > MAX_ANIMATION_DELAY - 1)
+            if (_animationDelay >= MAX_ANIMATION_DELAY)
             {
                 _animationDelay = 0;
                 _animationStep++;
-                if (_animationStep > MAX_ANIMATION_STEPS - 1)
+                if (_animationStep > MAX_ANIMATION_STEPS)
                 {
                     _animationStep = 0;
                 }
@@ -68,6 +89,13 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         public override void AnimateDamage()
         {
             _damage_flash_count = 3;
+        }
+        public override void AnimateAttack()
+        {
+            _animationStep = MAX_ANIMATION_STEPS;
+            _animationDelay = 0;
+            isAttacking = true;
+
         }
         public override Color GetColor()
         {

@@ -10,4 +10,6 @@ message MoveActionResultDef{
     float y = 3;
     bool outOfBounds = 4;
     action.Direction facing = 5;
+    float oldX = 6;
+    float oldY = 7;
 }

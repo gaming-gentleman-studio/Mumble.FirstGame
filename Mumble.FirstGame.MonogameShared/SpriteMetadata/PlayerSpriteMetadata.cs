@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
 using Mumble.FirstGame.Core.Entity.Player;
@@ -43,7 +44,7 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
             return rect;
 
         }
-        public override void AnimateMovement()
+        public override void AnimateMovement(MoveActionResult result)
         {
             _animationDelay++;
             if (_animationDelay > MAX_ANIMATION_DELAY - 1)

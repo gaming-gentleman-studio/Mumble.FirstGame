@@ -26,14 +26,15 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
           string.Concat(
             "Ci1BY3Rpb25SZXN1bHQvU2NoZW1hL01vdmVBY3Rpb25SZXN1bHREZWYucHJv",
             "dG8SDGFjdGlvbnJlc3VsdBodQWN0aW9uL1NjaGVtYS9EaXJlY3Rpb24ucHJv",
-            "dG8ibwoTTW92ZUFjdGlvblJlc3VsdERlZhIKCgJpZBgBIAEoBRIJCgF4GAIg",
-            "ASgCEgkKAXkYAyABKAISEwoLb3V0T2ZCb3VuZHMYBCABKAgSIQoGZmFjaW5n",
-            "GAUgASgLMhEuYWN0aW9uLkRpcmVjdGlvbkI3qgI0TXVtYmxlLkZpcnN0R2Ft",
-            "ZS5TZXJpYWxpemF0aW9uLlByb3RvYnVmLkFjdGlvblJlc3VsdGIGcHJvdG8z"));
+            "dG8iiwEKE01vdmVBY3Rpb25SZXN1bHREZWYSCgoCaWQYASABKAUSCQoBeBgC",
+            "IAEoAhIJCgF5GAMgASgCEhMKC291dE9mQm91bmRzGAQgASgIEiEKBmZhY2lu",
+            "ZxgFIAEoCzIRLmFjdGlvbi5EaXJlY3Rpb24SDAoEb2xkWBgGIAEoAhIMCgRv",
+            "bGRZGAcgASgCQjeqAjRNdW1ibGUuRmlyc3RHYW1lLlNlcmlhbGl6YXRpb24u",
+            "UHJvdG9idWYuQWN0aW9uUmVzdWx0YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Mumble.FirstGame.Serialization.Protobuf.Action.DirectionReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.MoveActionResultDef), global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.MoveActionResultDef.Parser, new[]{ "Id", "X", "Y", "OutOfBounds", "Facing" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.MoveActionResultDef), global::Mumble.FirstGame.Serialization.Protobuf.ActionResult.MoveActionResultDef.Parser, new[]{ "Id", "X", "Y", "OutOfBounds", "Facing", "OldX", "OldY" }, null, null, null, null)
           }));
     }
     #endregion
@@ -70,6 +71,8 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
       y_ = other.y_;
       outOfBounds_ = other.outOfBounds_;
       facing_ = other.facing_ != null ? other.facing_.Clone() : null;
+      oldX_ = other.oldX_;
+      oldY_ = other.oldY_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -133,6 +136,28 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
       }
     }
 
+    /// <summary>Field number for the "oldX" field.</summary>
+    public const int OldXFieldNumber = 6;
+    private float oldX_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public float OldX {
+      get { return oldX_; }
+      set {
+        oldX_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "oldY" field.</summary>
+    public const int OldYFieldNumber = 7;
+    private float oldY_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public float OldY {
+      get { return oldY_; }
+      set {
+        oldY_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as MoveActionResultDef);
@@ -151,6 +176,8 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Y, other.Y)) return false;
       if (OutOfBounds != other.OutOfBounds) return false;
       if (!object.Equals(Facing, other.Facing)) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(OldX, other.OldX)) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(OldY, other.OldY)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -162,6 +189,8 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
       if (Y != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Y);
       if (OutOfBounds != false) hash ^= OutOfBounds.GetHashCode();
       if (facing_ != null) hash ^= Facing.GetHashCode();
+      if (OldX != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(OldX);
+      if (OldY != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(OldY);
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -195,6 +224,14 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
         output.WriteRawTag(42);
         output.WriteMessage(Facing);
       }
+      if (OldX != 0F) {
+        output.WriteRawTag(53);
+        output.WriteFloat(OldX);
+      }
+      if (OldY != 0F) {
+        output.WriteRawTag(61);
+        output.WriteFloat(OldY);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -217,6 +254,12 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
       }
       if (facing_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Facing);
+      }
+      if (OldX != 0F) {
+        size += 1 + 4;
+      }
+      if (OldY != 0F) {
+        size += 1 + 4;
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -246,6 +289,12 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
           Facing = new global::Mumble.FirstGame.Serialization.Protobuf.Action.Direction();
         }
         Facing.MergeFrom(other.Facing);
+      }
+      if (other.OldX != 0F) {
+        OldX = other.OldX;
+      }
+      if (other.OldY != 0F) {
+        OldY = other.OldY;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -279,6 +328,14 @@ namespace Mumble.FirstGame.Serialization.Protobuf.ActionResult {
               Facing = new global::Mumble.FirstGame.Serialization.Protobuf.Action.Direction();
             }
             input.ReadMessage(Facing);
+            break;
+          }
+          case 53: {
+            OldX = input.ReadFloat();
+            break;
+          }
+          case 61: {
+            OldY = input.ReadFloat();
             break;
           }
         }

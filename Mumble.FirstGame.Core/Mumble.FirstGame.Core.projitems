@@ -9,6 +9,7 @@
     <Import_RootNamespace>Mumble.FirstGame.Core</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ActionResult\AttackActionResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ActionResult\DamageActionResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ActionResult\EntitiesCreatedActionResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ActionResult\EntityDestroyedActionResult.cs" />

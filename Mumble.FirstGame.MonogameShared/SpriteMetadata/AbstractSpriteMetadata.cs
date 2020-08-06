@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Mumble.FirstGame.Core.ActionResult;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,11 +11,15 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
     {
         public abstract Texture2D GetImage(ContentImages container);
         public abstract Vector2 GetPosition();
-        public virtual void AnimateMovement()
+        public virtual void AnimateMovement(MoveActionResult result)
         {
             return;
         }
         public virtual void AnimateDamage()
+        {
+            return;
+        }
+        public virtual void AnimateAttack()
         {
             return;
         }

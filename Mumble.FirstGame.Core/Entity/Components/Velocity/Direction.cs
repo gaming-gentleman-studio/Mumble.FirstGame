@@ -27,7 +27,7 @@ namespace Mumble.FirstGame.Core.Entity.Components.Velocity
             }
 
         }
-
+        
         public Direction(float radians) : this((float)Math.Cos(radians), (float)Math.Sin(radians))
         {
         }

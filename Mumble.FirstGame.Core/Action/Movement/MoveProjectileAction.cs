@@ -42,6 +42,8 @@ namespace Mumble.FirstGame.Core.Action.Movement
 
         public void CalculateEffect(SceneBoundary boundary, ICollisionSystem collisionSystem)
         {
+            float oldX = Entity.PositionComponent.X;
+            float oldY = Entity.PositionComponent.Y;
             IPositionComponent newPosition = Entity.PositionComponent.GetNewCoords(Velocity);
             if (boundary.IsInBounds(newPosition))
             {
@@ -49,7 +51,7 @@ namespace Mumble.FirstGame.Core.Action.Movement
                 if (!result.HasCollision)
                 {
                     Entity.PositionComponent.Move(newPosition);
-                    Results.Add(new MoveActionResult(Entity, newPosition.X, newPosition.Y));
+                    Results.Add(new MoveActionResult(Entity, newPosition.X, newPosition.Y, oldX, oldY));
                 }
                 else
                 {

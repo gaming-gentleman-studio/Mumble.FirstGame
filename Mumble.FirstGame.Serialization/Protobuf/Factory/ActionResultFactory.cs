@@ -106,7 +106,7 @@ namespace Mumble.FirstGame.Serialization.Protobuf.Factory
                     {
                         MoveActionResultDef moveDef = MoveActionResultDef.Parser.ParseFrom(serializedResult);
                         IEntity entity = _entityContainer.GetEntity(moveDef.Id, true);
-                        result = new MoveActionResult(entity, moveDef.X, moveDef.Y, moveDef.OutOfBounds);
+                        result = new MoveActionResult(entity, moveDef.X, moveDef.Y, moveDef.OldX, moveDef.OldY,moveDef.OutOfBounds);
                         entity.PositionComponent.ChangeFacing (new Core.Entity.Components.Velocity.Direction(moveDef.Facing.Radians));
                     }
                     catch (Exception ex)

@@ -31,6 +31,7 @@ namespace Mumble.FirstGame.Core.Action.Attack
                 {
                     IMeleeWeaponComponent weapon = (IMeleeWeaponComponent)_source.WeaponComponent;
                     Results.Add(weapon.Attack(_target));
+                    Results.Add(new AttackActionResult(_source, _target));
                 }
             }
         }
