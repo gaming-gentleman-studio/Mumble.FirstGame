@@ -1,6 +1,8 @@
-﻿using Mumble.FirstGame.Core.Entity;
+﻿using Mumble.FirstGame.Core.Background;
+using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Components.Position;
 using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
+using Mumble.FirstGame.Core.Scene.Battle.SceneBoundary;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
 using System;
 using System.Collections.Generic;
@@ -22,6 +24,7 @@ namespace Mumble.FirstGame.Core.System.Collision
             _entities = _entityContainer.Entities;
             BuildSpace(_entities);
         }
+  
 
         public IEntity GetEntityByPosition(IPositionComponent position)
         {

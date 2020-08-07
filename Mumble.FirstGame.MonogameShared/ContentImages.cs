@@ -17,12 +17,24 @@ namespace Mumble.FirstGame.MonogameShared
 
         public Texture2D Slime { get; private set; }
 
-        public void LoadContent(ContentManager Content)
+        public Texture2D Wall { get; private set; }
+
+        public void LoadContent(ContentManager Content, GraphicsDevice graphicsDevice)
         {
             ImgTheDude = Content.Load<Texture2D>("TheDude");
             Bullet = Content.Load<Texture2D>("Bullet");
             Cursor = Content.Load<Texture2D>("Cursor");
             Slime = Content.Load<Texture2D>("Enemy1");
+
+            CreateWall(graphicsDevice);
+        }
+        private void CreateWall(GraphicsDevice graphicsDevice)
+        {
+            Wall = new Texture2D(graphicsDevice, 80, 30);
+
+            Color[] data = new Color[80 * 30];
+            for (int i = 0; i < data.Length; ++i) data[i] = Color.Chocolate;
+            Wall.SetData(data);
         }
 
     }

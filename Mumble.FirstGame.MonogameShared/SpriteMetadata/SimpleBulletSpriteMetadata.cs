@@ -11,7 +11,6 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
     class SimpleBulletSpriteMetadata : AbstractSpriteMetadata
     {
         private IProjectileEntity _entity;
-        private const int SCALING = 5;
 
         public SimpleBulletSpriteMetadata(SimpleBullet entity)
         {
@@ -29,8 +28,8 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         public override Vector2 GetPosition()
         {
             return new Vector2(
-                _entity.PositionComponent.X * 2 * SCALING,
-                _entity.PositionComponent.Y * 2 * SCALING
+                _entity.PositionComponent.X * SCREEN_SCALING,
+                _entity.PositionComponent.Y * SCREEN_SCALING
             );
         }
         public override Vector2 GetOrigin()

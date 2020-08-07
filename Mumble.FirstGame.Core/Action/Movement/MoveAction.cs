@@ -61,9 +61,13 @@ namespace Mumble.FirstGame.Core.Action.Movement
                 {
                     newPosition = new PositionComponent(newPosition.X, boundary.GetBoundsAdjustedY(newPosition));
                 }
-                if (boundary.IsInBoundsY(newPosition))
+                else if (boundary.IsInBoundsY(newPosition))
                 {
                     newPosition = new PositionComponent(boundary.GetBoundsAdjustedX(newPosition), newPosition.Y);
+                }
+                else
+                {
+                    newPosition = Entity.PositionComponent;
                 }
                 Entity.PositionComponent.Move(newPosition);
                 Results.Add(new MoveActionResult(Entity, Entity.PositionComponent.X, Entity.PositionComponent.Y, oldX, oldY, true));

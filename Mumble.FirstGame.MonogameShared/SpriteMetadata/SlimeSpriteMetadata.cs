@@ -16,7 +16,6 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
     {
 
         private IEntity _entity;
-        private const int SCALING = 5;
         private int _animationStep = 0;
         private int _animationDelay = 0;
         private const int MAX_ANIMATION_DELAY = 2;
@@ -107,8 +106,8 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         public override Vector2 GetPosition()
         {
             return new Vector2(
-                _entity.PositionComponent.X * 2 * SCALING,
-                _entity.PositionComponent.Y * 2 * SCALING
+                _entity.PositionComponent.X * SCREEN_SCALING,
+                _entity.PositionComponent.Y * SCREEN_SCALING
             );
         }
         public override Vector2 GetScale()

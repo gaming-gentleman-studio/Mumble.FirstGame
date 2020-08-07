@@ -30,8 +30,8 @@ namespace Mumble.FirstGame.Core.Scene.Battle.Instances
 
         public ISceneBoundary GetSceneBoundary()
         {
-            int height = 100;
-            int width = 100;
+            int height = 30;
+            int width = 30;
             IBackground[,] backgrounds = new IBackground[width, height];
             for (int i = 0; i< width; i++)
             {
@@ -56,7 +56,7 @@ namespace Mumble.FirstGame.Core.Scene.Battle.Instances
         {
             return new List<ITrigger>()
             {
-                new BattleSceneInstance1Trigger((Slime)_firstSlimeAction.Entity)
+                //new BattleSceneInstance1Trigger((Slime)_firstSlimeAction.Entity)
             };
         } 
     }

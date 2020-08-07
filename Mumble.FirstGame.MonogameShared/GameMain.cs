@@ -23,6 +23,7 @@ using Mumble.FirstGame.Core.Scene.Factory;
 using Mumble.FirstGame.Core.System.Collision;
 using Mumble.FirstGame.MonogameShared.Settings;
 using Mumble.FirstGame.MonogameShared.SpriteMetadata;
+using Mumble.FirstGame.MonogameShared.SpriteMetadata.Background;
 using Mumble.FirstGame.MonogameShared.Utils;
 using Mumble.FirstGame.Serialization.OnlineActionResult;
 using Mumble.FirstGame.Serialization.Protobuf.Factory;
@@ -48,6 +49,7 @@ namespace Mumble.FirstGame.MonogameShared
         IGameClient client;
         Dictionary<IEntity, AbstractSpriteMetadata> EntitySprites = new Dictionary<IEntity, AbstractSpriteMetadata>();
         List<AbstractSpriteMetadata> UISprites = new List<AbstractSpriteMetadata>();
+        List<AbstractSpriteMetadata> BackgroundSprites = new List<AbstractSpriteMetadata>();
         Player player;
         ContentImages contentImages;
         MovementKeyHandler keyHandler;
@@ -119,13 +121,29 @@ namespace Mumble.FirstGame.MonogameShared
             player = (Player)createdResult.Entities.Where(x => x.OwnerIdentifier.Equals(owner)).FirstOrDefault();
             EntitySprites[player] = SpriteMetadataUtil.CreateSpriteMetadata(player);
 
-            InitializeUISprites();    
+            InitializeUISprites();
+            InitializeBackgroundSprites();
             ApplyResults(results);
             base.Initialize();
         }
         private void InitializeUISprites()
         {
             UISprites.Add(new CursorMetadata());
+        }
+        private void InitializeBackgroundSprites()
+        {
+            IBackground[,] backgrounds = scene.Boundary.Backgrounds;
+            for(int i = 0; i< scene.Boundary.Width; i++)
+            {
+                for (int j = 0; j < scene.Boundary.Height; j++)
+                {
+                    if (backgrounds[i,j] is Wall)
+                    {
+                        BackgroundSprites.Add(new WallSpriteMetadata(new Vector2(i, j)));
+                    }
+                    
+                }
+            }
         }
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
@@ -136,7 +154,7 @@ namespace Mumble.FirstGame.MonogameShared
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             contentImages = new ContentImages();
-            contentImages.LoadContent(Content);
+            contentImages.LoadContent(Content,graphics.GraphicsDevice);
 
         }
 
@@ -231,6 +249,10 @@ namespace Mumble.FirstGame.MonogameShared
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin(SpriteSortMode.Deferred,BlendState.AlphaBlend,SamplerState.PointClamp);
             
+            foreach(AbstractSpriteMetadata sprite in BackgroundSprites)
+            {
+                spriteBatch.Draw(sprite.GetImage(contentImages), sprite.GetPosition(), sprite.GetSpritesheetRectange(), sprite.GetColor(), sprite.GetRotation(), sprite.GetOrigin(), sprite.GetScale(), SpriteEffects.None, 0f);
+            }
             foreach (IEntity entity in EntitySprites.Keys)
             {
                 AbstractSpriteMetadata sprite = EntitySprites[entity];

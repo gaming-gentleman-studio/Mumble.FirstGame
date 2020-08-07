@@ -17,6 +17,7 @@ namespace Mumble.FirstGame.Core.Scene.Battle.SceneBoundary
 
         public IBackground[,] Backgrounds { get; private set; }
 
+
         public BattleSceneBoundary(int width, int height, IBackground[,] backgrounds)
         {
             Width = width;
@@ -29,12 +30,31 @@ namespace Mumble.FirstGame.Core.Scene.Battle.SceneBoundary
             };
             Backgrounds = backgrounds;
         }
+        private bool HasBackgroundCollision(IPositionComponent positionComponent)
+        {
+            int x = (int)Math.Round(positionComponent.X, 0);
+            int y = (int)Math.Round(positionComponent.Y, 0);
+            if (Backgrounds[x, y].HasCollision)
+            {
+                return true;
+            }
+            return false;
+        }
         public bool IsInBounds(IPositionComponent positionComponent)
         {
+            if (HasBackgroundCollision(positionComponent))
+            {
+                return false;
+            }
             return (positionComponent.X <= Width) && (positionComponent.X >= 0) && (positionComponent.Y <= Height) && (positionComponent.Y >= 0);
         }
+        //TODO - figure out a more intelligent way to bounce an entity
         public bool IsInBoundsX(IPositionComponent positionComponent)
         {
+            if (HasBackgroundCollision(positionComponent))
+            {
+                return false;
+            }
             return (positionComponent.X <= Width) && (positionComponent.X >= 0);
         }
         public float GetBoundsAdjustedX(IPositionComponent positionComponent)
@@ -51,6 +71,10 @@ namespace Mumble.FirstGame.Core.Scene.Battle.SceneBoundary
         }
         public bool IsInBoundsY(IPositionComponent positionComponent)
         {
+            if (HasBackgroundCollision(positionComponent))
+            {
+                return false;
+            }
             return (positionComponent.Y <= Height) && (positionComponent.Y >= 0);
         }
         public float GetBoundsAdjustedY(IPositionComponent positionComponent)
