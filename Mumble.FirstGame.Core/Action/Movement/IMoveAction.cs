@@ -1,6 +1,7 @@
 ﻿using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
 using Mumble.FirstGame.Core.Scene.Battle;
+using Mumble.FirstGame.Core.Scene.Battle.SceneBoundary;
 using Mumble.FirstGame.Core.System.Collision;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,6 @@ namespace Mumble.FirstGame.Core.Action.Movement
 
         IMoveableEntity Entity { get; }
 
-        void CalculateEffect(SceneBoundary boundary, ICollisionSystem collisionSystem);
+        void CalculateEffect(ISceneBoundary boundary, ICollisionSystem collisionSystem);
     }
 }

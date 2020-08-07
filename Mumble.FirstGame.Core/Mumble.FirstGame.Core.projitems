@@ -60,7 +60,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\BattleScene.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\Instances\BattleSceneInstance1.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\Instances\ISceneInstance.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\SceneBoundary.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\SceneBoundary\ISceneBoundary.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\SceneBoundary\BattleSceneBoundary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\EntityContainer\BattleEntityContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\EntityContainer\IEntityContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\Factory\BattleSceneFactory.cs" />

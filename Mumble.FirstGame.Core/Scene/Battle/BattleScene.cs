@@ -7,6 +7,7 @@ using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Entity.Projectile;
+using Mumble.FirstGame.Core.Scene.Battle.SceneBoundary;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
 using Mumble.FirstGame.Core.System.Collision;
 using System;
@@ -24,16 +25,16 @@ namespace Mumble.FirstGame.Core.Scene.Battle
         private IEnumerable<IActionResultAdapter> _actionResultAdapters;
         private List<IAction> _actionsFromActionResultAdapters;
         private ICollisionSystem _collisionSystem;
-        public SceneBoundary Boundary { get; private set; }
+        public ISceneBoundary Boundary { get; private set; }
 
         private int _elapsedTicks;
 
         private int _entityTurn = 0;
         
-        public BattleScene(IEntityContainer container,IEnumerable<IActionAdapter> actionAdapters, IEnumerable<IActionResultAdapter> actionResultAdapters, ICollisionSystem collisionSystem)
+        public BattleScene(IEntityContainer container,IEnumerable<IActionAdapter> actionAdapters, IEnumerable<IActionResultAdapter> actionResultAdapters, ICollisionSystem collisionSystem, ISceneBoundary boundary)
         {
             EntityContainer = container;
-            Boundary = new SceneBoundary(100, 100);
+            Boundary = boundary;
             _actionAdapters = actionAdapters;
             _actionResultAdapters = actionResultAdapters;
             _actionsFromActionResultAdapters = new List<IAction>();

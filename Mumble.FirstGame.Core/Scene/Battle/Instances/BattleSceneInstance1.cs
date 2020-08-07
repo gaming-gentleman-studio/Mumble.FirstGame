@@ -5,6 +5,7 @@ using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Components.Position;
 using Mumble.FirstGame.Core.Entity.Enemy;
 using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
+using Mumble.FirstGame.Core.Scene.Battle.SceneBoundary;
 using Mumble.FirstGame.Core.Scene.Trigger;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ using System.Text;
 
 namespace Mumble.FirstGame.Core.Scene.Battle.Instances
 {
-    public class BattleSceneInstance1 : ISceneInstance
+    public class BattleSceneInstance1 : IBattleSceneInstance
     {
         private SpawnSlimeAction _firstSlimeAction;
         public BattleSceneInstance1()
@@ -24,6 +25,11 @@ namespace Mumble.FirstGame.Core.Scene.Battle.Instances
             return new List<IAction>(){
                 _firstSlimeAction
             };
+        }
+
+        public ISceneBoundary GetSceneBoundary()
+        {
+            return new BattleSceneBoundary(100, 100);
         }
 
         public List<ITrigger> GetTriggers()

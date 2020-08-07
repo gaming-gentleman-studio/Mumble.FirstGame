@@ -5,15 +5,15 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mumble.FirstGame.Core.Scene.Battle
+namespace Mumble.FirstGame.Core.Scene.Battle.SceneBoundary
 {
-    public class SceneBoundary
+    public class BattleSceneBoundary : ISceneBoundary
     {
         public int Width { get; private set; }
         public int Height { get; private set; }
 
         public Dictionary<Direction,int> MaxValues { get; private set; }
-        public SceneBoundary(int width, int height)
+        public BattleSceneBoundary(int width, int height)
         {
             Width = width;
             Height = height;

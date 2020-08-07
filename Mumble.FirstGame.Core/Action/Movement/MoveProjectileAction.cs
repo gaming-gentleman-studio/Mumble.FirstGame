@@ -3,7 +3,7 @@ using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Components.Position;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
 using Mumble.FirstGame.Core.Entity.Projectile;
-using Mumble.FirstGame.Core.Scene.Battle;
+using Mumble.FirstGame.Core.Scene.Battle.SceneBoundary;
 using Mumble.FirstGame.Core.System.Collision;
 using System;
 using System.Collections.Generic;
@@ -40,7 +40,7 @@ namespace Mumble.FirstGame.Core.Action.Movement
             return true;
         }
 
-        public void CalculateEffect(SceneBoundary boundary, ICollisionSystem collisionSystem)
+        public void CalculateEffect(ISceneBoundary boundary, ICollisionSystem collisionSystem)
         {
             float oldX = Entity.PositionComponent.X;
             float oldY = Entity.PositionComponent.Y;
