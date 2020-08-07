@@ -8,6 +8,7 @@ using Mumble.FirstGame.Core.Action;
 using Mumble.FirstGame.Core.Action.Fire;
 using Mumble.FirstGame.Core.Action.Movement;
 using Mumble.FirstGame.Core.ActionResult;
+using Mumble.FirstGame.Core.Background;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Components.Position;
 using Mumble.FirstGame.Core.Entity.Enemy;
@@ -94,7 +95,7 @@ namespace Mumble.FirstGame.MonogameShared
             {
                 //We need an empty scene when online - server should tell us how to fill it in, not scene factory
                 //TODO - maybe do this a different way? it's awk right now, this scene isn't actually being used
-                scene = new BattleScene(provider.GetService<IEntityContainer>(), new List<IActionAdapter>(),new List<IActionResultAdapter>(), provider.GetService<ICollisionSystem>(), new BattleSceneBoundary(100,100));
+                scene = new BattleScene(provider.GetService<IEntityContainer>(), new List<IActionAdapter>(),new List<IActionResultAdapter>(), provider.GetService<ICollisionSystem>(), new BattleSceneBoundary(100,100, new IBackground[100,100]));
                 provider.AddService<IGameClient>(new OnlineGameClient(provider.GetService<IEntityContainer>(), settings, provider.GetService<ISerializationFactoryContainer>()));
             }
             client = provider.GetService<IGameClient>();

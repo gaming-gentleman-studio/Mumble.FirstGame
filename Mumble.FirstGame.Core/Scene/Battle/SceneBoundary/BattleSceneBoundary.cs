@@ -1,4 +1,5 @@
 ﻿using Mumble.FirstGame.Core.Action.Movement;
+using Mumble.FirstGame.Core.Background;
 using Mumble.FirstGame.Core.Entity.Components.Position;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
 using System;
@@ -13,7 +14,10 @@ namespace Mumble.FirstGame.Core.Scene.Battle.SceneBoundary
         public int Height { get; private set; }
 
         public Dictionary<Direction,int> MaxValues { get; private set; }
-        public BattleSceneBoundary(int width, int height)
+
+        public IBackground[,] Backgrounds { get; private set; }
+
+        public BattleSceneBoundary(int width, int height, IBackground[,] backgrounds)
         {
             Width = width;
             Height = height;
@@ -23,6 +27,7 @@ namespace Mumble.FirstGame.Core.Scene.Battle.SceneBoundary
                 { Direction.Left, 0 },
                 { Direction.Right, width }
             };
+            Backgrounds = backgrounds;
         }
         public bool IsInBounds(IPositionComponent positionComponent)
         {

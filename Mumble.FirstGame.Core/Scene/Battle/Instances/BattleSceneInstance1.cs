@@ -1,6 +1,7 @@
 ﻿using Mumble.FirstGame.Core.Action;
 using Mumble.FirstGame.Core.Action.Spawn;
 using Mumble.FirstGame.Core.ActionResult;
+using Mumble.FirstGame.Core.Background;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Components.Position;
 using Mumble.FirstGame.Core.Entity.Enemy;
@@ -29,7 +30,26 @@ namespace Mumble.FirstGame.Core.Scene.Battle.Instances
 
         public ISceneBoundary GetSceneBoundary()
         {
-            return new BattleSceneBoundary(100, 100);
+            int height = 100;
+            int width = 100;
+            IBackground[,] backgrounds = new IBackground[width, height];
+            for (int i = 0; i< width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    if (i == 0 || j == 0 || i == width-1 || j == height - 1)
+                    {
+                        backgrounds[i,j] = new Wall(BackgroundSubType.Plain);
+                    }
+                    else
+                    {
+                        backgrounds[i, j] = new Floor(BackgroundSubType.Plain);
+                    }
+                    
+                }
+            }
+
+            return new BattleSceneBoundary(width, height,backgrounds);
         }
 
         public List<ITrigger> GetTriggers()

@@ -28,6 +28,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\SpawnPlayerAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\SpawnSimpleBulletAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\SpawnSlimeAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Background\BackgroundSubType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Background\Floor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Background\IBackground.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Background\Wall.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\AI\ICombatAIComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\AI\SimpleFollowPlayerAIComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Damage\DamageComponent.cs" />
@@ -59,7 +63,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Projectile\SimpleBullet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\BattleScene.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\Instances\BattleSceneInstance1.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\Instances\ISceneInstance.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\Instances\IBattleSceneInstance.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\SceneBoundary\ISceneBoundary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\SceneBoundary\BattleSceneBoundary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\EntityContainer\BattleEntityContainer.cs" />
