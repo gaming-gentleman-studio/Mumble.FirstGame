@@ -48,6 +48,8 @@ namespace Mumble.FirstGame.Core.Entity.Enemy
             private set;
         }
 
+        public int Scale => 2;
+
         public Slime(int damage, int health, float x, float y)
         {
             WeaponComponent = new SimpleMeleeWeaponComponent(new DamageComponent(damage));

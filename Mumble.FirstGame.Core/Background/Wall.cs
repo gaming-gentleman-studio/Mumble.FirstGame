@@ -10,6 +10,8 @@ namespace Mumble.FirstGame.Core.Background
 
         public BackgroundSubType SubType { get; private set; }
 
+        public int Scale => 1;
+
         public Wall(BackgroundSubType subtype)
         {
             SubType = subtype;

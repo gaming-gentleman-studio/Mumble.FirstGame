@@ -60,13 +60,13 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         public override Vector2 GetPosition()
         {
             return new Vector2(
-                _entity.PositionComponent.X * SCREEN_SCALING,
-                _entity.PositionComponent.Y * SCREEN_SCALING
+                _entity.PositionComponent.X * SPRITE_PIXEL_SPACE,
+                _entity.PositionComponent.Y * SPRITE_PIXEL_SPACE
             );
         }
         public override Vector2 GetScale()
         {
-            return new Vector2(2, 2);
+            return new Vector2(_entity.Scale, _entity.Scale);
             
         }
         public override void AnimateDamage()

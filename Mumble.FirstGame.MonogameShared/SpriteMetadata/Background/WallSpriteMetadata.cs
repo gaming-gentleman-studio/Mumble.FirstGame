@@ -12,7 +12,7 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata.Background
         private Vector2 _position;
         public WallSpriteMetadata(Vector2 position)
         {
-            _position = new Vector2(position.X * SCREEN_SCALING, position.Y * SCREEN_SCALING);
+            _position = new Vector2(position.X * SPRITE_PIXEL_SPACE, position.Y * SPRITE_PIXEL_SPACE);
         }
         public override Texture2D GetImage(ContentImages container)
         {

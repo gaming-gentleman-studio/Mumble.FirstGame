@@ -34,6 +34,8 @@ namespace Mumble.FirstGame.Core.Entity.Projectile
             private set;
         }
 
+        public int Scale => 1;
+
         public SimpleBullet(float x, float y, int damage, Direction direction, float speed, IOwnerIdentifier ownerIdentifier)
         {
             PositionComponent = new PositionComponent(x,y);

@@ -14,5 +14,12 @@ namespace Mumble.FirstGame.Core.Entity
         }
         string GetName();
         IOwnerIdentifier OwnerIdentifier { get; }
+
+        //Scale - for example, 1 = base pixel square size (i.e. 16x16)
+        // 2 = 32x32
+        int Scale
+        {
+            get;
+        }
     }
 }

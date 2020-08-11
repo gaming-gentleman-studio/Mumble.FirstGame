@@ -38,6 +38,8 @@ namespace Mumble.FirstGame.Core.Entity.Player
 
         public IOwnerIdentifier OwnerIdentifier { get; private set; }
 
+        public int Scale => 2;
+
         private string _name;
         public Player(string name, float x, float y, IOwnerIdentifier owner)
         {

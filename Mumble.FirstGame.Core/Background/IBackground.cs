@@ -8,5 +8,7 @@ namespace Mumble.FirstGame.Core.Background
     {
         bool HasCollision { get; }
         BackgroundSubType SubType { get; }
+
+        int Scale { get; }
     }
 }
