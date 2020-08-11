@@ -15,6 +15,6 @@ namespace Mumble.FirstGame.Core.Action.Movement
 
         IMoveableEntity Entity { get; }
 
-        void CalculateEffect(ISceneBoundary boundary, ICollisionSystem collisionSystem);
+        void CalculateEffect(ICollisionSystem collisionSystem);
     }
 }

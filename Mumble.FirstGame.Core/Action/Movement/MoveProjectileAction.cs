@@ -40,14 +40,15 @@ namespace Mumble.FirstGame.Core.Action.Movement
             return true;
         }
 
-        public void CalculateEffect(ISceneBoundary boundary, ICollisionSystem collisionSystem)
+        public void CalculateEffect(ICollisionSystem collisionSystem)
         {
             float oldX = Entity.PositionComponent.X;
             float oldY = Entity.PositionComponent.Y;
             IPositionComponent newPosition = Entity.PositionComponent.GetNewCoords(Velocity);
-            if (boundary.IsInBounds(newPosition))
+            CollisionResult result = collisionSystem.HasCollision(newPosition, Entity.PositionComponent, Entity.OwnerIdentifier);
+            if (result.InBounds)
             {
-                CollisionResult result = collisionSystem.HasCollision(newPosition, Entity.PositionComponent, Entity.OwnerIdentifier);
+                
                 if (!result.HasCollision)
                 {
                     Entity.PositionComponent.Move(newPosition);

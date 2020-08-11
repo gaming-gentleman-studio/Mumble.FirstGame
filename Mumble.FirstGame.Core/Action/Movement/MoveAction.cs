@@ -42,14 +42,15 @@ namespace Mumble.FirstGame.Core.Action.Movement
             return true;
         }
 
-        public void CalculateEffect(ISceneBoundary boundary, ICollisionSystem collisionSystem)
+        public void CalculateEffect(ICollisionSystem collisionSystem)
         {
             float oldX = Entity.PositionComponent.X;
             float oldY = Entity.PositionComponent.Y;
             IPositionComponent newPosition = Entity.PositionComponent.GetNewCoords(Velocity);
-            if (boundary.IsInBounds(newPosition))
+            CollisionResult result = collisionSystem.HasCollision(newPosition, Entity.PositionComponent, Entity.OwnerIdentifier);
+            if (result.InBounds)
             {
-                if (!collisionSystem.HasCollision(newPosition,Entity.PositionComponent,Entity.OwnerIdentifier).HasCollision)
+                if (!result.HasCollision)
                 {
                     Entity.PositionComponent.Move(newPosition);
                     Results.Add(new MoveActionResult(Entity, newPosition.X, newPosition.Y, oldX, oldY));
@@ -57,18 +58,7 @@ namespace Mumble.FirstGame.Core.Action.Movement
             }
             else
             {
-                if (boundary.IsInBoundsX(newPosition))
-                {
-                    newPosition = new PositionComponent(newPosition.X, boundary.GetBoundsAdjustedY(newPosition));
-                }
-                else if (boundary.IsInBoundsY(newPosition))
-                {
-                    newPosition = new PositionComponent(boundary.GetBoundsAdjustedX(newPosition), newPosition.Y);
-                }
-                else
-                {
-                    newPosition = Entity.PositionComponent;
-                }
+                newPosition = result.BouncebackPosition;
                 Entity.PositionComponent.Move(newPosition);
                 Results.Add(new MoveActionResult(Entity, Entity.PositionComponent.X, Entity.PositionComponent.Y, oldX, oldY, true));
             }

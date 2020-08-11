@@ -18,6 +18,7 @@ namespace Mumble.FirstGame.Core.Scene.Factory
         public IScene Create(IEntityContainer container, List<IActionAdapter> adapters, ICollisionSystem collisionSystem)
         {
             IBattleSceneInstance instance = new BattleSceneInstance1();
+            collisionSystem.SetSceneBoundary(instance.GetSceneBoundary());
             List<ITrigger> triggers = instance.GetTriggers();
             adapters.AddRange(triggers);
             List<IAction> actionList = instance.GetInitialActions();

@@ -17,6 +17,7 @@ namespace Mumble.FirstGame.Core.System.Collision
         private List<IEntity> _entities;
         private Dictionary<OccupiedSpace,IEntity> _spaces;
         private Dictionary<IPositionComponent, IEntity> _positions;
+        private ISceneBoundary _boundary;
 
         public CollisionSystem(IEntityContainer entityContainer)
         {
@@ -33,6 +34,28 @@ namespace Mumble.FirstGame.Core.System.Collision
         public CollisionResult HasCollision(IPositionComponent position,IPositionComponent selfPosition, IOwnerIdentifier ownerIdentifier)
         {
             //Keep in sync
+            if (!_boundary.IsInBounds(position))
+            {
+                IPositionComponent newPosition;
+                if (_boundary.IsInBoundsX(position))
+                {
+                    newPosition = new PositionComponent(position.X, _boundary.GetBoundsAdjustedY(position));
+                }
+                else if (_boundary.IsInBoundsY(position))
+                {
+                    newPosition = new PositionComponent(_boundary.GetBoundsAdjustedX(position), position.Y);
+                }
+                else
+                {
+                    newPosition = selfPosition;
+                }
+                return new CollisionResult()
+                {
+                    HasCollision = true,
+                    InBounds = false,
+                    BouncebackPosition = newPosition
+                };
+            }
             BuildSpace(_entityContainer.Entities);
             OccupiedSpace spaceToCheck = new OccupiedSpace(position);
             foreach (OccupiedSpace space in _spaces.Keys)
@@ -59,6 +82,12 @@ namespace Mumble.FirstGame.Core.System.Collision
                 HasCollision = false
             };
         }
+
+        public void SetSceneBoundary(ISceneBoundary boundary)
+        {
+            _boundary = boundary;
+        }
+
         private void BuildSpace(List<IEntity> entities)
         {
             _entities = entities;

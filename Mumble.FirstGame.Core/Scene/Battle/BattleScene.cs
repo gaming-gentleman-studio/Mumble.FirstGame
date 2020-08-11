@@ -119,7 +119,7 @@ namespace Mumble.FirstGame.Core.Scene.Battle
             foreach(IProjectileEntity projectile in EntityContainer.Projectiles)
             {
                 MoveProjectileAction move = new MoveProjectileAction(projectile, projectile.VelocityComponent);
-                move.CalculateEffect(Boundary,_collisionSystem);
+                move.CalculateEffect(_collisionSystem);
                 resultingActions.Add(move);
             }
             
@@ -190,7 +190,7 @@ namespace Mumble.FirstGame.Core.Scene.Battle
         }
         private List<IAction> Update(IMoveAction moveAction)
         {
-            moveAction.CalculateEffect(Boundary, _collisionSystem);
+            moveAction.CalculateEffect( _collisionSystem);
 
             //TODO - enemies may also move
             return new List<IAction>() { moveAction };
