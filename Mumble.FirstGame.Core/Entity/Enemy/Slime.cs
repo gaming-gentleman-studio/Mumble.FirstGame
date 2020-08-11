@@ -3,6 +3,7 @@ using Mumble.FirstGame.Core.Entity.Components.AI;
 using Mumble.FirstGame.Core.Entity.Components.Damage;
 using Mumble.FirstGame.Core.Entity.Components.Health;
 using Mumble.FirstGame.Core.Entity.Components.Position;
+using Mumble.FirstGame.Core.Entity.Components.Size;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
 using Mumble.FirstGame.Core.Entity.Components.Weapon;
 using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
@@ -48,7 +49,7 @@ namespace Mumble.FirstGame.Core.Entity.Enemy
             private set;
         }
 
-        public int Scale => 2;
+        public ISizeComponent SizeComponent => new MediumSizeComponent();
 
         public Slime(int damage, int health, float x, float y)
         {

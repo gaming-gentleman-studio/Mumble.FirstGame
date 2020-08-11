@@ -1,5 +1,6 @@
 ﻿using Mumble.FirstGame.Core.Entity.Components.Damage;
 using Mumble.FirstGame.Core.Entity.Components.Position;
+using Mumble.FirstGame.Core.Entity.Components.Size;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
 using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using System;
@@ -34,7 +35,7 @@ namespace Mumble.FirstGame.Core.Entity.Projectile
             private set;
         }
 
-        public int Scale => 1;
+        public ISizeComponent SizeComponent => new SmallSizeComponent();
 
         public SimpleBullet(float x, float y, int damage, Direction direction, float speed, IOwnerIdentifier ownerIdentifier)
         {

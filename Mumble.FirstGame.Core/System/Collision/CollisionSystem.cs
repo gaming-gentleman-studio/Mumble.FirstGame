@@ -1,6 +1,7 @@
 ﻿using Mumble.FirstGame.Core.Background;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Components.Position;
+using Mumble.FirstGame.Core.Entity.Components.Size;
 using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Scene.Battle.SceneBoundary;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
@@ -31,7 +32,7 @@ namespace Mumble.FirstGame.Core.System.Collision
         {
             return _positions[position];
         }
-        public CollisionResult HasCollision(IPositionComponent position,IPositionComponent selfPosition, IOwnerIdentifier ownerIdentifier)
+        public CollisionResult HasCollision(IPositionComponent position,IPositionComponent selfPosition, ISizeComponent selfSize,IOwnerIdentifier ownerIdentifier)
         {
             //Keep in sync
             if (!_boundary.IsInBounds(position))
@@ -57,7 +58,7 @@ namespace Mumble.FirstGame.Core.System.Collision
                 };
             }
             BuildSpace(_entityContainer.Entities);
-            OccupiedSpace spaceToCheck = new OccupiedSpace(position);
+            OccupiedSpace spaceToCheck = new OccupiedSpace(position, selfSize);
             foreach (OccupiedSpace space in _spaces.Keys)
             {
                 if (_spaces[space].PositionComponent == selfPosition)
@@ -95,7 +96,7 @@ namespace Mumble.FirstGame.Core.System.Collision
             _positions = new Dictionary<IPositionComponent, IEntity>();
             foreach(IEntity entity in _entities)
             {
-                _spaces.Add(new OccupiedSpace(entity.PositionComponent), entity);
+                _spaces.Add(new OccupiedSpace(entity.PositionComponent,entity.SizeComponent), entity);
                 _positions.Add(entity.PositionComponent, entity);
             }
         }
@@ -109,7 +110,7 @@ namespace Mumble.FirstGame.Core.System.Collision
             public float XMax;
             public float YMax;
             
-            public OccupiedSpace(IPositionComponent position)
+            public OccupiedSpace(IPositionComponent position, ISizeComponent size)
             {
                 XMin = position.X - X_FUZZ;
                 XMax = position.X + X_FUZZ;

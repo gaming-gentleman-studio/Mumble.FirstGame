@@ -41,6 +41,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\IEntityComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Position\IPositionComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Position\PositionComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Size\ISizeComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Size\MediumSizeComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Size\SmallSizeComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Velocity\Direction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Velocity\IVelocityComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Velocity\VelocityComponent.cs" />

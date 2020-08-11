@@ -3,6 +3,7 @@ using Mumble.FirstGame.Core.Action.Movement;
 using Mumble.FirstGame.Core.Entity.Components.Damage;
 using Mumble.FirstGame.Core.Entity.Components.Health;
 using Mumble.FirstGame.Core.Entity.Components.Position;
+using Mumble.FirstGame.Core.Entity.Components.Size;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
 using Mumble.FirstGame.Core.Entity.Components.Weapon;
 using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
@@ -37,8 +38,7 @@ namespace Mumble.FirstGame.Core.Entity.Player
         }
 
         public IOwnerIdentifier OwnerIdentifier { get; private set; }
-
-        public int Scale => 2;
+        public ISizeComponent SizeComponent => new MediumSizeComponent();
 
         private string _name;
         public Player(string name, float x, float y, IOwnerIdentifier owner)

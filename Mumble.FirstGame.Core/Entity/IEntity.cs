@@ -1,4 +1,5 @@
 ﻿using Mumble.FirstGame.Core.Entity.Components.Position;
+using Mumble.FirstGame.Core.Entity.Components.Size;
 using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using System;
 using System.Collections.Generic;
@@ -14,12 +15,6 @@ namespace Mumble.FirstGame.Core.Entity
         }
         string GetName();
         IOwnerIdentifier OwnerIdentifier { get; }
-
-        //Scale - for example, 1 = base pixel square size (i.e. 16x16)
-        // 2 = 32x32
-        int Scale
-        {
-            get;
-        }
+        ISizeComponent SizeComponent { get; }
     }
 }

@@ -66,7 +66,7 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         }
         public override Vector2 GetScale()
         {
-            return new Vector2(_entity.Scale, _entity.Scale);
+            return new Vector2(_entity.SizeComponent.Scale, _entity.SizeComponent.Scale);
             
         }
         public override void AnimateDamage()

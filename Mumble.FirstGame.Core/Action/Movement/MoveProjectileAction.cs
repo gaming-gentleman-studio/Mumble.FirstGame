@@ -45,7 +45,7 @@ namespace Mumble.FirstGame.Core.Action.Movement
             float oldX = Entity.PositionComponent.X;
             float oldY = Entity.PositionComponent.Y;
             IPositionComponent newPosition = Entity.PositionComponent.GetNewCoords(Velocity);
-            CollisionResult result = collisionSystem.HasCollision(newPosition, Entity.PositionComponent, Entity.OwnerIdentifier);
+            CollisionResult result = collisionSystem.HasCollision(newPosition, Entity.PositionComponent, Entity.SizeComponent, Entity.OwnerIdentifier);
             if (result.InBounds)
             {
                 
