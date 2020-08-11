@@ -34,17 +34,17 @@ namespace Mumble.FirstGame.Core.System.Collision
         }
         public CollisionResult HasCollision(IPositionComponent position,IPositionComponent selfPosition, ISizeComponent selfSize,IOwnerIdentifier ownerIdentifier)
         {
-            //Keep in sync
-            if (!_boundary.IsInBounds(position))
+            
+            if (!_boundary.IsInBounds(position, selfSize))
             {
                 IPositionComponent newPosition;
-                if (_boundary.IsInBoundsX(position))
+                if (_boundary.IsInBoundsX(position, selfSize))
                 {
-                    newPosition = new PositionComponent(position.X, _boundary.GetBoundsAdjustedY(position));
+                    newPosition = new PositionComponent(position.X, _boundary.GetBoundsAdjustedY(position, selfSize));
                 }
-                else if (_boundary.IsInBoundsY(position))
+                else if (_boundary.IsInBoundsY(position, selfSize))
                 {
-                    newPosition = new PositionComponent(_boundary.GetBoundsAdjustedX(position), position.Y);
+                    newPosition = new PositionComponent(_boundary.GetBoundsAdjustedX(position, selfSize), position.Y);
                 }
                 else
                 {
@@ -57,6 +57,7 @@ namespace Mumble.FirstGame.Core.System.Collision
                     BouncebackPosition = newPosition
                 };
             }
+            //Keep in sync
             BuildSpace(_entityContainer.Entities);
             OccupiedSpace spaceToCheck = new OccupiedSpace(position, selfSize);
             foreach (OccupiedSpace space in _spaces.Keys)
@@ -103,8 +104,8 @@ namespace Mumble.FirstGame.Core.System.Collision
         private class OccupiedSpace
         {
 
-            private const float X_FUZZ = 1f;
-            private const float Y_FUZZ = 1f;
+            private const float X_FUZZ = 0.5f;
+            private const float Y_FUZZ = 0.5f;
             public float XMin;
             public float YMin;
             public float XMax;
@@ -112,10 +113,10 @@ namespace Mumble.FirstGame.Core.System.Collision
             
             public OccupiedSpace(IPositionComponent position, ISizeComponent size)
             {
-                XMin = position.X - X_FUZZ;
-                XMax = position.X + X_FUZZ;
-                YMin = position.Y - Y_FUZZ;
-                YMax = position.Y + Y_FUZZ;
+                XMin = position.X - (X_FUZZ*size.Scale);
+                XMax = position.X + (X_FUZZ * size.Scale);
+                YMin = position.Y - (Y_FUZZ * size.Scale);
+                YMax = position.Y + (Y_FUZZ * size.Scale);
             }
             public bool HasCollision(OccupiedSpace otherSpace)
             {

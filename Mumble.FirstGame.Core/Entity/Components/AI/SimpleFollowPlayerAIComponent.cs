@@ -12,7 +12,7 @@ namespace Mumble.FirstGame.Core.Entity.Components.AI
 {
     public class SimpleFollowPlayerAIComponent : ICombatAIComponent
     {
-        private const float _damageDistance = 5f;
+        private const float _damageDistance = 3f;
         public IAction GenerateAction(ICombatEntity source, List<ICombatEntity> players)
         {
             //first one for now

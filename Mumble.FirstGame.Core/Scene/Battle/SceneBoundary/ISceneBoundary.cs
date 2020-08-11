@@ -1,5 +1,6 @@
 ﻿using Mumble.FirstGame.Core.Background;
 using Mumble.FirstGame.Core.Entity.Components.Position;
+using Mumble.FirstGame.Core.Entity.Components.Size;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
 using System;
 using System.Collections.Generic;
@@ -16,10 +17,10 @@ namespace Mumble.FirstGame.Core.Scene.Battle.SceneBoundary
 
         IBackground[,] Backgrounds { get; }
 
-        bool IsInBounds(IPositionComponent positionComponent);
-        bool IsInBoundsX(IPositionComponent positionComponent);
-        float GetBoundsAdjustedX(IPositionComponent positionComponent);
-        bool IsInBoundsY(IPositionComponent positionComponent);
-        float GetBoundsAdjustedY(IPositionComponent positionComponent);
+        bool IsInBounds(IPositionComponent positionComponent, ISizeComponent size);
+        bool IsInBoundsX(IPositionComponent positionComponent, ISizeComponent size);
+        float GetBoundsAdjustedX(IPositionComponent positionComponent, ISizeComponent size);
+        bool IsInBoundsY(IPositionComponent positionComponent, ISizeComponent size);
+        float GetBoundsAdjustedY(IPositionComponent positionComponent, ISizeComponent size);
     }
 }

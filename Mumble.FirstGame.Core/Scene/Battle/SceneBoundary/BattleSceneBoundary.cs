@@ -1,10 +1,12 @@
 ﻿using Mumble.FirstGame.Core.Action.Movement;
 using Mumble.FirstGame.Core.Background;
 using Mumble.FirstGame.Core.Entity.Components.Position;
+using Mumble.FirstGame.Core.Entity.Components.Size;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Mumble.FirstGame.Core.Scene.Battle.SceneBoundary
 {
@@ -30,34 +32,42 @@ namespace Mumble.FirstGame.Core.Scene.Battle.SceneBoundary
             };
             Backgrounds = backgrounds;
         }
-        private bool HasBackgroundCollision(IPositionComponent positionComponent)
+        private bool HasBackgroundCollision(IPositionComponent positionComponent, ISizeComponent size)
         {
             int x = (int)Math.Round(positionComponent.X, 0);
             int y = (int)Math.Round(positionComponent.Y, 0);
-            if (Backgrounds[x, y].HasCollision)
+
+            
+            for (int i = 0; i < 1; i++)
             {
-                return true;
+                for (int j = 0; j< 1; j++)
+                {
+                    if (Backgrounds[x+i, y+j].HasCollision)
+                    {
+                        return true;
+                    }
+                }
             }
             return false;
         }
-        public bool IsInBounds(IPositionComponent positionComponent)
+        public bool IsInBounds(IPositionComponent positionComponent, ISizeComponent size)
         {
-            if (HasBackgroundCollision(positionComponent))
+            if (HasBackgroundCollision(positionComponent, size))
             {
                 return false;
             }
             return (positionComponent.X <= Width) && (positionComponent.X >= 0) && (positionComponent.Y <= Height) && (positionComponent.Y >= 0);
         }
         //TODO - figure out a more intelligent way to bounce an entity
-        public bool IsInBoundsX(IPositionComponent positionComponent)
+        public bool IsInBoundsX(IPositionComponent positionComponent, ISizeComponent size)
         {
-            if (HasBackgroundCollision(positionComponent))
+            if (HasBackgroundCollision(positionComponent, size))
             {
                 return false;
             }
             return (positionComponent.X <= Width) && (positionComponent.X >= 0);
         }
-        public float GetBoundsAdjustedX(IPositionComponent positionComponent)
+        public float GetBoundsAdjustedX(IPositionComponent positionComponent, ISizeComponent size)
         {
             if (positionComponent.X > Width)
             {
@@ -69,15 +79,15 @@ namespace Mumble.FirstGame.Core.Scene.Battle.SceneBoundary
             }
             return positionComponent.X;
         }
-        public bool IsInBoundsY(IPositionComponent positionComponent)
+        public bool IsInBoundsY(IPositionComponent positionComponent, ISizeComponent size)
         {
-            if (HasBackgroundCollision(positionComponent))
+            if (HasBackgroundCollision(positionComponent,size))
             {
                 return false;
             }
             return (positionComponent.Y <= Height) && (positionComponent.Y >= 0);
         }
-        public float GetBoundsAdjustedY(IPositionComponent positionComponent)
+        public float GetBoundsAdjustedY(IPositionComponent positionComponent, ISizeComponent size)
         {
             if (positionComponent.Y > Height)
             {
