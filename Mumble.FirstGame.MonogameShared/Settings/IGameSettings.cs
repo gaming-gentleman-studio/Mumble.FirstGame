@@ -9,6 +9,7 @@ namespace Mumble.FirstGame.MonogameShared.Settings
 {
     public interface IGameSettings
     {
+
         IPEndPoint Server { get; }
 
         ClientType ClientType { get; }

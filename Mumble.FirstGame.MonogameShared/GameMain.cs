@@ -58,6 +58,7 @@ namespace Mumble.FirstGame.MonogameShared
         float windowScale;
         IGameSettings settings;
         IScene scene;
+        ScalingUtils scalingUtils;
         public GameMain()
         {   
             graphics = new GraphicsDeviceManager(this);
@@ -135,6 +136,7 @@ namespace Mumble.FirstGame.MonogameShared
         private void SetWindowScale()
         {
             windowScale = 1f;
+            scalingUtils = new ScalingUtils(settings, windowScale);
             //float width = (float)graphics.GraphicsDevice.Viewport.Width / ((float)(scene.Boundary.Width * settings.SpritePixelSpacing)) ;
             //float height = (float)graphics.GraphicsDevice.Viewport.Height / ((float)(scene.Boundary.Height * settings.SpritePixelSpacing));
             //if (height > width)
@@ -159,7 +161,7 @@ namespace Mumble.FirstGame.MonogameShared
                 {
                     if (backgrounds[i,j] is Wall)
                     {
-                        BackgroundSprites.Add(new WallSpriteMetadata(new Vector2(i, j)));
+                        BackgroundSprites.Add(new WallSpriteMetadata(new Vector2(i, j),backgrounds[i,j].Scale));
                     }
                     
                 }
@@ -200,27 +202,14 @@ namespace Mumble.FirstGame.MonogameShared
             List<IAction> actions = new List<IAction>();
 
             actions.AddIfNotNull(keyHandler.HandleKeyPress(player));
-            actions.AddIfNotNull(mouseHandler.HandleMouseClick(player, ScalePosition(EntitySprites[player].GetPosition())));
+            actions.AddIfNotNull(mouseHandler.HandleMouseClick(player, scalingUtils.ScalePosition(EntitySprites[player].GetPosition())));
 
             results = client.Update(actions);
             ApplyResults(results);
             //DebugUtils.PrintActions(actions);
             base.Update(gameTime);
         }
-        private Vector2 ScalePosition(Vector2 position)
-        {
-            return new Vector2((position.X * settings.SpritePixelSpacing * windowScale)+settings.BorderPixelSize,
-                (position.Y * settings.SpritePixelSpacing * windowScale) + settings.BorderPixelSize);
-        }
-        private Vector2 DescalePosition(Vector2 position)
-        {
-            return new Vector2((position.X - settings.BorderPixelSize) / (settings.SpritePixelSpacing * windowScale),
-                (position.Y - settings.BorderPixelSize) / (settings.SpritePixelSpacing * windowScale));
-        }
-        private Vector2 ScaleSize(Vector2 scale)
-        {
-            return new Vector2(scale.X * settings.ScreenScale * windowScale, scale.Y * settings.ScreenScale * windowScale);
-        }
+
         private void ApplyResults(List<IActionResult> results)
         {
             if (results.Count > 0)
@@ -281,28 +270,28 @@ namespace Mumble.FirstGame.MonogameShared
         {
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin(SpriteSortMode.Deferred,BlendState.AlphaBlend,SamplerState.PointClamp);
-            Vector2 mousePosition = DescalePosition(Mouse.GetState().Position.ToVector2());
+            Vector2 mousePosition = scalingUtils.DescalePosition(Mouse.GetState().Position.ToVector2());
             foreach (AbstractSpriteMetadata sprite in BackgroundSprites)
             {
                 spriteBatch.Draw(sprite.GetImage(contentImages),
-                    ScalePosition(sprite.GetPosition()), 
+                    scalingUtils.ScalePosition(sprite.GetPosition()), 
                     sprite.GetSpritesheetRectange(mousePosition), 
                     sprite.GetColor(), 
                     sprite.GetRotation(), 
-                    sprite.GetOrigin(), 
-                    ScaleSize(sprite.GetScale()), 
+                    sprite.GetOrigin(),
+                    scalingUtils.ScaleSize(sprite.GetScale()), 
                     SpriteEffects.None, 0f);
             }
             foreach (IEntity entity in EntitySprites.Keys)
             {
                 AbstractSpriteMetadata sprite = EntitySprites[entity];
                 spriteBatch.Draw(sprite.GetImage(contentImages),
-                    ScalePosition(sprite.GetPosition()), 
+                    scalingUtils.ScalePosition(sprite.GetPosition()), 
                     sprite.GetSpritesheetRectange(mousePosition), 
                     sprite.GetColor(), 
                     sprite.GetRotation(), 
                     sprite.GetOrigin(),
-                    ScaleSize(sprite.GetScale()), 
+                    scalingUtils.ScaleSize(sprite.GetScale()), 
                     SpriteEffects.None, 0f);
             }
             foreach (AbstractSpriteMetadata sprite in UISprites)
@@ -316,6 +305,7 @@ namespace Mumble.FirstGame.MonogameShared
                     sprite.GetScale(), 
                     SpriteEffects.None, 0f);
             }
+            DebugUtils.DrawGrid(spriteBatch, graphics.GraphicsDevice, scalingUtils, scene.Boundary.Width, scene.Boundary.Height);
             spriteBatch.End();
 
             base.Draw(gameTime);

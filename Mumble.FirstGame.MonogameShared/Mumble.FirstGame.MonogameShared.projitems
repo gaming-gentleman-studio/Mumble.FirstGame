@@ -24,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MouseHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MovementKeyHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\ListExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\ScalingUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Vector2Extension.cs" />
   </ItemGroup>
   <ItemGroup>

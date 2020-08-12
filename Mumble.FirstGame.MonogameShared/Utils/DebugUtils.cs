@@ -1,6 +1,9 @@
-﻿using Mumble.FirstGame.Core.Action;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Mumble.FirstGame.Core.Action;
 using Mumble.FirstGame.Core.Action.Movement;
 using Mumble.FirstGame.Core.ActionResult;
+using Mumble.FirstGame.Core.Entity.Components.Position;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,6 +25,27 @@ namespace Mumble.FirstGame.MonogameShared.Utils
                     foreach (FieldInfo field in action.GetType().GetFields())
                     {
                         Debug.Write(";" + field.Name + ":" + field.GetValue(action).ToString());
+                    }
+                }
+            }
+        }
+        public static void DrawGrid(SpriteBatch spriteBatch, GraphicsDevice graphics, ScalingUtils scalingUtil,int width, int height)
+        { 
+            Texture2D texture1px = new Texture2D(graphics, 1, 1);
+            texture1px.SetData(new Color[] { Color.White });
+            for (int i = 0; i < width; ++i)
+            {
+                for (int j = 0; j < height; ++j)
+                {
+                    Vector2 scaled = scalingUtil.ScalePosition(new Vector2(i, j));
+                    
+                    if (i % 5 == 0 || j % 5 == 0)
+                    {
+                        spriteBatch.Draw(texture1px, scaled, new Rectangle(0, 0, 1, 1), Color.Yellow);
+                    }
+                    else
+                    {
+                        spriteBatch.Draw(texture1px, scaled, new Rectangle(0, 0, 1, 1), Color.Red);
                     }
                 }
             }

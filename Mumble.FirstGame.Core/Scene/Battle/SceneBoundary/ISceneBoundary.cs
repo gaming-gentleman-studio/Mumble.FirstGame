@@ -16,11 +16,5 @@ namespace Mumble.FirstGame.Core.Scene.Battle.SceneBoundary
         Dictionary<Direction, int> MaxValues { get; }
 
         IBackground[,] Backgrounds { get; }
-
-        bool IsInBounds(IPositionComponent positionComponent, ISizeComponent size);
-        bool IsInBoundsX(IPositionComponent positionComponent, ISizeComponent size);
-        float GetBoundsAdjustedX(IPositionComponent positionComponent, ISizeComponent size);
-        bool IsInBoundsY(IPositionComponent positionComponent, ISizeComponent size);
-        float GetBoundsAdjustedY(IPositionComponent positionComponent, ISizeComponent size);
     }
 }

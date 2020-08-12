@@ -63,6 +63,10 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
                 _entity.PositionComponent.Y
             );
         }
+        public override Vector2 GetOrigin()
+        {
+            return new Vector2(8, 8);
+        }
         public override Vector2 GetScale()
         {
             return new Vector2(_entity.SizeComponent.Scale, _entity.SizeComponent.Scale);

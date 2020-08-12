@@ -10,9 +10,11 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata.Background
     public class WallSpriteMetadata : AbstractSpriteMetadata
     {
         private Vector2 _position;
-        public WallSpriteMetadata(Vector2 position)
+        private float _scale;
+        public WallSpriteMetadata(Vector2 position, float scale)
         {
             _position = new Vector2(position.X, position.Y);
+            _scale = scale;
         }
         public override Texture2D GetImage(ContentImages container)
         {
@@ -23,5 +25,11 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata.Background
         {
             return _position;
         }
+        public override Vector2 GetScale()
+        {
+            return new Vector2(_scale, _scale);
+
+        }
+
     }
 }
