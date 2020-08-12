@@ -51,6 +51,29 @@ namespace Mumble.FirstGame.Core.Entity.Components.Velocity
         public static Direction Right => new Direction(1, 0);
         public static Direction None => new Direction(0, 0);
 
+        public static Direction Merge(Direction a, Direction b)
+        {
+            if (a == Direction.None && b == Direction.None)
+            {
+                return Direction.None;
+            }
+            else if (a == Direction.None)
+            {
+                return b;
+            }
+            else if (b == Direction.None)
+            {
+                return a;
+            }
+            float large = Math.Max(a.Radians,b.Radians);
+            float diff = Math.Abs(a.Radians - b.Radians);
+            if (diff > Math.PI)
+            {
+                diff = diff - (float)(2 * Math.PI);
+            }
+            float radians = large - (diff/2);
+            return new Direction(radians);
+        }
         public static Direction GetRandom90Direction()
         {
             Random rand = new Random();

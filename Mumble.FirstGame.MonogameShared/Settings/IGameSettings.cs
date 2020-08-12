@@ -24,6 +24,8 @@ namespace Mumble.FirstGame.MonogameShared.Settings
 
         int BorderPixelSize { get; }
 
+
+
         
 
     }

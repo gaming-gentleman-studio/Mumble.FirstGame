@@ -191,8 +191,6 @@ namespace Mumble.FirstGame.Core.Scene.Battle
         private List<IAction> Update(IMoveAction moveAction)
         {
             moveAction.CalculateEffect( _collisionSystem);
-
-            //TODO - enemies may also move
             return new List<IAction>() { moveAction };
         }
         private List<IAction> Update(IAttackAction combatAction)
