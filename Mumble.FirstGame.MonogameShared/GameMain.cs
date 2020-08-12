@@ -212,6 +212,11 @@ namespace Mumble.FirstGame.MonogameShared
             return new Vector2((position.X * settings.SpritePixelSpacing * windowScale)+settings.BorderPixelSize,
                 (position.Y * settings.SpritePixelSpacing * windowScale) + settings.BorderPixelSize);
         }
+        private Vector2 DescalePosition(Vector2 position)
+        {
+            return new Vector2((position.X - settings.BorderPixelSize) / (settings.SpritePixelSpacing * windowScale),
+                (position.Y - settings.BorderPixelSize) / (settings.SpritePixelSpacing * windowScale));
+        }
         private Vector2 ScaleSize(Vector2 scale)
         {
             return new Vector2(scale.X * settings.ScreenScale * windowScale, scale.Y * settings.ScreenScale * windowScale);
@@ -276,12 +281,12 @@ namespace Mumble.FirstGame.MonogameShared
         {
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin(SpriteSortMode.Deferred,BlendState.AlphaBlend,SamplerState.PointClamp);
-            
-            foreach(AbstractSpriteMetadata sprite in BackgroundSprites)
+            Vector2 mousePosition = DescalePosition(Mouse.GetState().Position.ToVector2());
+            foreach (AbstractSpriteMetadata sprite in BackgroundSprites)
             {
                 spriteBatch.Draw(sprite.GetImage(contentImages),
                     ScalePosition(sprite.GetPosition()), 
-                    sprite.GetSpritesheetRectange(), 
+                    sprite.GetSpritesheetRectange(mousePosition), 
                     sprite.GetColor(), 
                     sprite.GetRotation(), 
                     sprite.GetOrigin(), 
@@ -293,7 +298,7 @@ namespace Mumble.FirstGame.MonogameShared
                 AbstractSpriteMetadata sprite = EntitySprites[entity];
                 spriteBatch.Draw(sprite.GetImage(contentImages),
                     ScalePosition(sprite.GetPosition()), 
-                    sprite.GetSpritesheetRectange(), 
+                    sprite.GetSpritesheetRectange(mousePosition), 
                     sprite.GetColor(), 
                     sprite.GetRotation(), 
                     sprite.GetOrigin(),
@@ -304,7 +309,7 @@ namespace Mumble.FirstGame.MonogameShared
             {
                 spriteBatch.Draw(sprite.GetImage(contentImages),
                     sprite.GetPosition(),
-                    sprite.GetSpritesheetRectange(), 
+                    sprite.GetSpritesheetRectange(mousePosition), 
                     sprite.GetColor(), 
                     sprite.GetRotation(), 
                     sprite.GetOrigin(), 

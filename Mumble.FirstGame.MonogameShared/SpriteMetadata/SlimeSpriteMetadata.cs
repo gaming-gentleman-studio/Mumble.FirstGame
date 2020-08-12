@@ -36,7 +36,7 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         {
             return container.Slime;
         }
-        public override Rectangle GetSpritesheetRectange()
+        public override Rectangle GetSpritesheetRectange(Vector2 mousePosition)
         {
             
             Rectangle rect = SpriteMetadataUtil.SpritesheetPosByDirection[_facing];

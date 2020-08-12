@@ -31,7 +31,7 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         {
             return Color.DarkGray;
         }
-        public virtual Rectangle GetSpritesheetRectange()
+        public virtual Rectangle GetSpritesheetRectange(Vector2 mousePosition)
         {
             return new Rectangle(0, 0, 16, 16);
         }

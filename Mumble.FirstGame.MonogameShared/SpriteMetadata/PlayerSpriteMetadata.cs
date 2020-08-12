@@ -32,10 +32,9 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         {
             return container.ImgTheDude;
         }
-        public override Rectangle GetSpritesheetRectange()
+        public override Rectangle GetSpritesheetRectange(Vector2 mousePosition)
         {
-            Vector2 vec = Mouse.GetState().Position.ToVector2();
-            Direction direction = vec.ToRelativeDirection(GetPosition());
+            Direction direction = mousePosition.ToRelativeDirection(GetPosition());
             Direction facing = Direction.ToNearest90Angle(direction);
             Rectangle rect = SpriteMetadataUtil.SpritesheetPosByDirection[facing];
             rect.Y = (16 * _animationStep)+_animationStep;
