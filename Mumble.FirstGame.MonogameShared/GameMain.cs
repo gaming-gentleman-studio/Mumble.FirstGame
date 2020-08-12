@@ -195,7 +195,6 @@ namespace Mumble.FirstGame.MonogameShared
             }
 
 #endif
-            Mouse.GetState().Position.ToVector2().Normalize();
 
             List<IActionResult> results = new List<IActionResult>();
             List<IAction> actions = new List<IAction>();

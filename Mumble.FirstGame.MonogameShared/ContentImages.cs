@@ -25,16 +25,7 @@ namespace Mumble.FirstGame.MonogameShared
             Bullet = Content.Load<Texture2D>("Bullet");
             Cursor = Content.Load<Texture2D>("Cursor");
             Slime = Content.Load<Texture2D>("Enemy1");
-
-            CreateWall(graphicsDevice);
-        }
-        private void CreateWall(GraphicsDevice graphicsDevice)
-        {
-            Wall = new Texture2D(graphicsDevice, 80, 30);
-
-            Color[] data = new Color[80 * 30];
-            for (int i = 0; i < data.Length; ++i) data[i] = Color.Chocolate;
-            Wall.SetData(data);
+            Wall = Content.Load<Texture2D>("wall1");
         }
 
     }
