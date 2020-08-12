@@ -17,5 +17,14 @@ namespace Mumble.FirstGame.MonogameShared.Settings
 
         bool FullScreen { get; }
 
+        Tuple<int, int> AspectRatio { get; }
+        int SpritePixelSpacing { get; }
+
+        int ScreenScale { get; }
+
+        int BorderPixelSize { get; }
+
+        
+
     }
 }

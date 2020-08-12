@@ -106,8 +106,8 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         public override Vector2 GetPosition()
         {
             return new Vector2(
-                _entity.PositionComponent.X * SPRITE_PIXEL_SPACE,
-                _entity.PositionComponent.Y * SPRITE_PIXEL_SPACE
+                _entity.PositionComponent.X,
+                _entity.PositionComponent.Y
             );
         }
         public override Vector2 GetScale()

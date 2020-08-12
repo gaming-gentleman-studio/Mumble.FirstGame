@@ -55,17 +55,20 @@ namespace Mumble.FirstGame.MonogameShared
         MovementKeyHandler keyHandler;
         MouseHandler mouseHandler;
         GameServiceContainer provider;
+        float windowScale;
         IGameSettings settings;
         IScene scene;
         public GameMain()
         {   
             graphics = new GraphicsDeviceManager(this);
+
             Content.RootDirectory = "Content";
             
             //Should line up with server tick rate
             
             RegisterServices();
-            
+            graphics.PreferredBackBufferWidth = settings.AspectRatio.Item1;
+            graphics.PreferredBackBufferHeight = settings.AspectRatio.Item2;
             TargetElapsedTime = settings.TickRate;
             graphics.IsFullScreen = settings.FullScreen;
             IsFixedTimeStep = true;
@@ -116,6 +119,8 @@ namespace Mumble.FirstGame.MonogameShared
             IOwnerIdentifier owner = client.Register();
             List<IActionResult> results = client.Init(owner);
 
+            SetWindowScale();
+
             //TODO - this is a hacky way to get the player entity
             EntitiesCreatedActionResult createdResult = (EntitiesCreatedActionResult)results.Where(x => x is EntitiesCreatedActionResult).FirstOrDefault();
             player = (Player)createdResult.Entities.Where(x => x.OwnerIdentifier.Equals(owner)).FirstOrDefault();
@@ -125,6 +130,21 @@ namespace Mumble.FirstGame.MonogameShared
             InitializeBackgroundSprites();
             ApplyResults(results);
             base.Initialize();
+        }
+        //Maybe remove this?
+        private void SetWindowScale()
+        {
+            windowScale = 1f;
+            //float width = (float)graphics.GraphicsDevice.Viewport.Width / ((float)(scene.Boundary.Width * settings.SpritePixelSpacing)) ;
+            //float height = (float)graphics.GraphicsDevice.Viewport.Height / ((float)(scene.Boundary.Height * settings.SpritePixelSpacing));
+            //if (height > width)
+            //{
+            //    windowScale = width;
+            //}
+            //else
+            //{
+            //    windowScale = height;
+            //}
         }
         private void InitializeUISprites()
         {
@@ -181,12 +201,21 @@ namespace Mumble.FirstGame.MonogameShared
             List<IAction> actions = new List<IAction>();
 
             actions.AddIfNotNull(keyHandler.HandleKeyPress(player));
-            actions.AddIfNotNull(mouseHandler.HandleMouseClick(player, EntitySprites[player].GetPosition()));
+            actions.AddIfNotNull(mouseHandler.HandleMouseClick(player, ScalePosition(EntitySprites[player].GetPosition())));
 
             results = client.Update(actions);
             ApplyResults(results);
             //DebugUtils.PrintActions(actions);
             base.Update(gameTime);
+        }
+        private Vector2 ScalePosition(Vector2 position)
+        {
+            return new Vector2((position.X * settings.SpritePixelSpacing * windowScale)+settings.BorderPixelSize,
+                (position.Y * settings.SpritePixelSpacing * windowScale) + settings.BorderPixelSize);
+        }
+        private Vector2 ScaleSize(Vector2 scale)
+        {
+            return new Vector2(scale.X * settings.ScreenScale * windowScale, scale.Y * settings.ScreenScale * windowScale);
         }
         private void ApplyResults(List<IActionResult> results)
         {
@@ -251,16 +280,37 @@ namespace Mumble.FirstGame.MonogameShared
             
             foreach(AbstractSpriteMetadata sprite in BackgroundSprites)
             {
-                spriteBatch.Draw(sprite.GetImage(contentImages), sprite.GetPosition(), sprite.GetSpritesheetRectange(), sprite.GetColor(), sprite.GetRotation(), sprite.GetOrigin(), sprite.GetScale(), SpriteEffects.None, 0f);
+                spriteBatch.Draw(sprite.GetImage(contentImages),
+                    ScalePosition(sprite.GetPosition()), 
+                    sprite.GetSpritesheetRectange(), 
+                    sprite.GetColor(), 
+                    sprite.GetRotation(), 
+                    sprite.GetOrigin(), 
+                    ScaleSize(sprite.GetScale()), 
+                    SpriteEffects.None, 0f);
             }
             foreach (IEntity entity in EntitySprites.Keys)
             {
                 AbstractSpriteMetadata sprite = EntitySprites[entity];
-                spriteBatch.Draw(sprite.GetImage(contentImages), sprite.GetPosition(), sprite.GetSpritesheetRectange(), sprite.GetColor(), sprite.GetRotation(), sprite.GetOrigin(), sprite.GetScale(), SpriteEffects.None, 0f);
+                spriteBatch.Draw(sprite.GetImage(contentImages),
+                    ScalePosition(sprite.GetPosition()), 
+                    sprite.GetSpritesheetRectange(), 
+                    sprite.GetColor(), 
+                    sprite.GetRotation(), 
+                    sprite.GetOrigin(),
+                    ScaleSize(sprite.GetScale()), 
+                    SpriteEffects.None, 0f);
             }
             foreach (AbstractSpriteMetadata sprite in UISprites)
             {
-                spriteBatch.Draw(sprite.GetImage(contentImages), sprite.GetPosition(), sprite.GetSpritesheetRectange(), sprite.GetColor(), sprite.GetRotation(), sprite.GetOrigin(), sprite.GetScale(), SpriteEffects.None, 0f);
+                spriteBatch.Draw(sprite.GetImage(contentImages),
+                    sprite.GetPosition(),
+                    sprite.GetSpritesheetRectange(), 
+                    sprite.GetColor(), 
+                    sprite.GetRotation(), 
+                    sprite.GetOrigin(), 
+                    sprite.GetScale(), 
+                    SpriteEffects.None, 0f);
             }
             spriteBatch.End();
 

@@ -30,8 +30,8 @@ namespace Mumble.FirstGame.Core.Scene.Battle.Instances
 
         public ISceneBoundary GetSceneBoundary()
         {
-            int height = 30;
-            int width = 30;
+            int height = 50;
+            int width = 50;
             IBackground[,] backgrounds = new IBackground[width, height];
             for (int i = 0; i< width; i++)
             {

@@ -69,6 +69,14 @@ namespace Mumble.FirstGame.Test.Integration
             public TimeSpan TickRate => TimeSpan.FromMilliseconds(50);
 
             public bool FullScreen => false;
+
+            public int SpritePixelSpacing => 16;
+
+            public int ScreenScale => 1;
+
+            public Tuple<int, int> AspectRatio => new Tuple<int, int>(1920, 1080);
+
+            public int BorderPixelSize => 12;
         }
     }
 }

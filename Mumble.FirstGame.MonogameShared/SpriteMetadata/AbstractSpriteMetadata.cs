@@ -9,7 +9,6 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
 {
     public abstract class AbstractSpriteMetadata
     {
-        protected const int SPRITE_PIXEL_SPACE = 16;
         public abstract Texture2D GetImage(ContentImages container);
         public abstract Vector2 GetPosition();
         public virtual void AnimateMovement(MoveActionResult result)

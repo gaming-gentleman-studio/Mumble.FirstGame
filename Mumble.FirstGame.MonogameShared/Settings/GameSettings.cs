@@ -15,5 +15,16 @@ namespace Mumble.FirstGame.MonogameShared.Settings
         public TimeSpan TickRate => TimeSpan.FromMilliseconds(50);
 
         public bool FullScreen => false;
+
+        //Scaling of the position of the sprite
+        //aka how many pixels one unit of distance in core is
+        public int SpritePixelSpacing => 16;
+
+        //Scaling of sprites
+        public int ScreenScale => 1;
+
+        public Tuple<int, int> AspectRatio => new Tuple<int, int>(1920, 1080);
+
+        public int BorderPixelSize => 12;
     }
 }
