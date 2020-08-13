@@ -28,7 +28,7 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         private bool isAttacking = false;
         private int _damage_flash_count = 0;
 
-        public SlimeSpriteMetadata(Slime entity)
+        public SlimeSpriteMetadata(IEntity entity)
         {
             _entity = entity;
         }

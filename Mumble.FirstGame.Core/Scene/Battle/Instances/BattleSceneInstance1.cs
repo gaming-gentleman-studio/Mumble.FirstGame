@@ -17,14 +17,16 @@ namespace Mumble.FirstGame.Core.Scene.Battle.Instances
     public class BattleSceneInstance1 : IBattleSceneInstance
     {
         private SpawnSlimeAction _firstSlimeAction;
+        private SpawnTurretAction _firstTurretAction;
         public BattleSceneInstance1()
         {
             _firstSlimeAction = new SpawnSlimeAction(3, 30, new PositionComponent(25, 25));
+            _firstTurretAction = new SpawnTurretAction(5, 25, 25);
         }
         public List<IAction> GetInitialActions()
         {
             return new List<IAction>(){
-                _firstSlimeAction
+                _firstTurretAction
             };
         }
 

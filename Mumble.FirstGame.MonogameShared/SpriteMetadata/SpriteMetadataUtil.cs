@@ -4,6 +4,7 @@ using Mumble.FirstGame.Core.Entity.Components.Velocity;
 using Mumble.FirstGame.Core.Entity.Enemy;
 using Mumble.FirstGame.Core.Entity.Player;
 using Mumble.FirstGame.Core.Entity.Projectile;
+using Mumble.FirstGame.MonogameShared.SpriteMetadata.Enemy;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -33,7 +34,11 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
             }
             else if (entity is Slime)
             {
-                return new SlimeSpriteMetadata((Slime)entity);
+                return new SlimeSpriteMetadata(entity);
+            }
+            else if (entity is Turret)
+            {
+                return new TurretSpriteMetadata(entity);
             }
             else
             {

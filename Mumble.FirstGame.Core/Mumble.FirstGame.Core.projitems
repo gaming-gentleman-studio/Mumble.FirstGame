@@ -28,11 +28,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\SpawnPlayerAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\SpawnSimpleBulletAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\SpawnSlimeAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\SpawnTurretAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Background\BackgroundSubType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Background\Floor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Background\IBackground.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Background\Wall.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\AI\ICombatAIComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\AI\SimpleAttackPlayerAIComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\AI\SimpleFollowPlayerAIComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Damage\DamageComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Damage\IDamageComponent.cs" />
@@ -53,6 +55,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Weapon\SimpleMeleeWeaponComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Weapon\SimpleWeaponComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Enemy\Slime.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Enemy\Turret.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\ICombatAIEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\ICombatEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\IEntity.cs" />

@@ -19,13 +19,15 @@ namespace Mumble.FirstGame.MonogameShared
 
         public Texture2D Wall { get; private set; }
 
+        public Texture2D Turret { get; private set; }
         public void LoadContent(ContentManager Content, GraphicsDevice graphicsDevice)
         {
             ImgTheDude = Content.Load<Texture2D>("TheDude");
             Bullet = Content.Load<Texture2D>("Bullet");
             Cursor = Content.Load<Texture2D>("Cursor");
-            Slime = Content.Load<Texture2D>("Enemy1");
+            Slime = Content.Load<Texture2D>("Slime");
             Wall = Content.Load<Texture2D>("wall1");
+            Turret = Content.Load<Texture2D>("Turret");
         }
 
     }
