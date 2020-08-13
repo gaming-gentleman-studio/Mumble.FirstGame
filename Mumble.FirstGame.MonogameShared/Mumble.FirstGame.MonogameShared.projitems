@@ -13,11 +13,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Settings\GameSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings\IGameSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\Background\WallSpriteMetadata.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\CursorMetadata.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\Enemy\BaseEnemySpriteMetadata.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\UI\CursorMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\AbstractSpriteMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\Enemy\TurretSpriteMetadata.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\PlayerSpriteMetadata.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\SimpleBulletSpriteMetadata.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\Player\PlayerSpriteMetadata.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\Projectile\SimpleBulletSpriteMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\Enemy\SlimeSpriteMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\SpriteMetadataUtil.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\DebugUtils.cs" />
@@ -30,6 +31,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Content\" />
+    <Folder Include="$(MSBuildThisFileDirectory)SpriteMetadata\Projectile\" />
+    <Folder Include="$(MSBuildThisFileDirectory)SpriteMetadata\UI\" />
+    <Folder Include="$(MSBuildThisFileDirectory)SpriteMetadata\Player\" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />

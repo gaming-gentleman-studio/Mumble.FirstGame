@@ -8,11 +8,12 @@ using System.Text;
 
 namespace Mumble.FirstGame.MonogameShared.SpriteMetadata.Enemy
 {
-    public class TurretSpriteMetadata : SlimeSpriteMetadata
+    public class TurretSpriteMetadata : BaseEnemySpriteMetadata
     {
-        public TurretSpriteMetadata(IEntity entity) : base(entity)
+        protected override IEntity _entity { get; }
+        public TurretSpriteMetadata(IEntity entity)
         {
-            
+            _entity = entity;
         }
         public override Texture2D GetImage(ContentImages container)
         {
