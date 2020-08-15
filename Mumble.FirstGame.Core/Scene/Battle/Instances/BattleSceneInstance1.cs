@@ -21,7 +21,7 @@ namespace Mumble.FirstGame.Core.Scene.Battle.Instances
         public BattleSceneInstance1()
         {
             _firstSlimeAction = new SpawnSlimeAction(3, 30, new PositionComponent(25, 25));
-            _firstTurretAction = new SpawnTurretAction(5, 28, 28);
+            _firstTurretAction = new SpawnTurretAction(20, 28, 28);
         }
         public List<IAction> GetInitialActions()
         {

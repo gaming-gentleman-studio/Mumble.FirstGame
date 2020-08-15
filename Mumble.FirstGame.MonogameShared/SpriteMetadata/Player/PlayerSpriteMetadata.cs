@@ -6,11 +6,13 @@ using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
 using Mumble.FirstGame.Core.Entity.Player;
 using Mumble.FirstGame.Core.Entity.Projectile;
+using Mumble.FirstGame.MonogameShared.Animation;
 using Mumble.FirstGame.MonogameShared.SpriteMetadata;
 using Mumble.FirstGame.MonogameShared.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static Mumble.FirstGame.MonogameShared.Animation.SpritesheetSettings;
 
 namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
 {
@@ -18,15 +20,41 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
     {
 
         private IEntity _entity;
-        private int _animationStep = 0;
-        private int _animationDelay = 0;
-        private const int MAX_ANIMATION_DELAY = 2;
-        private const int MAX_ANIMATION_STEPS = 3;
-        private int _damage_flash_count = 0;
+        private AnimationHandler _animationHandler;
 
         public PlayerSpriteMetadata(Player entity)
         {
             _entity = entity;
+            _animationHandler = new AnimationHandler(new AnimationHandlerSettings()
+            {
+                SpritesheetSettingsMap = new Dictionary<AnimationTypes, SpritesheetSettings>()
+                {
+                    { AnimationTypes.Move, new SpritesheetSettings()
+                    {
+                        FrameDelay = 3,
+                        FacingBasis = FacingBasisEnum.Mouse,
+                        Rows = new List<int>()
+                        {
+                            0,
+                            1,
+                            2
+                        }
+                    } },
+                    { AnimationTypes.Damage, new SpritesheetSettings()
+                    {
+                        FrameDelay = 3,
+                        ColorChangeOnly = true,
+                        ColorChange = Color.Red
+                    } },
+                    { AnimationTypes.Idle, new SpritesheetSettings() }
+                },
+                AnimationTypePrecedence = new List<AnimationTypes>()
+                {
+                    AnimationTypes.Damage,
+                    AnimationTypes.Move,
+                    AnimationTypes.Idle
+                }
+            });
         }
         public override Texture2D GetImage(ContentImages container)
         {
@@ -34,26 +62,12 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         }
         public override Rectangle GetSpritesheetRectange(Vector2 mousePosition)
         {
-            Direction direction = mousePosition.ToRelativeDirection(GetPosition());
-            Direction facing = Direction.ToNearest90Angle(direction);
-            Rectangle rect = SpriteMetadataUtil.SpritesheetPosByDirection[facing];
-            rect.Y = (16 * _animationStep)+_animationStep;
-            
-            return rect;
+            return _animationHandler.GetSpritesheetRectange(mousePosition, GetPosition());
 
         }
         public override void AnimateMovement(MoveActionResult result)
         {
-            _animationDelay++;
-            if (_animationDelay > MAX_ANIMATION_DELAY - 1)
-            {
-                _animationDelay = 0;
-                _animationStep++;
-                if (_animationStep > MAX_ANIMATION_STEPS - 1)
-                {
-                    _animationStep = 0;
-                }
-            }
+            _animationHandler.AnimateType(AnimationTypes.Move);
 
         }
         public override Vector2 GetPosition()
@@ -74,20 +88,11 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         }
         public override void AnimateDamage()
         {
-            _damage_flash_count = 3;
+            _animationHandler.AnimateType(AnimationTypes.Damage);
         }
         public override Color GetColor()
         {
-            if (_damage_flash_count < 1)
-            {
-                return base.GetColor();
-            }
-            else
-            {
-                _damage_flash_count--;
-                return Color.Red;
-
-            }
+            return _animationHandler.GetColor();
 
         }
     }

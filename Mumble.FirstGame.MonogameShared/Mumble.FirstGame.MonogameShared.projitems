@@ -9,11 +9,13 @@
     <Import_RootNamespace>Mumble.FirstGame.MonogameShared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Animation\AnimationHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Animation\AnimationHandlerSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Animation\SpritesheetSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ContentImages.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings\GameSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings\IGameSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\Background\WallSpriteMetadata.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\Enemy\BaseEnemySpriteMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\UI\CursorMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\AbstractSpriteMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\Enemy\TurretSpriteMetadata.cs" />
