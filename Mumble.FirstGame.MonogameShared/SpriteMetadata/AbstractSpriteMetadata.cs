@@ -44,5 +44,9 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
         {
             return new Vector2(8, 8);
         }
+        public virtual float GetLayerDepth()
+        {
+            return 0.01f;
+        }
     }
 }

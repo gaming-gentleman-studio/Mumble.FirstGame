@@ -100,15 +100,11 @@ namespace Mumble.FirstGame.Core.System.Collision
             }
             if (_boundary != null)
             {
-                for (int i = 0; i < _boundary.Backgrounds.GetLength(0); i++)
+                foreach(IBackground background in _boundary.Backgrounds)
                 {
-                    for (int j = 0; j < _boundary.Backgrounds.GetLength(1); j++)
+                    if (background.HasCollision)
                     {
-                        IBackground background = _boundary.Backgrounds[i, j];
-                        if (background.HasCollision)
-                        {
-                            _backgrounds.Add(new OccupiedSpace((float)i, (float)j, background.Scale), background);
-                        }
+                        _backgrounds.Add(new OccupiedSpace(background.Position.X, background.Position.Y, background.Scale), background);
                     }
                 }
             }

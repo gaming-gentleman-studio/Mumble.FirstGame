@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ContentImages.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings\GameSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings\IGameSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\Background\FloorSpriteMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\Background\WallSpriteMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\UI\CursorMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\AbstractSpriteMetadata.cs" />

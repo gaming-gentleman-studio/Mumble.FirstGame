@@ -17,10 +17,10 @@ namespace Mumble.FirstGame.Core.Scene.Battle.SceneBoundary
 
         public Dictionary<Direction,int> MaxValues { get; private set; }
 
-        public IBackground[,] Backgrounds { get; private set; }
+        public HashSet<IBackground> Backgrounds { get; private set; }
 
 
-        public BattleSceneBoundary(int width, int height, IBackground[,] backgrounds)
+        public BattleSceneBoundary(int width, int height, HashSet<IBackground> backgrounds)
         {
             Width = width;
             Height = height;

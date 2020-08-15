@@ -38,14 +38,13 @@ namespace Mumble.FirstGame.MonogameShared.Utils
                 for (int j = 0; j < height; ++j)
                 {
                     Vector2 scaled = scalingUtil.ScalePosition(new Vector2(i, j));
-                    
                     if (i % 5 == 0 || j % 5 == 0)
                     {
-                        spriteBatch.Draw(texture1px, scaled, new Rectangle(0, 0, 1, 1), Color.Yellow);
+                        spriteBatch.Draw(texture1px, scaled, null, Color.Yellow, 0f,new Vector2(0,0),new Vector2(1,1),SpriteEffects.None,0f);
                     }
                     else
                     {
-                        spriteBatch.Draw(texture1px, scaled, new Rectangle(0, 0, 1, 1), Color.Red);
+                        spriteBatch.Draw(texture1px, scaled, null, Color.Red, 0f, new Vector2(0, 0), new Vector2(1, 1), SpriteEffects.None, 0f);
                     }
                 }
             }

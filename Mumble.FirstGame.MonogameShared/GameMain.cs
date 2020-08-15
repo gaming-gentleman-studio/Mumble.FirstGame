@@ -101,7 +101,7 @@ namespace Mumble.FirstGame.MonogameShared
             {
                 //We need an empty scene when online - server should tell us how to fill it in, not scene factory
                 //TODO - maybe do this a different way? it's awk right now, this scene isn't actually being used
-                scene = new BattleScene(provider.GetService<IEntityContainer>(), new List<IActionAdapter>(),new List<IActionResultAdapter>(), provider.GetService<ICollisionSystem>(), new BattleSceneBoundary(100,100, new IBackground[100,100]));
+                scene = new BattleScene(provider.GetService<IEntityContainer>(), new List<IActionAdapter>(),new List<IActionResultAdapter>(), provider.GetService<ICollisionSystem>(), new BattleSceneBoundary(100,100, new HashSet<IBackground>()));
                 provider.AddService<IGameClient>(new OnlineGameClient(provider.GetService<IEntityContainer>(), settings, provider.GetService<ISerializationFactoryContainer>()));
             }
             client = provider.GetService<IGameClient>();
@@ -154,16 +154,16 @@ namespace Mumble.FirstGame.MonogameShared
         }
         private void InitializeBackgroundSprites()
         {
-            IBackground[,] backgrounds = scene.Boundary.Backgrounds;
-            for(int i = 0; i< scene.Boundary.Width; i++)
+            HashSet<IBackground> backgrounds = scene.Boundary.Backgrounds;
+            foreach(IBackground background in backgrounds)
             {
-                for (int j = 0; j < scene.Boundary.Height; j++)
+                if (background is Wall)
                 {
-                    if (backgrounds[i,j] is Wall)
-                    {
-                        BackgroundSprites.Add(new WallSpriteMetadata(new Vector2(i, j),backgrounds[i,j].Scale));
-                    }
-                    
+                    BackgroundSprites.Add(new WallSpriteMetadata(new Vector2(background.Position.X, background.Position.Y), background.Scale));
+                }
+                else if (background is Floor)
+                {
+                    BackgroundSprites.Add(new FloorSpriteMetadata(new Vector2(background.Position.X, background.Position.Y), background.Scale));
                 }
             }
         }
@@ -269,18 +269,20 @@ namespace Mumble.FirstGame.MonogameShared
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-            spriteBatch.Begin(SpriteSortMode.Deferred,BlendState.AlphaBlend,SamplerState.PointClamp);
+            spriteBatch.Begin(SpriteSortMode.BackToFront,BlendState.AlphaBlend,SamplerState.PointClamp);
             Vector2 mousePosition = scalingUtils.DescalePosition(Mouse.GetState().Position.ToVector2());
             foreach (AbstractSpriteMetadata sprite in BackgroundSprites)
             {
+                Vector2 pos = sprite.GetPosition();
                 spriteBatch.Draw(sprite.GetImage(contentImages),
-                    scalingUtils.ScalePosition(sprite.GetPosition()), 
-                    sprite.GetSpritesheetRectange(mousePosition), 
-                    sprite.GetColor(), 
-                    sprite.GetRotation(), 
+                    scalingUtils.ScalePosition(sprite.GetPosition()),
+                    sprite.GetSpritesheetRectange(mousePosition),
+                    sprite.GetColor(),
+                    sprite.GetRotation(),
                     sprite.GetOrigin(),
-                    scalingUtils.ScaleSize(sprite.GetScale()), 
-                    SpriteEffects.None, 0f);
+                    scalingUtils.ScaleSize(sprite.GetScale()),
+                    SpriteEffects.None,
+                    sprite.GetLayerDepth());
             }
             foreach (IEntity entity in EntitySprites.Keys)
             {
@@ -292,7 +294,8 @@ namespace Mumble.FirstGame.MonogameShared
                     sprite.GetRotation(), 
                     sprite.GetOrigin(),
                     scalingUtils.ScaleSize(sprite.GetScale()), 
-                    SpriteEffects.None, 0f);
+                    SpriteEffects.None,
+                    sprite.GetLayerDepth());
             }
             foreach (AbstractSpriteMetadata sprite in UISprites)
             {

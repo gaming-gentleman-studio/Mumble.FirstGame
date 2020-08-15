@@ -35,18 +35,18 @@ namespace Mumble.FirstGame.Core.Scene.Battle.Instances
         {
             int height = 50;
             int width = 50;
-            IBackground[,] backgrounds = new IBackground[width, height];
+            HashSet<IBackground> backgrounds = new HashSet<IBackground>();
             for (int i = 0; i< width; i++)
             {
                 for (int j = 0; j < height; j++)
                 {
                     if (i == 0 || j == 0 || i == width-1 || j == height - 1)
                     {
-                        backgrounds[i,j] = new Wall(BackgroundSubType.Plain);
+                        backgrounds.Add(new Wall(BackgroundSubType.Plain, new PositionComponent(i, j)));
                     }
                     else
                     {
-                        backgrounds[i, j] = new Floor(BackgroundSubType.Plain);
+                        backgrounds.Add(new Floor(BackgroundSubType.Plain, new PositionComponent(i,j)));
                     }
                     
                 }

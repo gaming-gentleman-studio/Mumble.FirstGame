@@ -1,24 +1,23 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Mumble.FirstGame.Core.Background;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Mumble.FirstGame.MonogameShared.SpriteMetadata.Background
 {
-    public class WallSpriteMetadata : AbstractSpriteMetadata
+    public class FloorSpriteMetadata : AbstractSpriteMetadata
     {
         private Vector2 _position;
         private float _scale;
-        public WallSpriteMetadata(Vector2 position, float scale)
+        public FloorSpriteMetadata(Vector2 position, float scale)
         {
             _position = new Vector2(position.X, position.Y);
             _scale = scale;
         }
         public override Texture2D GetImage(ContentImages container)
         {
-            return container.Wall;
+            return container.Floor;
         }
 
         public override Vector2 GetPosition()
@@ -32,7 +31,7 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata.Background
         }
         public override float GetLayerDepth()
         {
-            return 0.99f;
+            return 1f;
         }
 
     }

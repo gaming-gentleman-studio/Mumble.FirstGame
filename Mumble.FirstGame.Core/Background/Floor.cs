@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mumble.FirstGame.Core.Entity.Components.Position;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,9 +13,12 @@ namespace Mumble.FirstGame.Core.Background
 
         public int Scale => 1;
 
-        public Floor(BackgroundSubType subtype)
+        public IPositionComponent Position { get; private set; }
+
+        public Floor(BackgroundSubType subtype, IPositionComponent position)
         {
             SubType = subtype;
+            Position = position;
         }
     }
 }

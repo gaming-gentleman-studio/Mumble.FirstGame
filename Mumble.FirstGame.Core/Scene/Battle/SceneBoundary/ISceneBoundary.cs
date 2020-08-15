@@ -15,6 +15,6 @@ namespace Mumble.FirstGame.Core.Scene.Battle.SceneBoundary
 
         Dictionary<Direction, int> MaxValues { get; }
 
-        IBackground[,] Backgrounds { get; }
+        HashSet<IBackground> Backgrounds { get; }
     }
 }
