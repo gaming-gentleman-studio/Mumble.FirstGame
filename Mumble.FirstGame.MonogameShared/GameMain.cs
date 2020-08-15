@@ -125,7 +125,7 @@ namespace Mumble.FirstGame.MonogameShared
             //TODO - this is a hacky way to get the player entity
             EntitiesCreatedActionResult createdResult = (EntitiesCreatedActionResult)results.Where(x => x is EntitiesCreatedActionResult).FirstOrDefault();
             player = (Player)createdResult.Entities.Where(x => x.OwnerIdentifier.Equals(owner)).FirstOrDefault();
-            EntitySprites[player] = SpriteMetadataUtil.CreateSpriteMetadata(player);
+            EntitySprites[player] = SpriteMetadataFactory.CreateSpriteMetadata(player);
 
             InitializeUISprites();
             InitializeBackgroundSprites();
@@ -219,7 +219,7 @@ namespace Mumble.FirstGame.MonogameShared
                 {
                     foreach (IEntity entity in result.Entities)
                     {
-                        EntitySprites[entity] = SpriteMetadataUtil.CreateSpriteMetadata(entity);
+                        EntitySprites[entity] = SpriteMetadataFactory.CreateSpriteMetadata(entity);
 
 
                     }
@@ -229,7 +229,7 @@ namespace Mumble.FirstGame.MonogameShared
                 {
                     if (!EntitySprites.Keys.Contains(result.Entity))
                     {
-                        EntitySprites[result.Entity] = SpriteMetadataUtil.CreateSpriteMetadata(result.Entity);
+                        EntitySprites[result.Entity] = SpriteMetadataFactory.CreateSpriteMetadata(result.Entity);
                     }
                     EntitySprites[result.Entity].AnimateMovement(result);
                     if (result.OutOfBounds)

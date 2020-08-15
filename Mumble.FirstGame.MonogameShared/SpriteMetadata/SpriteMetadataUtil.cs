@@ -24,28 +24,5 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
                 {Direction.Left, new Rectangle(width*3,0,width,height) }
             };
         }
-        public static AbstractSpriteMetadata CreateSpriteMetadata(IEntity entity)
-        {
-            if (entity is Player)
-            {
-                return new PlayerSpriteMetadata((Player)entity);
-            }
-            else if (entity is SimpleBullet)
-            {
-                return new SimpleBulletSpriteMetadata((SimpleBullet)entity);
-            }
-            else if (entity is Slime)
-            {
-                return new SlimeSpriteMetadata(entity);
-            }
-            else if (entity is Turret)
-            {
-                return new TurretSpriteMetadata(entity);
-            }
-            else
-            {
-                return null;
-            }
-        }
     }
 }
