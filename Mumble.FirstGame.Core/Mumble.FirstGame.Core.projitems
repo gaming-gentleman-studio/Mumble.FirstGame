@@ -25,10 +25,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Action\Movement\MoveProjectileAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\NullAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\ISpawnEntityAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\SpawnEntityAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\SpawnPlayerAction.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\SpawnSimpleBulletAction.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\SpawnSlimeAction.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\SpawnTurretAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Background\BackgroundSubType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Background\Floor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Background\IBackground.cs" />

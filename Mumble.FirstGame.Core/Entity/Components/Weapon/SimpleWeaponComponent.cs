@@ -35,7 +35,7 @@ namespace Mumble.FirstGame.Core.Entity.Components.Weapon
         public IAction Attack(float sourceX, float sourceY, Direction direction,IOwnerIdentifier ownerIdentifier)
         {
             _cooldownLeft = _cooldown;
-            SpawnSimpleBulletAction spawn = new SpawnSimpleBulletAction(sourceX,sourceY, DamageComponent.GetRawDamage(), VelocityComponent.Speed, direction,ownerIdentifier);
+            SpawnEntityAction spawn = new SpawnEntityAction(new SimpleBullet(sourceX,sourceY, DamageComponent.GetRawDamage(), direction, VelocityComponent.Speed,ownerIdentifier));
             return spawn;
         }
 

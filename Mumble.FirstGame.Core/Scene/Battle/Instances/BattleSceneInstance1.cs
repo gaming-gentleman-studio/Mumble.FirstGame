@@ -16,12 +16,12 @@ namespace Mumble.FirstGame.Core.Scene.Battle.Instances
 {
     public class BattleSceneInstance1 : IBattleSceneInstance
     {
-        private SpawnSlimeAction _firstSlimeAction;
-        private SpawnTurretAction _firstTurretAction;
+        private SpawnEntityAction _firstSlimeAction;
+        private SpawnEntityAction _firstTurretAction;
         public BattleSceneInstance1()
         {
-            _firstSlimeAction = new SpawnSlimeAction(3, 30, new PositionComponent(25, 25));
-            _firstTurretAction = new SpawnTurretAction(20, 28, 28);
+            _firstSlimeAction = new SpawnEntityAction(new Slime(3, 30, 25, 25));
+            _firstTurretAction = new SpawnEntityAction(new Turret(20, 28, 28));
         }
         public List<IAction> GetInitialActions()
         {
@@ -104,7 +104,7 @@ namespace Mumble.FirstGame.Core.Scene.Battle.Instances
             List<IAction> actions = new List<IAction>();
             for (int i = 0; i < _nextNumberOfSlimesToSpawn; i++)
             {
-                SpawnSlimeAction action = new SpawnSlimeAction(3, 30, new PositionComponent(25+(5*i), 25+(5*i)));
+                SpawnEntityAction action = new SpawnEntityAction(new Slime(3, 30, 25+(5*i), 25+(5*i)));
                 actions.Add(action);
                 _slimes.Add((Slime)action.Entity);
             }
