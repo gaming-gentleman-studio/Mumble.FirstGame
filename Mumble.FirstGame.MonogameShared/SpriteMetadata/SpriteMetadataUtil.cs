@@ -14,14 +14,16 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
     public class SpriteMetadataUtil
     {
 
-        public static Dictionary<Direction, Rectangle> SpritesheetPosByDirection = new Dictionary<Direction, Rectangle>()
+        public static Dictionary<Direction, Rectangle> GetSpritesheetPosByDirection(int width, int height)
         {
-            {Direction.Down , new Rectangle(0,0,16,16) },
-            {Direction.Up, new Rectangle(16,0,16,16) },
-            {Direction.Right, new Rectangle(32,0,16,16) },
-            {Direction.Left, new Rectangle(48,0,16,16) }
-        };
-
+            return new Dictionary<Direction, Rectangle>()
+            {
+                {Direction.Down , new Rectangle(0,0,width,height) },
+                {Direction.Up, new Rectangle(width,0,width,height) },
+                {Direction.Right, new Rectangle(width*2,0,width,height) },
+                {Direction.Left, new Rectangle(width*3,0,width,height) }
+            };
+        }
         public static AbstractSpriteMetadata CreateSpriteMetadata(IEntity entity)
         {
             if (entity is Player)

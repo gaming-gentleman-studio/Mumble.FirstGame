@@ -46,7 +46,10 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
                         ColorChangeOnly = true,
                         ColorChange = Color.Red
                     } },
-                    { AnimationTypes.Idle, new SpritesheetSettings() }
+                    { AnimationTypes.Idle, new SpritesheetSettings(){
+                        CellWidth = 16,
+                        CellHeight = 16
+                    }}
                 },
                 AnimationTypePrecedence = new List<AnimationTypes>()
                 {

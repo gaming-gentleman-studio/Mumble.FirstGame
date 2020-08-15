@@ -13,6 +13,10 @@ namespace Mumble.FirstGame.MonogameShared.Animation
         public bool ColorChangeOnly = false;
         public Color ColorChange = Color.DarkGray;
 
+        //Height/width of an individual cell
+        public int CellWidth = 16;
+        public int CellHeight = 16;
+
         //How to determine the facing, aka which column to use
         //Has facing options, aka 4 columns
         public enum FacingBasisEnum

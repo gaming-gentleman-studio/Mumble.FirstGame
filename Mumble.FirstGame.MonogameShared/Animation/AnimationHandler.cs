@@ -62,7 +62,7 @@ namespace Mumble.FirstGame.MonogameShared
 
                 if (_enabled[type] && !settings.ColorChangeOnly)
                 {
-                    rect.Y = (16 * settings.Rows[_rowStep[type]]) + settings.Rows[_rowStep[type]];
+                    rect.Y = (settings.CellHeight * settings.Rows[_rowStep[type]]) + settings.Rows[_rowStep[type]];
 
                     //handle frame delays
                     _delayCnt[type]++;
@@ -86,16 +86,16 @@ namespace Mumble.FirstGame.MonogameShared
             {
                 Direction direction = mousePosition.ToRelativeDirection(selfPosition);
                 Direction facing = Direction.ToNearest90Angle(direction);
-                rect = SpriteMetadataUtil.SpritesheetPosByDirection[facing];
+                rect = SpriteMetadataUtil.GetSpritesheetPosByDirection(settings.CellWidth,settings.CellHeight)[facing];
             }
             else if (settings.FacingBasis == FacingBasisEnum.PastMovement)
             {
                 Direction facing = Direction.ToNearest90Angle(_movedFacing);
-                rect = SpriteMetadataUtil.SpritesheetPosByDirection[facing];
+                rect = SpriteMetadataUtil.GetSpritesheetPosByDirection(settings.CellWidth,settings.CellHeight)[facing];
             }
             else
             {
-                rect = new Rectangle(0, 0, 16, 16);
+                rect = new Rectangle(0, 0, settings.CellWidth, settings.CellHeight);
             }
             return rect;
         }
