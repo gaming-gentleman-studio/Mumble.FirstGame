@@ -159,7 +159,7 @@ namespace Mumble.FirstGame.MonogameShared
             {
                 if (background is Wall)
                 {
-                    BackgroundSprites.Add(new WallSpriteMetadata(new Vector2(background.Position.X, background.Position.Y), background.Scale));
+                    BackgroundSprites.Add(new WallSpriteMetadata((Wall)background));
                 }
                 else if (background is Floor)
                 {

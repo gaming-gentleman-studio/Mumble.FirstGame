@@ -25,6 +25,6 @@ namespace Mumble.FirstGame.MonogameShared.Settings
 
         public Tuple<int, int> AspectRatio => new Tuple<int, int>(1920, 1080);
 
-        public int BorderPixelSize => 12;
+        public int BorderPixelSize => 64;
     }
 }

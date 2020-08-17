@@ -4,6 +4,7 @@ using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Background;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Components.Position;
+using Mumble.FirstGame.Core.Entity.Components.Velocity;
 using Mumble.FirstGame.Core.Entity.Enemy;
 using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Scene.Battle.SceneBoundary;
@@ -11,6 +12,7 @@ using Mumble.FirstGame.Core.Scene.Trigger;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static Mumble.FirstGame.Core.Background.Wall;
 
 namespace Mumble.FirstGame.Core.Scene.Battle.Instances
 {
@@ -26,8 +28,8 @@ namespace Mumble.FirstGame.Core.Scene.Battle.Instances
         public List<IAction> GetInitialActions()
         {
             return new List<IAction>(){
-                _firstTurretAction,
-                _firstSlimeAction
+               // _firstTurretAction,
+               // _firstSlimeAction
             };
         }
 
@@ -42,7 +44,16 @@ namespace Mumble.FirstGame.Core.Scene.Battle.Instances
                 {
                     if (i == 0 || j == 0 || i == width-1 || j == height - 1)
                     {
-                        backgrounds.Add(new Wall(BackgroundSubType.Plain, new PositionComponent(i, j)));
+                        WallOrientation orientation = WallOrientation.Other;
+                        if (j == 0 && i != 0 && i != width -1)
+                        {
+                            orientation = WallOrientation.AtTop;
+                        }
+                        else if (j == height - 1)
+                        {
+                            orientation = WallOrientation.AtBottom;
+                        }
+                        backgrounds.Add(new Wall(BackgroundSubType.Plain, new PositionComponent(i, j), orientation));
                     }
                     else
                     {
