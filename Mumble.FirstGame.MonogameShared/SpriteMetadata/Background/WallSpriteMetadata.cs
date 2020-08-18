@@ -20,16 +20,9 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata.Background
         {
             if (_wall.Orientation == WallOrientation.AtTop)
             {
-                return new Rectangle(0, 16, 16, 48);
+                return new Rectangle(0, 16, 16, 32);
             }
-            else if (_wall.Orientation == WallOrientation.AtBottom)
-            {
-                return new Rectangle(0, 0, 16, 32);
-            }
-            else
-            {
-                return new Rectangle(0, 16, 16, 16);
-            }
+            return new Rectangle(0, 0, 16, 16);
             
         }
         public override Texture2D GetImage(ContentImages container)
@@ -39,15 +32,8 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata.Background
 
         public override Vector2 GetPosition()
         {
-            if (_wall.Orientation == WallOrientation.AtTop)
-            {
-                return new Vector2(_wall.Position.X, _wall.Position.Y);
-            }
-            else
-            {
-                return new Vector2(_wall.Position.X, _wall.Position.Y-_wall.Scale);
-            }
-            
+            return new Vector2(_wall.Position.X, _wall.Position.Y);
+
         }
         public override Vector2 GetScale()
         {
@@ -68,14 +54,7 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata.Background
         }
         public override Vector2 GetOrigin()
         {
-            if (_wall.Orientation == WallOrientation.AtTop)
-            {
-                return new Vector2(8, 24);
-            }
-            else
-            {
-                return new Vector2(8, 8);
-            }
+            return new Vector2(8, 8);
         }
 
     }
