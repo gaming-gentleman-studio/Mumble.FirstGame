@@ -35,8 +35,8 @@ namespace Mumble.FirstGame.Core.Scene.Battle.Instances
 
         public ISceneBoundary GetSceneBoundary()
         {
-            int height = 50;
-            int width = 50;
+            int height = 51;
+            int width = 51;
             HashSet<IBackground> backgrounds = new HashSet<IBackground>();
             for (int i = 0; i< width; i++)
             {
@@ -62,8 +62,11 @@ namespace Mumble.FirstGame.Core.Scene.Battle.Instances
                         {
                             style = new WallStyle(WallDecor.Dungeon, WallDoodadSet.None);
                         }
+                        if (i%2 == 0 && j %2 ==0)
+                        {
+                            backgrounds.Add(new Wall(new PositionComponent(i, j), style, orientation));
+                        }
                         
-                        backgrounds.Add(new Wall( new PositionComponent(i, j), style, orientation));
                     }
                     else
                     {

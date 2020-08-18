@@ -31,7 +31,7 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata.Background
         }
         public override float GetLayerDepth()
         {
-            return 1f;
+            return LayerConstants.FLOOR;
         }
 
     }

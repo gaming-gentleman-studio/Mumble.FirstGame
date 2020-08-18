@@ -52,11 +52,11 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata.Background
         {
             if (_wall.Orientation == WallOrientation.AtTop)
             {
-                return 0.9f;
+                return LayerConstants.TOPWALL;
             }
             else
             {
-                return 0.1f;
+                return LayerConstants.WALL;
             }
             
         }
