@@ -20,14 +20,22 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata.Background
         {
             if (_wall.Orientation == WallOrientation.AtTop)
             {
-                return new Rectangle(0, 16, 16, 32);
+                return new Rectangle(0, 0, 16, 32);
             }
             return new Rectangle(0, 0, 16, 16);
             
         }
         public override Texture2D GetImage(ContentImages container)
         {
-            return container.Wall;
+            if (_wall.Style.DoodadSet == WallDoodadSet.FracturedTop)
+            {
+                return container.DungeonWallFracturedTop;
+            }
+            else
+            {
+                return container.DungeonWall;
+            }
+            
         }
 
         public override Vector2 GetPosition()

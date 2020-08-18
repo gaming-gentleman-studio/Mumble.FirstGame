@@ -27,10 +27,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\ISpawnEntityAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\SpawnEntityAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Spawn\SpawnPlayerAction.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Background\BackgroundSubType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Background\Floor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Background\IBackground.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Background\Wall.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Background\WallStyle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\AI\ICombatAIComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\AI\SimpleAttackPlayerAIComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\AI\SimpleFollowPlayerAIComponent.cs" />
@@ -47,6 +47,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Velocity\Direction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Velocity\IVelocityComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Velocity\VelocityComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Weapon\FireballShooterWeaponComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Weapon\IMeleeWeaponComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Weapon\IRangedWeaponComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\Weapon\IWeaponComponent.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entity\OwnerIdentifier\IntOwnerIdentifier.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\OwnerIdentifier\IOwnerIdentifier.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Player\Player.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity\Projectile\Fireball.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Projectile\IProjectileEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Projectile\SimpleBullet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\Battle\BattleScene.cs" />

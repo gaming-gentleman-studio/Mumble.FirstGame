@@ -36,7 +36,7 @@ namespace Mumble.FirstGame.Core.Entity.Enemy
         {
             CombatAIComponent = new SimpleAttackPlayerAIComponent();
             HealthComponent = new HealthComponent(health);
-            WeaponComponent = new SimpleWeaponComponent(new VelocityComponent(Direction.None, 1f), new DamageComponent(1));
+            WeaponComponent = new FireballShooterWeaponComponent(new VelocityComponent(Direction.None, 1f), new DamageComponent(1));
             VelocityComponent = new VelocityComponent(Direction.None, 0f);
             PositionComponent = new PositionComponent(x, y);
             OwnerIdentifier = IntOwnerIdentifier.NonPlayerOwned;

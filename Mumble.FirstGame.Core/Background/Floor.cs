@@ -9,15 +9,13 @@ namespace Mumble.FirstGame.Core.Background
     {
         public bool HasCollision => false;
 
-        public BackgroundSubType SubType { get; private set; }
 
         public int Scale => 1;
 
         public IPositionComponent Position { get; private set; }
 
-        public Floor(BackgroundSubType subtype, IPositionComponent position)
+        public Floor(IPositionComponent position)
         {
-            SubType = subtype;
             Position = position;
         }
     }

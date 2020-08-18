@@ -8,7 +8,9 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.Common.props" />
   <PropertyGroup />
   <ItemGroup>
-    <None Include="Content\Content.mgcb" />
+    <None Include="Content\Content.mgcb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="Mumble.FirstGame.MonogameShared.projitems" Label="Shared" />
   <Import Project="Mumble.FirstGame.Core.projitems" Label="Shared" />

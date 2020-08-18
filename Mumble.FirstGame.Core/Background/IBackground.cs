@@ -9,7 +9,6 @@ namespace Mumble.FirstGame.Core.Background
     public interface IBackground
     {
         bool HasCollision { get; }
-        BackgroundSubType SubType { get; }
 
         IPositionComponent Position { get; }
 

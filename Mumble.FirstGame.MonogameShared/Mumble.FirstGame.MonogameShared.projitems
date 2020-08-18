@@ -17,6 +17,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Settings\IGameSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\Background\FloorSpriteMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\Background\WallSpriteMetadata.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\Projectile\FireballSpriteMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\SpriteMetadataFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\UI\CursorMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\AbstractSpriteMetadata.cs" />
@@ -34,12 +35,22 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Vector2Extension.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Content\" />
-    <Folder Include="$(MSBuildThisFileDirectory)SpriteMetadata\Projectile\" />
     <Folder Include="$(MSBuildThisFileDirectory)SpriteMetadata\UI\" />
     <Folder Include="$(MSBuildThisFileDirectory)SpriteMetadata\Player\" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Content\Background\DungeonWall-FracturedTop.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Background\DungeonWall.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Background\Floor1.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Projectiles\Bullet.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Projectiles\Fireball.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\Slime.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\TheDude.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\TheDude2.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\Sprites\Turret.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Content\UI\Cursor.png" />
   </ItemGroup>
 </Project>

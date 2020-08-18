@@ -28,7 +28,7 @@ namespace Mumble.FirstGame.Core.Scene.Battle.Instances
         public List<IAction> GetInitialActions()
         {
             return new List<IAction>(){
-               // _firstTurretAction,
+               _firstTurretAction,
                // _firstSlimeAction
             };
         }
@@ -53,11 +53,21 @@ namespace Mumble.FirstGame.Core.Scene.Battle.Instances
                         {
                             orientation = WallOrientation.AtBottom;
                         }
-                        backgrounds.Add(new Wall(BackgroundSubType.Plain, new PositionComponent(i, j), orientation));
+                        WallStyle style;
+                        if (j ==0 && i%3 == 2)
+                        {
+                            style = new WallStyle(WallDecor.Dungeon, WallDoodadSet.FracturedTop);
+                        }
+                        else
+                        {
+                            style = new WallStyle(WallDecor.Dungeon, WallDoodadSet.None);
+                        }
+                        
+                        backgrounds.Add(new Wall( new PositionComponent(i, j), style, orientation));
                     }
                     else
                     {
-                        backgrounds.Add(new Floor(BackgroundSubType.Plain, new PositionComponent(i,j)));
+                        backgrounds.Add(new Floor(new PositionComponent(i,j)));
                     }
                     
                 }

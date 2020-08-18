@@ -10,7 +10,6 @@ namespace Mumble.FirstGame.Core.Background
     {
         public bool HasCollision => true;
 
-        public BackgroundSubType SubType { get; private set; }
 
         public int Scale => 2;
 
@@ -24,11 +23,12 @@ namespace Mumble.FirstGame.Core.Background
         }
         public WallOrientation Orientation { get; private set; }
 
-        public Wall(BackgroundSubType subtype, IPositionComponent position, WallOrientation orientation = WallOrientation.Other)
+        public WallStyle Style { get; private set; }
+        public Wall(IPositionComponent position,WallStyle style, WallOrientation orientation = WallOrientation.Other)
         {
-            SubType = subtype;
             Position = position;
             Orientation = orientation;
+            Style = style;
         }
     }
 }
