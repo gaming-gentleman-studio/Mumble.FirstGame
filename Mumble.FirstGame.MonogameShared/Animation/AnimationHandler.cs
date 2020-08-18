@@ -110,7 +110,7 @@ namespace Mumble.FirstGame.MonogameShared
             {
                 if (_rowStep[type] > settings.Rows.Count-1)
                 {
-                    _rowStep[type] = settings.Rows.Count - 1;
+                    _rowStep[type] = 0;
                 }
             }
             _enabled[type] = true;

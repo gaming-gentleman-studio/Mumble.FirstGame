@@ -47,6 +47,7 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
                         ColorChange = Color.Red
                     } },
                     { AnimationTypes.Idle, new SpritesheetSettings(){
+                        FacingBasis = FacingBasisEnum.Mouse,
                         CellWidth = 16,
                         CellHeight = 16
                     }}
