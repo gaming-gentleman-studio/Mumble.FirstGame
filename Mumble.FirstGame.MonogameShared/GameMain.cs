@@ -58,8 +58,7 @@ namespace Mumble.FirstGame.MonogameShared
         GameServiceContainer provider;
         float windowScale;
         IGameSettings settings;
-        Director director;
-        IScene scene => director.CurrentScene;
+        IScene scene => client.CurrentScene;
         ScalingUtils scalingUtils;
         public GameMain()
         {   
@@ -94,8 +93,7 @@ namespace Mumble.FirstGame.MonogameShared
             
             if (settings.ClientType == ClientType.Solo)
             {
-                director = new Director();
-                provider.AddService<IGameClient>(new SoloGameClient(director));
+                provider.AddService<IGameClient>(new SoloGameClient());
             }
             else if (settings.ClientType == ClientType.Online)
             {

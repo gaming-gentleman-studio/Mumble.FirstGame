@@ -8,6 +8,6 @@ namespace Mumble.FirstGame.Core.Scene.Factory
 {
     public interface ISceneFactory
     {
-        IScene Create(IEntityContainer container, List<IActionAdapter> adapters,ICollisionSystem collisionSystem);
+        IScene Create(Director director,List<IActionAdapter> adapters);
     }
 }

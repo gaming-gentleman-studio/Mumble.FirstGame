@@ -11,7 +11,8 @@ namespace Mumble.FirstGame.Core
     public class Director
     {
         private ISceneFactory _battleSceneFactory;
-        private ICollisionSystem _collisionSystem;
+
+        public ICollisionSystem CollisionSystem;
         public IEntityContainer EntityContainer { get; private set; }
         public IScene CurrentScene { get; private set; }
 
@@ -24,11 +25,15 @@ namespace Mumble.FirstGame.Core
         {
             _battleSceneFactory = new BattleSceneFactory();
             EntityContainer = new BattleEntityContainer();
-            _collisionSystem = new CollisionSystem(EntityContainer);
+            CollisionSystem = new CollisionSystem(EntityContainer);
         }
         public void SetCurrentScene()
         {
-            CurrentScene = _battleSceneFactory.Create(EntityContainer, new List<IActionAdapter>(), _collisionSystem);
+            CurrentScene = _battleSceneFactory.Create(this, new List<IActionAdapter>());
+        }
+        public void TransitionScene()
+        {
+
         }
     }
 }

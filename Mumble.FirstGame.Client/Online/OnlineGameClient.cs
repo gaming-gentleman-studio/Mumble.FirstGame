@@ -5,6 +5,7 @@ using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Entity.Player;
+using Mumble.FirstGame.Core.Scene;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
 using Mumble.FirstGame.MonogameShared.Settings;
 using Mumble.FirstGame.Serialization.OnlineAction;
@@ -28,7 +29,9 @@ namespace Mumble.FirstGame.Client.Online
         private TcpClient _tcpClient;
         private IEntityContainer _entityContainer;
         private IntOwnerIdentifier _identifier;
-        
+
+        public IScene CurrentScene => throw new NotImplementedException(); //TODO
+
         public OnlineGameClient(IEntityContainer container, IGameSettings settings, ISerializationFactoryContainer factoryContainer)
         {
             _tcpClient = new TcpClient(settings.Server, factoryContainer);

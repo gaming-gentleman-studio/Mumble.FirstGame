@@ -15,15 +15,16 @@ namespace Mumble.FirstGame.Core.Scene.Factory
 {
     public class BattleSceneFactory : ISceneFactory
     {
-        public IScene Create(IEntityContainer container, List<IActionAdapter> adapters, ICollisionSystem collisionSystem)
+
+        public IScene Create(Director director,List<IActionAdapter> adapters)
         {
             IBattleSceneInstance instance = new BattleSceneInstance1();
-            collisionSystem.SetSceneBoundary(instance.GetSceneBoundary());
+            director.CollisionSystem.SetSceneBoundary(instance.GetSceneBoundary());
             List<ITrigger> triggers = instance.GetTriggers();
             adapters.AddRange(triggers);
             List<IAction> actionList = instance.GetInitialActions();
 
-            IScene scene = new BattleScene(container, adapters,triggers, collisionSystem,instance.GetSceneBoundary());
+            IScene scene = new BattleScene(director,adapters,triggers,instance.GetSceneBoundary());
             
             Dictionary<IOwnerIdentifier, List<IAction>> actions = new Dictionary<IOwnerIdentifier, List<IAction>>()
             {

@@ -15,15 +15,15 @@ namespace Mumble.FirstGame.Client
 {
     public class SoloGameClient : IGameClient
     {
-        private IScene _scene => _director.CurrentScene;
+        public IScene CurrentScene => _director.CurrentScene;
         private Director _director;
         private int _tickRate = 1;
         private IOwnerIdentifier _ownerIdentifier;
 
-        public SoloGameClient(Director director)
+        public SoloGameClient()
         {
             _ownerIdentifier = new IntOwnerIdentifier(1);
-            _director = director;
+            _director = new Director();
         }
         public List<IActionResult> Init(IOwnerIdentifier owner)
         {
@@ -31,7 +31,7 @@ namespace Mumble.FirstGame.Client
             SpawnPlayerAction action = new SpawnPlayerAction("beau",3,10, _ownerIdentifier);
             Dictionary<IOwnerIdentifier, List<IAction>> ownedActions = new Dictionary<IOwnerIdentifier, List<IAction>>();
             ownedActions.Add(_ownerIdentifier, new List<IAction> { action });
-            return _scene.Update(ownedActions, 0);
+            return CurrentScene.Update(ownedActions, 0);
         }
 
         public IOwnerIdentifier Register()
@@ -43,7 +43,7 @@ namespace Mumble.FirstGame.Client
         {
             Dictionary<IOwnerIdentifier, List<IAction>> ownedActions = new Dictionary<IOwnerIdentifier, List<IAction>>();
             ownedActions.Add(_ownerIdentifier, actions);
-            return _scene.Update(ownedActions, _tickRate);
+            return CurrentScene.Update(ownedActions, _tickRate);
         }
     }
 }

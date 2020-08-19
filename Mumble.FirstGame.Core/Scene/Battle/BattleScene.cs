@@ -20,25 +20,25 @@ namespace Mumble.FirstGame.Core.Scene.Battle
 
     public class BattleScene : IScene
     {
-        public IEntityContainer EntityContainer { get; private set; }
+        public IEntityContainer EntityContainer => _director.EntityContainer;
         private IEnumerable<IActionAdapter> _actionAdapters;
         private IEnumerable<IActionResultAdapter> _actionResultAdapters;
         private List<IAction> _actionsFromActionResultAdapters;
-        private ICollisionSystem _collisionSystem;
+        private ICollisionSystem _collisionSystem => _director.CollisionSystem;
+        private Director _director;
         public ISceneBoundary Boundary { get; private set; }
 
         private int _elapsedTicks;
 
         private int _entityTurn = 0;
         
-        public BattleScene(IEntityContainer container,IEnumerable<IActionAdapter> actionAdapters, IEnumerable<IActionResultAdapter> actionResultAdapters, ICollisionSystem collisionSystem, ISceneBoundary boundary)
+        public BattleScene(Director director,IEnumerable<IActionAdapter> actionAdapters, IEnumerable<IActionResultAdapter> actionResultAdapters, ISceneBoundary boundary)
         {
-            EntityContainer = container;
+            _director = director;
             Boundary = boundary;
             _actionAdapters = actionAdapters;
             _actionResultAdapters = actionResultAdapters;
             _actionsFromActionResultAdapters = new List<IAction>();
-            _collisionSystem = collisionSystem;
         }
         public List<IActionResult> Update(Dictionary<IOwnerIdentifier, List<IAction>> actions, int elapsedTicks)
         {
