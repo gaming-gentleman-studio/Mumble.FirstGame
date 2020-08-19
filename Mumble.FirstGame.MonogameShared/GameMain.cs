@@ -9,6 +9,7 @@ using Mumble.FirstGame.Core.Action;
 using Mumble.FirstGame.Core.Action.Fire;
 using Mumble.FirstGame.Core.Action.Movement;
 using Mumble.FirstGame.Core.ActionResult;
+using Mumble.FirstGame.Core.ActionResult.Meta;
 using Mumble.FirstGame.Core.Background;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Components.Position;
@@ -93,6 +94,7 @@ namespace Mumble.FirstGame.MonogameShared
             
             if (settings.ClientType == ClientType.Solo)
             {
+                //TODO - the client will likely at some point need a copy of game settings
                 provider.AddService<IGameClient>(new SoloGameClient());
             }
             else if (settings.ClientType == ClientType.Online)
@@ -114,19 +116,12 @@ namespace Mumble.FirstGame.MonogameShared
             keyHandler = new MovementKeyHandler();
             mouseHandler = new MouseHandler();
 
-            IOwnerIdentifier owner = client.Register();
-            List<IActionResult> results = client.Init(owner);
-
+            client.Register();
+            List<IActionResult> results = client.Init();
+            ApplyResults(results);
             SetWindowScale();
 
-            //TODO - this is a hacky way to get the player entity
-            EntitiesCreatedActionResult createdResult = (EntitiesCreatedActionResult)results.Where(x => x is EntitiesCreatedActionResult).FirstOrDefault();
-            player = (Player)createdResult.Entities.Where(x => x.OwnerIdentifier.Equals(owner)).FirstOrDefault();
-            EntitySprites[player] = SpriteMetadataFactory.CreateSpriteMetadata(player);
 
-            InitializeUISprites();
-            InitializeBackgroundSprites();
-            ApplyResults(results);
             base.Initialize();
         }
         private void SetWindowScale()
@@ -134,13 +129,24 @@ namespace Mumble.FirstGame.MonogameShared
             windowScale = 1f;
             scalingUtils = new ScalingUtils(settings, windowScale);
         }
+        private void InitializeBattleScene(List<IActionResult> results)
+        {
+            //TODO - this is a hacky way to get the player entity
+            EntitiesCreatedActionResult createdResult = (EntitiesCreatedActionResult)results.Where(x => x is EntitiesCreatedActionResult).FirstOrDefault();
+            player = (Player)createdResult.Entities.Where(x => x.OwnerIdentifier.Equals(client.Owner)).FirstOrDefault();
+            EntitySprites[player] = SpriteMetadataFactory.CreateSpriteMetadata(player);
+
+            InitializeUISprites();
+            InitializeBackgroundSprites();
+            ApplyResults(results);
+        }
         private void InitializeUISprites()
         {
             UISprites.Add(new CursorMetadata());
         }
         private void InitializeBackgroundSprites()
         {
-            HashSet<IBackground> backgrounds = scene.Boundary.Backgrounds;
+            HashSet<IBackground> backgrounds = ((BattleScene)scene).Boundary.Backgrounds;
             foreach(IBackground background in backgrounds)
             {
                 if (background is Wall)
@@ -200,51 +206,63 @@ namespace Mumble.FirstGame.MonogameShared
         {
             if (results.Count > 0)
             {
-                //TODO - make a result handler class probably
-                foreach (EntitiesCreatedActionResult result in results.Where(x => x is EntitiesCreatedActionResult))
+                foreach(SceneEnteredActionResult result in results.Where(x => x is SceneEnteredActionResult))
                 {
-                    foreach (IEntity entity in result.Entities)
-                    {
-                        EntitySprites[entity] = SpriteMetadataFactory.CreateSpriteMetadata(entity);
-
-
-                    }
                     
-                }
-                foreach (MoveActionResult result in results.Where(x => x is MoveActionResult))
-                {
-                    if (!EntitySprites.Keys.Contains(result.Entity))
+                    if (scene is BattleScene)
                     {
-                        EntitySprites[result.Entity] = SpriteMetadataFactory.CreateSpriteMetadata(result.Entity);
+                        InitializeBattleScene(results.Where(x => x != result).ToList());
                     }
-                    EntitySprites[result.Entity].AnimateMovement(result);
-                    if (result.OutOfBounds)
+                    return;
+                }
+                if (scene is BattleScene)
+                {
+                    //TODO - make a result handler class probably
+                    foreach (EntitiesCreatedActionResult result in results.Where(x => x is EntitiesCreatedActionResult))
                     {
-                        if (result.Entity != player)
+                        foreach (IEntity entity in result.Entities)
                         {
-                            EntitySprites.Remove(result.Entity);
+                            EntitySprites[entity] = SpriteMetadataFactory.CreateSpriteMetadata(entity);
+
+
                         }
 
                     }
-                    else
+                    foreach (MoveActionResult result in results.Where(x => x is MoveActionResult))
                     {
-                        //this is a little awkwardly placed I think
-                        PositionComponent newPos = new PositionComponent(result.XPos, result.YPos);
-                        result.Entity.PositionComponent.Move(newPos);
-                    }
+                        if (!EntitySprites.Keys.Contains(result.Entity))
+                        {
+                            EntitySprites[result.Entity] = SpriteMetadataFactory.CreateSpriteMetadata(result.Entity);
+                        }
+                        EntitySprites[result.Entity].AnimateMovement(result);
+                        if (result.OutOfBounds)
+                        {
+                            if (result.Entity != player)
+                            {
+                                EntitySprites.Remove(result.Entity);
+                            }
 
-                }
-                foreach (EntityDestroyedActionResult result in results.Where(x => x is EntityDestroyedActionResult))
-                {
-                    EntitySprites.Remove(result.Entity);
-                }
-                foreach (DamageActionResult result in results.Where(x => x is DamageActionResult))
-                {
-                    EntitySprites[result.Entity].AnimateDamage();
-                }
-                foreach(AttackActionResult result in results.Where(x => x is AttackActionResult))
-                {
-                    EntitySprites[result.Source].AnimateAttack();
+                        }
+                        else
+                        {
+                            //this is a little awkwardly placed I think
+                            PositionComponent newPos = new PositionComponent(result.XPos, result.YPos);
+                            result.Entity.PositionComponent.Move(newPos);
+                        }
+
+                    }
+                    foreach (EntityDestroyedActionResult result in results.Where(x => x is EntityDestroyedActionResult))
+                    {
+                        EntitySprites.Remove(result.Entity);
+                    }
+                    foreach (DamageActionResult result in results.Where(x => x is DamageActionResult))
+                    {
+                        EntitySprites[result.Entity].AnimateDamage();
+                    }
+                    foreach (AttackActionResult result in results.Where(x => x is AttackActionResult))
+                    {
+                        EntitySprites[result.Source].AnimateAttack();
+                    }
                 }
             }
         }

@@ -1,5 +1,6 @@
 ﻿using Mumble.FirstGame.Core;
 using Mumble.FirstGame.Core.Action;
+using Mumble.FirstGame.Core.Action.Meta;
 using Mumble.FirstGame.Core.Action.Spawn;
 using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
@@ -18,31 +19,30 @@ namespace Mumble.FirstGame.Client
         public IScene CurrentScene => _director.CurrentScene;
         private Director _director;
         private int _tickRate = 1;
-        private IOwnerIdentifier _ownerIdentifier;
+        public IOwnerIdentifier Owner { get; private set; }
 
         public SoloGameClient()
         {
-            _ownerIdentifier = new IntOwnerIdentifier(1);
+            Owner = new IntOwnerIdentifier(1);
             _director = new Director();
         }
-        public List<IActionResult> Init(IOwnerIdentifier owner)
+        public List<IActionResult> Init()
         {
-            
-            SpawnPlayerAction action = new SpawnPlayerAction("beau",3,10, _ownerIdentifier);
+            EnterSceneAction action = new EnterSceneAction();
             Dictionary<IOwnerIdentifier, List<IAction>> ownedActions = new Dictionary<IOwnerIdentifier, List<IAction>>();
-            ownedActions.Add(_ownerIdentifier, new List<IAction> { action });
+            ownedActions.Add(Owner, new List<IAction> { action });
             return CurrentScene.Update(ownedActions, 0);
         }
 
-        public IOwnerIdentifier Register()
+        public void Register()
         {
-            return _ownerIdentifier;
+            return;
         }
 
         public List<IActionResult> Update(List<IAction> actions)
         {
             Dictionary<IOwnerIdentifier, List<IAction>> ownedActions = new Dictionary<IOwnerIdentifier, List<IAction>>();
-            ownedActions.Add(_ownerIdentifier, actions);
+            ownedActions.Add(Owner, actions);
             return CurrentScene.Update(ownedActions, _tickRate);
         }
     }

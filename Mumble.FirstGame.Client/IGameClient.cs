@@ -14,10 +14,12 @@ namespace Mumble.FirstGame.Client
     public interface IGameClient
     {
         IScene CurrentScene { get; }
+
+        IOwnerIdentifier Owner { get; }
         List<IActionResult> Update(List<IAction> actions);
 
-        IOwnerIdentifier Register();
-        List<IActionResult> Init(IOwnerIdentifier owner);
+        void Register();
+        List<IActionResult> Init();
 
        
     }

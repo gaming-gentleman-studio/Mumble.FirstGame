@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf;
 using Mumble.FirstGame.Core.Action;
+using Mumble.FirstGame.Core.Action.Meta;
 using Mumble.FirstGame.Core.Action.Spawn;
 using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
@@ -32,6 +33,8 @@ namespace Mumble.FirstGame.Client.Online
 
         public IScene CurrentScene => throw new NotImplementedException(); //TODO
 
+        public IOwnerIdentifier Owner { get; private set; }
+
         public OnlineGameClient(IEntityContainer container, IGameSettings settings, ISerializationFactoryContainer factoryContainer)
         {
             _tcpClient = new TcpClient(settings.Server, factoryContainer);
@@ -51,26 +54,26 @@ namespace Mumble.FirstGame.Client.Online
             return results;
         }
 
-        public List<IActionResult> Init(IOwnerIdentifier owner)
+        public List<IActionResult> Init()
         {
-            
+
             // some of these fields don't actually matter - just need to tell server where we are spawning
-            SpawnPlayerAction spawnAction = new SpawnPlayerAction("beau", 3, 10,owner);
-            List<IActionResult> results =_tcpClient.Send(_identifier,spawnAction, _entityContainer);
+            EnterSceneAction enterSceneAction = new EnterSceneAction();
+            List<IActionResult> results =_tcpClient.Send(_identifier, enterSceneAction, _entityContainer);
             _udpClient.Listen();
             _tcpClient.Listen();
             return results;
             
         }
 
-        public IOwnerIdentifier Register()
+        public void Register()
         {
             RegisterClientAction registerAction = new RegisterClientAction();
             IntOwnerIdentifier tempIdentifier = new IntOwnerIdentifier(0);
             List<IActionResult> results = _tcpClient.Send(tempIdentifier,registerAction, _entityContainer);
             ClientRegisteredActionResult result = results.Where(x => x is ClientRegisteredActionResult).Cast<ClientRegisteredActionResult>().FirstOrDefault();
             _identifier = (IntOwnerIdentifier)result.OwnerIdentifier; 
-            return result.OwnerIdentifier;
+            Owner = result.OwnerIdentifier;
         }
     }
 }

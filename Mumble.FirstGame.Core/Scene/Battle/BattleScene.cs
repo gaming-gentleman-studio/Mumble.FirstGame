@@ -1,6 +1,7 @@
 ﻿using Mumble.FirstGame.Core.Action;
 using Mumble.FirstGame.Core.Action.Attack;
 using Mumble.FirstGame.Core.Action.Fire;
+using Mumble.FirstGame.Core.Action.Meta;
 using Mumble.FirstGame.Core.Action.Movement;
 using Mumble.FirstGame.Core.Action.Spawn;
 using Mumble.FirstGame.Core.ActionResult;
@@ -175,6 +176,19 @@ namespace Mumble.FirstGame.Core.Scene.Battle
                 ISpawnEntityAction spawnAction = (ISpawnEntityAction)action;
                 resultingActions.AddRange(Update(spawnAction));
             }
+            else if (action is IEnterSceneAction)
+            {
+                IEnterSceneAction enterAction = (IEnterSceneAction)action;
+                resultingActions.AddRange(Update(enterAction,owner));
+            }
+            return resultingActions;
+        }
+        private List<IAction> Update(IEnterSceneAction enterAction, IOwnerIdentifier owner)
+        {
+            SpawnPlayerAction spawnAction = new SpawnPlayerAction("Beau", 3, 10, owner);
+            List<IAction> resultingActions = Update(spawnAction);
+            enterAction.CalculateEffect();
+            resultingActions.Add(enterAction);
             return resultingActions;
         }
         private List<IAction> Update(IFireWeaponAction fireAction, IOwnerIdentifier owner)
