@@ -1,4 +1,5 @@
-﻿using Mumble.FirstGame.Core.Action;
+﻿using Mumble.FirstGame.Core;
+using Mumble.FirstGame.Core.Action;
 using Mumble.FirstGame.Core.Action.Spawn;
 using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.Entity;
@@ -14,14 +15,15 @@ namespace Mumble.FirstGame.Client
 {
     public class SoloGameClient : IGameClient
     {
-        private IScene _scene;
+        private IScene _scene => _director.CurrentScene;
+        private Director _director;
         private int _tickRate = 1;
         private IOwnerIdentifier _ownerIdentifier;
 
-        public SoloGameClient(IScene scene)
+        public SoloGameClient(Director director)
         {
             _ownerIdentifier = new IntOwnerIdentifier(1);
-            _scene = scene;
+            _director = director;
         }
         public List<IActionResult> Init(IOwnerIdentifier owner)
         {

@@ -31,6 +31,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Background\IBackground.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Background\Wall.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Background\WallStyle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Director.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\AI\ICombatAIComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\AI\SimpleAttackPlayerAIComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity\Components\AI\SimpleFollowPlayerAIComponent.cs" />

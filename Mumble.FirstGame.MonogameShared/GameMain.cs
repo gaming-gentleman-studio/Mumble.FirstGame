@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Mumble.FirstGame.Client;
 using Mumble.FirstGame.Client.Online;
+using Mumble.FirstGame.Core;
 using Mumble.FirstGame.Core.Action;
 using Mumble.FirstGame.Core.Action.Fire;
 using Mumble.FirstGame.Core.Action.Movement;
@@ -57,7 +58,8 @@ namespace Mumble.FirstGame.MonogameShared
         GameServiceContainer provider;
         float windowScale;
         IGameSettings settings;
-        IScene scene;
+        Director director;
+        IScene scene => director.CurrentScene;
         ScalingUtils scalingUtils;
         public GameMain()
         {   
@@ -65,11 +67,12 @@ namespace Mumble.FirstGame.MonogameShared
 
             Content.RootDirectory = "Content";
             
-            //Should line up with server tick rate
             
             RegisterServices();
             graphics.PreferredBackBufferWidth = settings.AspectRatio.Item1;
             graphics.PreferredBackBufferHeight = settings.AspectRatio.Item2;
+
+            //Should line up with server tick rate
             TargetElapsedTime = settings.TickRate;
             graphics.IsFullScreen = settings.FullScreen;
             IsFixedTimeStep = true;
@@ -81,9 +84,6 @@ namespace Mumble.FirstGame.MonogameShared
             provider = new GameServiceContainer();
             provider.AddService<IGameSettings>(new GameSettings());
             
-            provider.AddService<IEntityContainer>(new BattleEntityContainer());
-            provider.AddService<ISceneFactory>(new BattleSceneFactory());
-            provider.AddService<ICollisionSystem>(new CollisionSystem(provider.GetService<IEntityContainer>()));
             
             provider.AddService<IActionResultFactory>(new ActionResultFactory(provider.GetService<IEntityContainer>()));
             provider.AddService<IActionFactory>(new ActionFactory(provider.GetService<IEntityContainer>()));
@@ -94,14 +94,13 @@ namespace Mumble.FirstGame.MonogameShared
             
             if (settings.ClientType == ClientType.Solo)
             {
-                scene = provider.GetService<ISceneFactory>().Create(provider.GetService<IEntityContainer>(), new List<IActionAdapter>(),provider.GetService<ICollisionSystem>());
-                provider.AddService<IGameClient>(new SoloGameClient(scene));
+                director = new Director();
+                provider.AddService<IGameClient>(new SoloGameClient(director));
             }
             else if (settings.ClientType == ClientType.Online)
             {
                 //We need an empty scene when online - server should tell us how to fill it in, not scene factory
                 //TODO - maybe do this a different way? it's awk right now, this scene isn't actually being used
-                scene = new BattleScene(provider.GetService<IEntityContainer>(), new List<IActionAdapter>(),new List<IActionResultAdapter>(), provider.GetService<ICollisionSystem>(), new BattleSceneBoundary(100,100, new HashSet<IBackground>()));
                 provider.AddService<IGameClient>(new OnlineGameClient(provider.GetService<IEntityContainer>(), settings, provider.GetService<ISerializationFactoryContainer>()));
             }
             client = provider.GetService<IGameClient>();
@@ -132,21 +131,10 @@ namespace Mumble.FirstGame.MonogameShared
             ApplyResults(results);
             base.Initialize();
         }
-        //Maybe remove this?
         private void SetWindowScale()
         {
             windowScale = 1f;
             scalingUtils = new ScalingUtils(settings, windowScale);
-            //float width = (float)graphics.GraphicsDevice.Viewport.Width / ((float)(scene.Boundary.Width * settings.SpritePixelSpacing)) ;
-            //float height = (float)graphics.GraphicsDevice.Viewport.Height / ((float)(scene.Boundary.Height * settings.SpritePixelSpacing));
-            //if (height > width)
-            //{
-            //    windowScale = width;
-            //}
-            //else
-            //{
-            //    windowScale = height;
-            //}
         }
         private void InitializeUISprites()
         {
@@ -308,7 +296,7 @@ namespace Mumble.FirstGame.MonogameShared
                     sprite.GetScale(), 
                     SpriteEffects.None, 0f);
             }
-            DebugUtils.DrawGrid(spriteBatch, graphics.GraphicsDevice, scalingUtils, scene.Boundary.Width, scene.Boundary.Height);
+            //DebugUtils.DrawGrid(spriteBatch, graphics.GraphicsDevice, scalingUtils, scene.Boundary.Width, scene.Boundary.Height);
             spriteBatch.End();
 
             base.Draw(gameTime);
