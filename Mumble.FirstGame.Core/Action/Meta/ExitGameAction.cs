@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Mumble.FirstGame.Core.Action.Meta
 {
-    public class EnterSceneAction : IAction
+    public class ExitGameAction : IAction
     {
         public List<IActionResult> Results { get; private set; }
 
@@ -14,7 +14,7 @@ namespace Mumble.FirstGame.Core.Action.Meta
         {
             Results = new List<IActionResult>()
             {
-                new SceneEnteredActionResult()
+                new GameExitedActionResult()
             };
         }
     }

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mumble.FirstGame.Core.Action.Meta
+namespace Mumble.FirstGame.Core.Action.Menu
 {
-    public interface IEnterSceneAction : IAction
+    public interface IRequestMenuOptionsAction : IAction
     {
         void CalculateEffect();
     }

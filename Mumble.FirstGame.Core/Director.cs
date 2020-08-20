@@ -1,6 +1,7 @@
 ﻿using Mumble.FirstGame.Core.Scene;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
 using Mumble.FirstGame.Core.Scene.Factory;
+using Mumble.FirstGame.Core.Scene.Menu;
 using Mumble.FirstGame.Core.System.Collision;
 using System;
 using System.Collections.Generic;
@@ -29,11 +30,11 @@ namespace Mumble.FirstGame.Core
         }
         public void SetCurrentScene()
         {
-            CurrentScene = _battleSceneFactory.Create(this, new List<IActionAdapter>());
+            CurrentScene = new MainMenuScene();
         }
         public void TransitionScene()
         {
-
+            CurrentScene = _battleSceneFactory.Create(this, new List<IActionAdapter>());
         }
     }
 }

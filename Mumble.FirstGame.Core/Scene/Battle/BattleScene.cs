@@ -176,19 +176,20 @@ namespace Mumble.FirstGame.Core.Scene.Battle
                 ISpawnEntityAction spawnAction = (ISpawnEntityAction)action;
                 resultingActions.AddRange(Update(spawnAction));
             }
-            else if (action is IEnterSceneAction)
+            else if (action is EnterSceneAction)
             {
-                IEnterSceneAction enterAction = (IEnterSceneAction)action;
+                EnterSceneAction enterAction = (EnterSceneAction)action;
                 resultingActions.AddRange(Update(enterAction,owner));
             }
             return resultingActions;
         }
-        private List<IAction> Update(IEnterSceneAction enterAction, IOwnerIdentifier owner)
+        private List<IAction> Update(EnterSceneAction enterAction, IOwnerIdentifier owner)
         {
             SpawnPlayerAction spawnAction = new SpawnPlayerAction("Beau", 3, 10, owner);
             List<IAction> resultingActions = Update(spawnAction);
             enterAction.CalculateEffect();
             resultingActions.Add(enterAction);
+            resultingActions.Add(spawnAction);
             return resultingActions;
         }
         private List<IAction> Update(IFireWeaponAction fireAction, IOwnerIdentifier owner)

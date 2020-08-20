@@ -23,6 +23,10 @@ using Mumble.FirstGame.Core.Scene.Battle.SceneBoundary;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
 using Mumble.FirstGame.Core.Scene.Factory;
 using Mumble.FirstGame.Core.System.Collision;
+using Mumble.FirstGame.MonogameShared.DisplayHandlers;
+using Mumble.FirstGame.MonogameShared.DisplayHandlers.Battle;
+using Mumble.FirstGame.MonogameShared.InputHandlers;
+using Mumble.FirstGame.MonogameShared.ResultHandler;
 using Mumble.FirstGame.MonogameShared.Settings;
 using Mumble.FirstGame.MonogameShared.SpriteMetadata;
 using Mumble.FirstGame.MonogameShared.SpriteMetadata.Background;
@@ -47,18 +51,18 @@ namespace Mumble.FirstGame.MonogameShared
     public class GameMain : Game
     {
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
         IGameClient client;
-        Dictionary<IEntity, AbstractSpriteMetadata> EntitySprites = new Dictionary<IEntity, AbstractSpriteMetadata>();
-        List<AbstractSpriteMetadata> UISprites = new List<AbstractSpriteMetadata>();
-        List<AbstractSpriteMetadata> BackgroundSprites = new List<AbstractSpriteMetadata>();
-        Player player;
+
         ContentImages contentImages;
-        MovementKeyHandler keyHandler;
-        MouseHandler mouseHandler;
+
         GameServiceContainer provider;
         float windowScale;
         IGameSettings settings;
+
+        IResultHandler resultHandler;
+        IInputHandler inputHandler;
+        IDisplayHandler displayHandler;
+
         IScene scene => client.CurrentScene;
         ScalingUtils scalingUtils;
         public GameMain()
@@ -76,6 +80,7 @@ namespace Mumble.FirstGame.MonogameShared
             TargetElapsedTime = settings.TickRate;
             graphics.IsFullScreen = settings.FullScreen;
             IsFixedTimeStep = true;
+            
 
         }
         private void RegisterServices()
@@ -113,15 +118,9 @@ namespace Mumble.FirstGame.MonogameShared
         /// </summary>
         protected override void Initialize()
         {
-            keyHandler = new MovementKeyHandler();
-            mouseHandler = new MouseHandler();
-
-            client.Register();
-            List<IActionResult> results = client.Init();
-            ApplyResults(results);
             SetWindowScale();
 
-
+            client.Register();
             base.Initialize();
         }
         private void SetWindowScale()
@@ -132,32 +131,38 @@ namespace Mumble.FirstGame.MonogameShared
         private void InitializeBattleScene(List<IActionResult> results)
         {
             //TODO - this is a hacky way to get the player entity
+            
             EntitiesCreatedActionResult createdResult = (EntitiesCreatedActionResult)results.Where(x => x is EntitiesCreatedActionResult).FirstOrDefault();
-            player = (Player)createdResult.Entities.Where(x => x.OwnerIdentifier.Equals(client.Owner)).FirstOrDefault();
-            EntitySprites[player] = SpriteMetadataFactory.CreateSpriteMetadata(player);
+            Player player = (Player)createdResult.Entities.Where(x => x.OwnerIdentifier.Equals(client.Owner)).FirstOrDefault();
+            Dictionary<IEntity, AbstractSpriteMetadata> entitySprites = new Dictionary<IEntity, AbstractSpriteMetadata>();
+            entitySprites[player] = SpriteMetadataFactory.CreateSpriteMetadata(player);
+            resultHandler = new BattleResultHandler(player, entitySprites);
+            inputHandler = new BattleInputHandler(player, scalingUtils, entitySprites);
 
-            InitializeUISprites();
-            InitializeBackgroundSprites();
+            displayHandler = new BattleDisplayHandler(graphics, contentImages,scalingUtils, entitySprites, InitializeUISprites(), InitializeBackgroundSprites());
             ApplyResults(results);
         }
-        private void InitializeUISprites()
+        private List<AbstractSpriteMetadata> InitializeUISprites()
         {
-            UISprites.Add(new CursorMetadata());
+            return new List<AbstractSpriteMetadata>() { new CursorMetadata() };
         }
-        private void InitializeBackgroundSprites()
+        private List<AbstractSpriteMetadata> InitializeBackgroundSprites()
         {
+            List<AbstractSpriteMetadata> backgroundSprites = new List<AbstractSpriteMetadata>();
             HashSet<IBackground> backgrounds = ((BattleScene)scene).Boundary.Backgrounds;
             foreach(IBackground background in backgrounds)
             {
                 if (background is Wall)
                 {
-                    BackgroundSprites.Add(new WallSpriteMetadata((Wall)background));
+                    backgroundSprites.Add(new WallSpriteMetadata((Wall)background));
                 }
                 else if (background is Floor)
                 {
-                    BackgroundSprites.Add(new FloorSpriteMetadata(new Vector2(background.Position.X, background.Position.Y), background.Scale));
+                    backgroundSprites.Add(new FloorSpriteMetadata(new Vector2(background.Position.X, background.Position.Y), background.Scale));
                 }
+                
             }
+            return backgroundSprites;
         }
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
@@ -166,9 +171,12 @@ namespace Mumble.FirstGame.MonogameShared
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
             contentImages = new ContentImages();
-            contentImages.LoadContent(Content,graphics.GraphicsDevice);
+            contentImages.LoadContent(Content, graphics.GraphicsDevice);
+
+            //There are here bc we have a dependency on contentImages
+            List<IActionResult> results = client.Init();
+            ApplyResults(results);
 
         }
 
@@ -193,15 +201,13 @@ namespace Mumble.FirstGame.MonogameShared
             List<IActionResult> results = new List<IActionResult>();
             List<IAction> actions = new List<IAction>();
 
-            actions.AddIfNotNull(keyHandler.HandleKeyPress(player));
-            actions.AddIfNotNull(mouseHandler.HandleMouseClick(player, scalingUtils.ScalePosition(EntitySprites[player].GetPosition())));
+            actions.AddRange(inputHandler.HandleInput());
 
             results = client.Update(actions);
             ApplyResults(results);
             //DebugUtils.PrintActions(actions);
             base.Update(gameTime);
         }
-
         private void ApplyResults(List<IActionResult> results)
         {
             if (results.Count > 0)
@@ -215,55 +221,7 @@ namespace Mumble.FirstGame.MonogameShared
                     }
                     return;
                 }
-                if (scene is BattleScene)
-                {
-                    //TODO - make a result handler class probably
-                    foreach (EntitiesCreatedActionResult result in results.Where(x => x is EntitiesCreatedActionResult))
-                    {
-                        foreach (IEntity entity in result.Entities)
-                        {
-                            EntitySprites[entity] = SpriteMetadataFactory.CreateSpriteMetadata(entity);
-
-
-                        }
-
-                    }
-                    foreach (MoveActionResult result in results.Where(x => x is MoveActionResult))
-                    {
-                        if (!EntitySprites.Keys.Contains(result.Entity))
-                        {
-                            EntitySprites[result.Entity] = SpriteMetadataFactory.CreateSpriteMetadata(result.Entity);
-                        }
-                        EntitySprites[result.Entity].AnimateMovement(result);
-                        if (result.OutOfBounds)
-                        {
-                            if (result.Entity != player)
-                            {
-                                EntitySprites.Remove(result.Entity);
-                            }
-
-                        }
-                        else
-                        {
-                            //this is a little awkwardly placed I think
-                            PositionComponent newPos = new PositionComponent(result.XPos, result.YPos);
-                            result.Entity.PositionComponent.Move(newPos);
-                        }
-
-                    }
-                    foreach (EntityDestroyedActionResult result in results.Where(x => x is EntityDestroyedActionResult))
-                    {
-                        EntitySprites.Remove(result.Entity);
-                    }
-                    foreach (DamageActionResult result in results.Where(x => x is DamageActionResult))
-                    {
-                        EntitySprites[result.Entity].AnimateDamage();
-                    }
-                    foreach (AttackActionResult result in results.Where(x => x is AttackActionResult))
-                    {
-                        EntitySprites[result.Source].AnimateAttack();
-                    }
-                }
+                resultHandler.ApplyResults(results);
             }
         }
         /// <summary>
@@ -273,48 +231,8 @@ namespace Mumble.FirstGame.MonogameShared
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-            spriteBatch.Begin(SpriteSortMode.BackToFront,BlendState.AlphaBlend,SamplerState.PointClamp);
             Vector2 mousePosition = scalingUtils.DescalePosition(Mouse.GetState().Position.ToVector2());
-            foreach (AbstractSpriteMetadata sprite in BackgroundSprites)
-            {
-                Vector2 pos = sprite.GetPosition();
-                spriteBatch.Draw(sprite.GetImage(contentImages),
-                    scalingUtils.ScalePosition(sprite.GetPosition()),
-                    sprite.GetSpritesheetRectange(mousePosition),
-                    sprite.GetColor(),
-                    sprite.GetRotation(),
-                    sprite.GetOrigin(),
-                    scalingUtils.ScaleSize(sprite.GetScale()),
-                    SpriteEffects.None,
-                    sprite.GetLayerDepth());
-            }
-            foreach (IEntity entity in EntitySprites.Keys)
-            {
-                AbstractSpriteMetadata sprite = EntitySprites[entity];
-                spriteBatch.Draw(sprite.GetImage(contentImages),
-                    scalingUtils.ScalePosition(sprite.GetPosition()), 
-                    sprite.GetSpritesheetRectange(mousePosition), 
-                    sprite.GetColor(), 
-                    sprite.GetRotation(), 
-                    sprite.GetOrigin(),
-                    scalingUtils.ScaleSize(sprite.GetScale()), 
-                    SpriteEffects.None,
-                    sprite.GetLayerDepth());
-            }
-            foreach (AbstractSpriteMetadata sprite in UISprites)
-            {
-                spriteBatch.Draw(sprite.GetImage(contentImages),
-                    sprite.GetPosition(),
-                    sprite.GetSpritesheetRectange(mousePosition), 
-                    sprite.GetColor(), 
-                    sprite.GetRotation(), 
-                    sprite.GetOrigin(), 
-                    sprite.GetScale(), 
-                    SpriteEffects.None, 0f);
-            }
-            //DebugUtils.DrawGrid(spriteBatch, graphics.GraphicsDevice, scalingUtils, scene.Boundary.Width, scene.Boundary.Height);
-            spriteBatch.End();
-
+            displayHandler.Draw(mousePosition);
             base.Draw(gameTime);
         }
     }

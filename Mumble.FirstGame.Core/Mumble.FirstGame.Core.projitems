@@ -14,6 +14,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)ActionResult\EntitiesCreatedActionResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ActionResult\EntityDestroyedActionResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ActionResult\IActionResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ActionResult\Menu\GetMenuOptionsActionResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ActionResult\Meta\GameExitedActionResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ActionResult\Meta\SceneEnteredActionResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ActionResult\MoveActionResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Attack\AttackAction.cs" />
@@ -21,8 +23,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Action\Fire\FireWeaponAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Fire\IFireWeaponAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\IAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Action\Menu\IRequestMenuOptionsAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Action\Menu\RequestMenuOptionsAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Meta\EnterSceneAction.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Action\Meta\IEnterSceneAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Action\Meta\ExitGameAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Movement\IMoveAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Movement\MoveAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Action\Movement\MoveProjectileAction.cs" />
@@ -84,6 +88,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Scene\IActionResultAdapter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\IScene.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\Menu\MainMenuScene.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scene\Menu\MenuOption.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scene\Trigger\ITrigger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Collision\CollisionSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System\Collision\ICollisionSystem.cs" />

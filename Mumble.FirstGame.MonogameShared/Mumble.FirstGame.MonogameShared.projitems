@@ -13,6 +13,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Animation\AnimationHandlerSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Animation\SpritesheetSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ContentImages.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DisplayHandlers\Battle\BattleDisplayHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DisplayHandlers\IDisplayHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)InputHandlers\Battle\BattleInputHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)InputHandlers\IInputHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ResultHandler\Battle\BattleResultHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ResultHandler\IResultHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings\GameSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings\IGameSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\Background\FloorSpriteMetadata.cs" />
@@ -29,13 +35,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\SpriteMetadataUtil.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\DebugUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameMain.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MouseHandler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MovementKeyHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)InputHandlers\Battle\BattleMouseHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)InputHandlers\Battle\BattleKeyHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\ListExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\ScalingUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Vector2Extension.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)InputHandlers\Battle\" />
+    <Folder Include="$(MSBuildThisFileDirectory)ResultHandler\Battle\" />
     <Folder Include="$(MSBuildThisFileDirectory)SpriteMetadata\UI\" />
     <Folder Include="$(MSBuildThisFileDirectory)SpriteMetadata\Player\" />
   </ItemGroup>
