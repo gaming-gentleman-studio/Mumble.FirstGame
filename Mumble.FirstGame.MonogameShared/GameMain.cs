@@ -4,42 +4,30 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Mumble.FirstGame.Client;
 using Mumble.FirstGame.Client.Online;
-using Mumble.FirstGame.Core;
 using Mumble.FirstGame.Core.Action;
-using Mumble.FirstGame.Core.Action.Fire;
-using Mumble.FirstGame.Core.Action.Movement;
 using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.ActionResult.Meta;
 using Mumble.FirstGame.Core.Background;
 using Mumble.FirstGame.Core.Entity;
-using Mumble.FirstGame.Core.Entity.Components.Position;
-using Mumble.FirstGame.Core.Entity.Enemy;
-using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Entity.Player;
-using Mumble.FirstGame.Core.Entity.Projectile;
 using Mumble.FirstGame.Core.Scene;
 using Mumble.FirstGame.Core.Scene.Battle;
-using Mumble.FirstGame.Core.Scene.Battle.SceneBoundary;
 using Mumble.FirstGame.Core.Scene.EntityContainer;
-using Mumble.FirstGame.Core.Scene.Factory;
-using Mumble.FirstGame.Core.System.Collision;
+using Mumble.FirstGame.Core.Scene.Menu;
 using Mumble.FirstGame.MonogameShared.DisplayHandlers;
 using Mumble.FirstGame.MonogameShared.DisplayHandlers.Battle;
+using Mumble.FirstGame.MonogameShared.DisplayHandlers.Menu;
 using Mumble.FirstGame.MonogameShared.InputHandlers;
+using Mumble.FirstGame.MonogameShared.InputHandlers.Menu;
 using Mumble.FirstGame.MonogameShared.ResultHandler;
+using Mumble.FirstGame.MonogameShared.ResultHandler.Menu;
 using Mumble.FirstGame.MonogameShared.Settings;
 using Mumble.FirstGame.MonogameShared.SpriteMetadata;
 using Mumble.FirstGame.MonogameShared.SpriteMetadata.Background;
 using Mumble.FirstGame.MonogameShared.Utils;
-using Mumble.FirstGame.Serialization.OnlineActionResult;
 using Mumble.FirstGame.Serialization.Protobuf.Factory;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Net;
-using System.Reflection;
-using System.Runtime.InteropServices;
 
 #endregion
 
@@ -54,6 +42,7 @@ namespace Mumble.FirstGame.MonogameShared
         IGameClient client;
 
         ContentImages contentImages;
+        ContentFonts contentFonts;
 
         GameServiceContainer provider;
         float windowScale;
@@ -128,6 +117,20 @@ namespace Mumble.FirstGame.MonogameShared
             windowScale = 1f;
             scalingUtils = new ScalingUtils(settings, windowScale);
         }
+        private void InitializeMainMenuScene()
+        {
+            int width = graphics.GraphicsDevice.Viewport.Width;
+            int height = graphics.GraphicsDevice.Viewport.Height;
+            List<MenuItemMetadata> menuItems = new List<MenuItemMetadata>()
+            {
+                new MenuItemMetadata("New Game",new Vector2(width/2,height/2),contentFonts.Arial20),
+                new MenuItemMetadata("Exit", new Vector2((width/2), (height/2)+100),contentFonts.Arial20)
+            };
+            displayHandler = new MainMenuDisplayHandler(graphics, contentImages, menuItems,InitializeUISprites());
+            resultHandler = new MainMenuResultHandler();
+            inputHandler = new MenuInputHandler(menuItems);
+        }
+        
         private void InitializeBattleScene(List<IActionResult> results)
         {
             //TODO - this is a hacky way to get the player entity
@@ -173,6 +176,9 @@ namespace Mumble.FirstGame.MonogameShared
             // Create a new SpriteBatch, which can be used to draw textures.
             contentImages = new ContentImages();
             contentImages.LoadContent(Content, graphics.GraphicsDevice);
+            contentFonts = new ContentFonts();
+            contentFonts.LoadContent(Content);
+
 
             //There are here bc we have a dependency on contentImages
             List<IActionResult> results = client.Init();
@@ -218,6 +224,10 @@ namespace Mumble.FirstGame.MonogameShared
                     if (scene is BattleScene)
                     {
                         InitializeBattleScene(results.Where(x => x != result).ToList());
+                    }
+                    else if (scene is MainMenuScene)
+                    {
+                        InitializeMainMenuScene();
                     }
                     return;
                 }

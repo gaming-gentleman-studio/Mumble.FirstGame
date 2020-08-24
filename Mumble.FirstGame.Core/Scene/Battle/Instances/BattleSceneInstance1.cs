@@ -28,7 +28,7 @@ namespace Mumble.FirstGame.Core.Scene.Battle.Instances
         public List<IAction> GetInitialActions()
         {
             return new List<IAction>(){
-               _firstTurretAction,
+               //_firstTurretAction,
                 _firstSlimeAction
             };
         }

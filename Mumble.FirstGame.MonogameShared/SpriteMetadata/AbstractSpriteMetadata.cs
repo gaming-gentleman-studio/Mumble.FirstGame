@@ -9,6 +9,7 @@ namespace Mumble.FirstGame.MonogameShared.SpriteMetadata
 {
     public abstract class AbstractSpriteMetadata
     {
+        //TODO - should we not be passing ContentImages in here?
         public abstract Texture2D GetImage(ContentImages container);
         public abstract Vector2 GetPosition();
         public virtual void AnimateMovement(MoveActionResult result)

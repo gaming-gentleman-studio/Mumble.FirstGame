@@ -12,13 +12,17 @@
     <Compile Include="$(MSBuildThisFileDirectory)Animation\AnimationHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Animation\AnimationHandlerSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Animation\SpritesheetSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ContentFonts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ContentImages.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DisplayHandlers\Battle\BattleDisplayHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DisplayHandlers\IDisplayHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DisplayHandlers\Menu\MainMenuDisplayHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)InputHandlers\Battle\BattleInputHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)InputHandlers\IInputHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)InputHandlers\Menu\MenuInputHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ResultHandler\Battle\BattleResultHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ResultHandler\IResultHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ResultHandler\Menu\MainMenuResultHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings\GameSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings\IGameSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SpriteMetadata\Background\FloorSpriteMetadata.cs" />
