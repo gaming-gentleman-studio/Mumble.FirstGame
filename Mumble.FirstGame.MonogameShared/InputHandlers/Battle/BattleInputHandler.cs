@@ -28,8 +28,11 @@ namespace Mumble.FirstGame.MonogameShared.InputHandlers
         public List<IAction> HandleInput()
         {
             List<IAction> actions = new List<IAction>();
-            actions.AddIfNotNull(_keyHandler.HandleKeyPress(_player));
-            actions.AddIfNotNull(_mouseHandler.HandleMouseClick(_player, _scalingUtils.ScalePosition(_entitySprites[_player].GetPosition())));
+            if (_entitySprites.ContainsKey(_player))
+            {
+                actions.AddIfNotNull(_keyHandler.HandleKeyPress(_player));
+                actions.AddIfNotNull(_mouseHandler.HandleMouseClick(_player, _scalingUtils.ScalePosition(_entitySprites[_player].GetPosition())));
+            }
             return actions;
         }
     }

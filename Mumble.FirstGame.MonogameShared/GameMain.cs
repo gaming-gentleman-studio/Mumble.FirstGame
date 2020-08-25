@@ -5,7 +5,9 @@ using Microsoft.Xna.Framework.Input;
 using Mumble.FirstGame.Client;
 using Mumble.FirstGame.Client.Online;
 using Mumble.FirstGame.Core.Action;
+using Mumble.FirstGame.Core.Action.Meta;
 using Mumble.FirstGame.Core.ActionResult;
+using Mumble.FirstGame.Core.ActionResult.Menu;
 using Mumble.FirstGame.Core.ActionResult.Meta;
 using Mumble.FirstGame.Core.Background;
 using Mumble.FirstGame.Core.Entity;
@@ -26,6 +28,7 @@ using Mumble.FirstGame.MonogameShared.SpriteMetadata;
 using Mumble.FirstGame.MonogameShared.SpriteMetadata.Background;
 using Mumble.FirstGame.MonogameShared.Utils;
 using Mumble.FirstGame.Serialization.Protobuf.Factory;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -52,7 +55,7 @@ namespace Mumble.FirstGame.MonogameShared
         IInputHandler inputHandler;
         IDisplayHandler displayHandler;
 
-        IScene scene => client.CurrentScene;
+        IScene scene;
         ScalingUtils scalingUtils;
         public GameMain()
         {   
@@ -98,6 +101,7 @@ namespace Mumble.FirstGame.MonogameShared
                 provider.AddService<IGameClient>(new OnlineGameClient(provider.GetService<IEntityContainer>(), settings, provider.GetService<ISerializationFactoryContainer>()));
             }
             client = provider.GetService<IGameClient>();
+            scene = client.CurrentScene;
         }
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
@@ -117,15 +121,24 @@ namespace Mumble.FirstGame.MonogameShared
             windowScale = 1f;
             scalingUtils = new ScalingUtils(settings, windowScale);
         }
-        private void InitializeMainMenuScene()
+        private void InitializeMainMenuScene(List<IActionResult> results)
         {
             int width = graphics.GraphicsDevice.Viewport.Width;
             int height = graphics.GraphicsDevice.Viewport.Height;
-            List<MenuItemMetadata> menuItems = new List<MenuItemMetadata>()
+
+            List<MenuItemMetadata> menuItems = new List<MenuItemMetadata>();
+
+            int space = 100;
+            int i = 0;
+            foreach (GetMenuOptionsActionResult result in results.Where(x => x is GetMenuOptionsActionResult))
             {
-                new MenuItemMetadata("New Game",new Vector2(width/2,height/2),contentFonts.Arial20),
-                new MenuItemMetadata("Exit", new Vector2((width/2), (height/2)+100),contentFonts.Arial20)
-            };
+                foreach(MenuOption option in result.Options)
+                {
+                    menuItems.Add(new MenuItemMetadata(option, new Vector2(width / 2, (height / 2)+(space*i)), contentFonts.Arial20));
+                    i++;
+                }
+            }
+
             displayHandler = new MainMenuDisplayHandler(graphics, contentImages, menuItems,InitializeUISprites());
             resultHandler = new MainMenuResultHandler();
             inputHandler = new MenuInputHandler(menuItems);
@@ -207,6 +220,7 @@ namespace Mumble.FirstGame.MonogameShared
             List<IActionResult> results = new List<IActionResult>();
             List<IAction> actions = new List<IAction>();
 
+
             actions.AddRange(inputHandler.HandleInput());
 
             results = client.Update(actions);
@@ -218,20 +232,41 @@ namespace Mumble.FirstGame.MonogameShared
         {
             if (results.Count > 0)
             {
-                foreach(SceneEnteredActionResult result in results.Where(x => x is SceneEnteredActionResult))
+                foreach (GameExitedActionResult result in results.Where(x => x is GameExitedActionResult))
                 {
-                    
+                    Exit();
+                }
+                foreach (SceneLoadedActionResult result in results.Where(x => x is SceneLoadedActionResult))
+                {
+                    if (results.Count > 1)
+                    {
+                        throw new Exception("Load Scene actions must be standalone - something went wrong with core");
+                    }
+                    //scene instance has changed
+                    client.CheckForSceneUpdate();
+                    scene = client.CurrentScene;
+                    EnterSceneAction enterAction = new EnterSceneAction();
+                    ApplyResults(client.Update(new List<IAction>()
+                    {
+                        enterAction
+                    }));
+
+                }
+                foreach (SceneEnteredActionResult result in results.Where(x => x is SceneEnteredActionResult))
+                {
+
                     if (scene is BattleScene)
                     {
                         InitializeBattleScene(results.Where(x => x != result).ToList());
                     }
                     else if (scene is MainMenuScene)
                     {
-                        InitializeMainMenuScene();
+                        InitializeMainMenuScene(results.Where(x => x != result).ToList());
                     }
                     return;
                 }
                 resultHandler.ApplyResults(results);
+
             }
         }
         /// <summary>

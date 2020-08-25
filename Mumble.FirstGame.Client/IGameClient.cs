@@ -19,6 +19,8 @@ namespace Mumble.FirstGame.Client
         List<IActionResult> Update(List<IAction> actions);
 
         void Register();
+
+        void CheckForSceneUpdate();
         List<IActionResult> Init();
 
        

@@ -25,7 +25,7 @@ namespace Mumble.FirstGame.Core.Action.Menu
                 Results = new List<IActionResult>(){
                     new GetMenuOptionsActionResult(new List<MenuOption>()
                     {
-                        new MenuOption("Start",new EnterSceneAction()),
+                        new MenuOption("Start",new LoadSceneAction()),
                         new MenuOption("Exit",new ExitGameAction())
                     })
                 };

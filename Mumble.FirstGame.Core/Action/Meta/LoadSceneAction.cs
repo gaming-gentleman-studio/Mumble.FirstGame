@@ -1,21 +1,21 @@
 ﻿using Mumble.FirstGame.Core.ActionResult;
 using Mumble.FirstGame.Core.ActionResult.Meta;
-using Mumble.FirstGame.Core.Scene.Menu;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Mumble.FirstGame.Core.Action.Meta
 {
-    public class EnterSceneAction : IAction
+    public class LoadSceneAction : IAction
     {
         public List<IActionResult> Results { get; private set; }
 
-        public void CalculateEffect()
+        public void CalculateEffect(Director director)
         {
+            director.TransitionScene();
             Results = new List<IActionResult>()
             {
-                new SceneEnteredActionResult()
+                new SceneLoadedActionResult()
             };
         }
     }

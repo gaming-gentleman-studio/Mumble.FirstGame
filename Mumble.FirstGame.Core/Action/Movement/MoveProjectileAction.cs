@@ -2,6 +2,7 @@
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.Components.Position;
 using Mumble.FirstGame.Core.Entity.Components.Velocity;
+using Mumble.FirstGame.Core.Entity.Player;
 using Mumble.FirstGame.Core.Entity.Projectile;
 using Mumble.FirstGame.Core.Scene.Battle.SceneBoundary;
 using Mumble.FirstGame.Core.System.Collision;

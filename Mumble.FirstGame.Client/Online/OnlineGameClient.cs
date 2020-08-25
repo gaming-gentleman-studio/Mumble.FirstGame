@@ -75,5 +75,10 @@ namespace Mumble.FirstGame.Client.Online
             _identifier = (IntOwnerIdentifier)result.OwnerIdentifier; 
             Owner = result.OwnerIdentifier;
         }
+
+        public void CheckForSceneUpdate()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

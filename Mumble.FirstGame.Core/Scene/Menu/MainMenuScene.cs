@@ -12,7 +12,12 @@ namespace Mumble.FirstGame.Core.Scene.Menu
 {
     public class MainMenuScene : IScene
     {
-
+        private Director _director;
+        
+        public MainMenuScene(Director director)
+        {
+            _director = director;
+        }
         public bool IsSceneActive()
         {
             return true;
@@ -33,12 +38,31 @@ namespace Mumble.FirstGame.Core.Scene.Menu
                     }
                     else if (action is EnterSceneAction)
                     {
-                        EnterSceneAction enterAction = new EnterSceneAction();
-                        RequestMenuOptionsAction menuAction = new RequestMenuOptionsAction(MenuOption.Default);
+                        EnterSceneAction enterAction = (EnterSceneAction)action;
                         enterAction.CalculateEffect();
-                        menuAction.CalculateEffect();
                         resultingActions.Add(enterAction);
+
+                        RequestMenuOptionsAction menuAction = new RequestMenuOptionsAction(MenuOption.Default);
+                        menuAction.CalculateEffect();
                         resultingActions.Add(menuAction);
+                    }
+                    else if (action is ExitGameAction)
+                    {
+                        ExitGameAction exitAction = (ExitGameAction)action;
+                        exitAction.CalculateEffect();
+                        resultingActions.Add(exitAction);
+                    }
+                    else if (action is LoadSceneAction)
+                    {
+                        LoadSceneAction loadAction = (LoadSceneAction)action;
+                        loadAction.CalculateEffect(_director);
+                        resultingActions.Add(loadAction);
+                    }
+                    else if (action is ClickMenuItemAction)
+                    {
+                        ClickMenuItemAction clickAction = (ClickMenuItemAction)action;
+                        clickAction.CalculateEffect(owner, _director.CurrentScene);
+                        resultingActions.Add(clickAction);
                     }
                 }
             }

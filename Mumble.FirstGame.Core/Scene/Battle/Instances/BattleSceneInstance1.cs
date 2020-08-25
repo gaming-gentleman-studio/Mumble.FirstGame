@@ -83,6 +83,7 @@ namespace Mumble.FirstGame.Core.Scene.Battle.Instances
         {
             return new List<ITrigger>()
             {
+                new ReturnToMenuOnPlayerDeathTrigger()
                 //new BattleSceneInstance1Trigger((Slime)_firstSlimeAction.Entity)
             };
         } 

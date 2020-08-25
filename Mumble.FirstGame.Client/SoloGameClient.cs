@@ -16,7 +16,7 @@ namespace Mumble.FirstGame.Client
 {
     public class SoloGameClient : IGameClient
     {
-        public IScene CurrentScene => _director.CurrentScene;
+        public IScene CurrentScene { get; private set; }
         private Director _director;
         private int _tickRate = 1;
         public IOwnerIdentifier Owner { get; private set; }
@@ -25,6 +25,7 @@ namespace Mumble.FirstGame.Client
         {
             Owner = new IntOwnerIdentifier(1);
             _director = new Director();
+            CurrentScene = _director.CurrentScene;
         }
         public List<IActionResult> Init()
         {
@@ -33,7 +34,10 @@ namespace Mumble.FirstGame.Client
             ownedActions.Add(Owner, new List<IAction> { action });
             return CurrentScene.Update(ownedActions, 0);
         }
-
+        public void CheckForSceneUpdate()
+        {
+            CurrentScene = _director.CurrentScene;
+        }
         public void Register()
         {
             return;

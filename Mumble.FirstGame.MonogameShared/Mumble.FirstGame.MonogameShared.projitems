@@ -17,6 +17,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)DisplayHandlers\Battle\BattleDisplayHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DisplayHandlers\IDisplayHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DisplayHandlers\Menu\MainMenuDisplayHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)InputHandlers\Battle\BattleInputHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)InputHandlers\IInputHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)InputHandlers\Menu\MenuInputHandler.cs" />

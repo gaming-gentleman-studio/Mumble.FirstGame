@@ -15,6 +15,10 @@ namespace Mumble.FirstGame.Core.Entity.Components.AI
         private const float _damageDistance = 3f;
         public IAction GenerateAction(ICombatEntity source, List<ICombatEntity> players)
         {
+            if (players.Count < 1)
+            {
+                return new NullAction();
+            }
             //first one for now
             IPositionComponent playerPosition = players[0].PositionComponent;
             IPositionComponent sourcePosition = source.PositionComponent;

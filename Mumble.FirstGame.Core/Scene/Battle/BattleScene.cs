@@ -5,6 +5,7 @@ using Mumble.FirstGame.Core.Action.Meta;
 using Mumble.FirstGame.Core.Action.Movement;
 using Mumble.FirstGame.Core.Action.Spawn;
 using Mumble.FirstGame.Core.ActionResult;
+using Mumble.FirstGame.Core.ActionResult.Meta;
 using Mumble.FirstGame.Core.Entity;
 using Mumble.FirstGame.Core.Entity.OwnerIdentifier;
 using Mumble.FirstGame.Core.Entity.Projectile;
@@ -30,8 +31,6 @@ namespace Mumble.FirstGame.Core.Scene.Battle
         public ISceneBoundary Boundary { get; private set; }
 
         private int _elapsedTicks;
-
-        private int _entityTurn = 0;
         
         public BattleScene(Director director,IEnumerable<IActionAdapter> actionAdapters, IEnumerable<IActionResultAdapter> actionResultAdapters, ISceneBoundary boundary)
         {
@@ -43,6 +42,7 @@ namespace Mumble.FirstGame.Core.Scene.Battle
         }
         public List<IActionResult> Update(Dictionary<IOwnerIdentifier, List<IAction>> actions, int elapsedTicks)
         {
+           
             EntityContainer.HardDeleteEntities();
             List<IAction> resultingActions = new List<IAction>();
             _elapsedTicks = elapsedTicks;
@@ -103,16 +103,6 @@ namespace Mumble.FirstGame.Core.Scene.Battle
                     entitiesToRemove.Add(destroyedResult.Entity);
                 }
             }
-        }
-        private List<IActionResult> RegenerateEntityDestroyedResults()
-        {
-            List<IEntity> entities = EntityContainer.GetSoftDeletedEntities();
-            List<IActionResult> results = new List<IActionResult>();
-            foreach(IEntity entity in entities)
-            {
-                results.Add(new EntityDestroyedActionResult(entity));
-            }
-            return results;
         }
         private List<IAction> ApplyVelocity()
         {
@@ -181,6 +171,12 @@ namespace Mumble.FirstGame.Core.Scene.Battle
                 EnterSceneAction enterAction = (EnterSceneAction)action;
                 resultingActions.AddRange(Update(enterAction,owner));
             }
+            else if (action is LoadSceneAction)
+            {
+                LoadSceneAction loadAction = (LoadSceneAction)action;
+                loadAction.CalculateEffect(_director);
+                resultingActions.Add(loadAction);
+            }
             return resultingActions;
         }
         private List<IAction> Update(EnterSceneAction enterAction, IOwnerIdentifier owner)
@@ -220,14 +216,10 @@ namespace Mumble.FirstGame.Core.Scene.Battle
             spawnAction.CalculateEffect(EntityContainer);
             return new List<IAction>() { spawnAction };
         }
-        private bool isEnemyTurn()
-        {
-            return _entityTurn > EntityContainer.PlayerTeam.Count()-1;
-        }
 
-        public bool IsSceneActive()
+        private bool IsSceneActive()
         {
-            return (EntityContainer.EnemyTeam.Count(enemy => enemy.HealthComponent.IsAlive()) > 0);
+            return EntityContainer.PlayerTeam[0].HealthComponent.IsAlive();
         }
     }
 }
